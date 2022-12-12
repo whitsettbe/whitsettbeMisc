@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Dreidel Speed</title>
+
+<style>
+#videoElement {
+	width: 500px;
+	height: 375px;
+}
+
+#canvas {
+	width: 500px;
+	height: 375px;
+}
+</style>
+</head>
+
+<body>
+<input type="button" value="Start" onclick="start()">
+<!--<input type="button" value="Stop" onclick="stop()"><br><br>-->
+<video autoplay="true" id="videoElement" hidden>
+</video><br>
+<canvas id="canvas"></canvas>
+<div id="slp"></div>
+<div id="frq"></div>
+<div id="hz"></div>
+<div id="hzRes"></div>
+<script>
+
+const DT = 20;
+const PI = 3.14159265358979;
+
+//example parameters for cube-on-square-cone uniform dreidel (r=1cm)
+const P_g = 9.8;
+const P_c = (2/3*8+3/10*PI/3)/(8+PI/3);
+const P_R = .01;
+const P_d = (8 * 2 * P_R + PI/3 * 3/4 * P_R) / (8 + PI/3);
+
+//initialize
+var canv = document.querySelector("#canvas");
+var ctx = canv.getContext("2d", {willReadFrequently: true});
+canv.width = 500;
+canv.height = 375;
+var player;
+var video;
+
+//frequency identification space
+var freqSum = 0;
+var freq = 0;
+var rotVelSum = 0;
+var samples = 0;
+var slpMem = [0, 0];
+var started = false;
+
+//initialize camera and audio output
+function start()
+{
+	document.getElementById("hzRes").innerHTML = "";
+	freqSum = 0;
+	freq = 0;
+	rotVelSum = 0;
+	samples = 0;
+	slpMem = [0, 0];
+
+	//start webcam
+	video = document.querySelector("#videoElement");
+	if (navigator.mediaDevices.getUserMedia)
+	{
+		if(!started)
+		{
+		navigator.mediaDevices.getUserMedia({video: true}).then(
+		function(stream)
+		{
+			
+			started = true;
+			video.srcObject = stream;
+			//set timed audio update
+			setInterval(screenUpdate, DT);
+			setTimeout(stop, 1000);
+		});
+		}
+		else
+		{
+			setTimeout(stop, 1000);
+		}
+	}
+	
+}
+
+//print result
+function stop()
+{
+	document.getElementById("hzRes").innerHTML = "" + Math.round(rotVelSum / samples);
+}
+
+function satCalc(px)
+{
+	return Math.floor(100 * Math.round(1 - Math.min(...px) / Math.max(...px)));
+}
+
+function getAdjs(loc)
+{
+	out = [];
+	if(Math.floor(loc / 4) >= canv.width)
+		out.push(loc - 4 * canv.width);
+	if(Math.floor(loc / 4) < canv.width * (canv.height - 1))
+		out.push(loc + 4 * canv.width);
+	if(Math.floor(loc / 4) % canv.width >= 1)
+		out.push(loc - 4);
+	if(Math.floor(loc / 4) % canv.width < canv.width - 1)
+		out.push(loc + 4);
+	return out;
+}
+
+function getRow(loc)
+{
+	return Math.floor(Math.floor(loc / 4) / canv.width);
+}
+
+function getCol(loc)
+{
+	return Math.floor(loc / 4) % canv.width;
+}
+
+function screenUpdate()
+{
+	ctx.drawImage(video, 0, 0, canv.width, canv.height);
+	var dat = ctx.getImageData(0, 0, canv.width, canv.height).data;
+	var bestCenter = 0;
+	var bestDist = canv.width + canv.height;
+	for(var i = 0; i < dat.length; i += 4)
+	{
+		var s = satCalc([dat[i], dat[i+1], dat[i+2]]);
+		//taxicab dist
+		var d = Math.abs(Math.floor(Math.floor(i / 4) / canv.width) - Math.floor(canv.height / 2)) +
+				Math.abs(Math.floor(i / 4) % canv.width - Math.floor(canv.width / 2));
+		if(s > 0 && d < bestDist)
+		{
+			bestCenter = i;
+			bestDist = d;
+		}
+		dat[i+2] = dat[i+1] = dat[i] = s;
+	}
+	
+	//statistics
+	var xMean = 0, yMean = 0, xStdev = 0, yStdev = 0;
+	var r = 0, slp = 0; //slope is x/y
+	
+	//flood fill centermost with white
+	dat[bestCenter + 2] = dat[bestCenter + 1] = 0; dat[bestCenter] = 255;
+	var q = [bestCenter];
+	for(var i = 0; i < q.length; i++)
+	{
+		adjs = getAdjs(q[i]);
+		for(var a = 0; a < adjs.length; a++)
+		{
+			if(dat[adjs[a]] > 0 && dat[adjs[a]] < 255)
+			{
+				dat[adjs[a]+2] = dat[adjs[a]+1] = dat[adjs[a]] = 255;
+				q.push(adjs[a]);
+			}
+		}
+	}
+	
+	//calculate statistics
+	for(var i = 0; i < q.length; i++){xMean += getCol(q[i]); yMean += getRow(q[i]);}
+	xMean /= q.length; yMean /= q.length;
+	for(var i = 0; i < q.length; i++){xStdev += Math.pow(getCol(q[i]) - xMean, 2); yStdev += Math.pow(getRow(q[i]) - yMean, 2);}
+	xStdev = Math.sqrt(xStdev / (q.length - 1)); yStdev = Math.sqrt(yStdev / (q.length - 1));
+	for(var i = 0; i < q.length; i++){r += (getCol(q[i]) - xMean) / xStdev * (getRow(q[i]) - yMean) / yStdev;}
+	r /= q.length - 1;
+	slp = r * xStdev / yStdev;
+	if(!slp) slp = 10;
+	
+	//use -w^2=x''/x for sine function
+	//alert(freqSum);
+	freq = Math.sqrt(Math.max(0, -((slp - 2 * slpMem[slpMem.length - 1] + slpMem[slpMem.length - 2]) / (DT / 1000) / (DT / 1000)) / slp));
+	freqSum += freq;
+	//document.getElementById("frq").innerHTML = "" + Math.sqrt(Math.max(0, -((slp - 2 * slpMem[slpMem.length - 1] + slpMem[slpMem.length - 2]) / (DT / 1000) / (DT / 1000))
+	//		/ ((slp + slpMem[slpMem.length - 1] + slpMem[slpMem.length - 2]) / 3)));
+	//alert(freqSum);
+	slpMem.push(slp);
+	samples++;
+	
+	//get angular magnitude for sine component
+	bigSlp = 0;
+	for(var i = slpMem.length - 1; i >= 0 && i >= slpMem.length - Math.floor(samples / freqSum * (2 * PI) * (1000 / DT)); i--) {bigSlp = Math.max(bigSlp, Math.abs(slpMem[i]));}
+	
+	//calculate rotational velocity, g*d*sin(theta)/(c*Omega*R^2)
+	rotVelSum = P_g * P_d * (bigSlp / Math.sqrt(1 + bigSlp * bigSlp)) / (P_c * (samples / freqSum) * P_R * P_R) / (2 * PI);
+	
+	//document.getElementById("frq").innerHTML = "" + (freqSum / samples);
+	//document.getElementById("slp").innerHTML = "" + slp;
+	
+	//document.getElementById("hz").innerHTML = "" + Math.round(rotVelSum / samples * 1) / 1;
+	
+	createImageBitmap(new ImageData(dat, canv.width)).then((val) => {ctx.drawImage(val, 0, 0, canv.width, canv.height)});//ctx.drawImage(val, 100, 100, canv.width, canv.height));
+}
+
+</script>
+
+</body>
+</html>
