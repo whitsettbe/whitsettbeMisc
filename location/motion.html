@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Dreidel Speed</title>
+
+<style>
+#videoElement {
+	width: 500px;
+	height: 375px;
+}
+
+#canvas {
+	width: 500px;
+	height: 375px;
+}
+</style>
+</head>
+
+<body>
+<input type="button" value="Start" onclick="start()">
+<video autoplay="true" id="videoElement" hidden>
+</video><br>
+<canvas id="canvas"></canvas>
+<script>
+
+const DT = 50;
+
+//initialize
+var canv = document.querySelector("#canvas");
+var ctx = canv.getContext("2d", {willReadFrequently: true});
+canv.width = 500;
+canv.height = 375;
+var player;
+var video;
+
+//frequency identification space
+var freqSum = 0;
+var freq = 0;
+var rotVelSum = 0;
+var samples = 0;
+var slpMem = [0, 0];
+var started = false;
+
+//initialize camera and audio output
+function start()
+{
+	//start webcam
+	video = document.querySelector("#videoElement");
+	if (navigator.mediaDevices.getUserMedia)
+	{
+		if(!started)
+		{
+		navigator.mediaDevices.getUserMedia({video: {facingMode: {
+      exact: 'environment'
+    }}}).then(
+		function(stream)
+		{
+			started = true;
+			video.srcObject = stream;
+			//set timed audio update
+			setInterval(screenUpdate, DT);
+			setTimeout(stop, 1000);
+		});
+		}
+		else
+		{
+			setTimeout(stop, 1000);
+		}
+	}
+	
+}
+
+//print result
+function stop()
+{
+	//document.getElementById("hzRes").innerHTML = "" + Math.round(rotVelSum / samples);
+}
+
+function screenUpdate()
+{
+	ctx.drawImage(video, 0, 0, canv.width, canv.height);
+	var dat = ctx.getImageData(0, 0, canv.width, canv.height).data;
+}
+</script>
+
+</body>
+</html>
