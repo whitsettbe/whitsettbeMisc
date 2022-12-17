@@ -70,7 +70,9 @@ function start()
 	{
 		if(!started)
 		{
-		navigator.mediaDevices.getUserMedia({video: true}).then(
+		navigator.mediaDevices.getUserMedia({video: {facingMode: {
+      exact: 'environment'
+    }}}).then(
 		function(stream)
 		{
 			
