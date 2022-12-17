@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Dreidel Speed</title>
+<title>Motion</title>
 
 <style>
 #videoElement {
@@ -21,10 +21,15 @@
 <input type="button" value="Start" onclick="start()">
 <video autoplay="true" id="videoElement" hidden>
 </video><br>
-<canvas id="canvas"></canvas>
+<canvas id="canvas"></canvas><br>
+<div id="rc"></div>
+<div id="cc"></div>
+<div id="dir"></div>
 <script>
 
-const DT = 50;
+const DT = 300;
+const BLUR = 0.5;
+const THRESH = 50;
 
 //initialize
 var canv = document.querySelector("#canvas");
@@ -35,12 +40,11 @@ var player;
 var video;
 
 //frequency identification space
-var freqSum = 0;
-var freq = 0;
-var rotVelSum = 0;
-var samples = 0;
-var slpMem = [0, 0];
 var started = false;
+var dat;
+var showDat;
+var rowCent = 0;
+var colCent = 0;
 
 //initialize camera and audio output
 function start()
@@ -51,9 +55,7 @@ function start()
 	{
 		if(!started)
 		{
-		navigator.mediaDevices.getUserMedia({video: {facingMode: {
-      exact: 'environment'
-    }}}).then(
+		navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}}).then(
 		function(stream)
 		{
 			started = true;
@@ -77,10 +79,76 @@ function stop()
 	//document.getElementById("hzRes").innerHTML = "" + Math.round(rotVelSum / samples);
 }
 
+function getAdjs(loc)
+{
+	out = [];
+	if(Math.floor(loc / 4) >= canv.width)
+		out.push(loc - 4 * canv.width);
+	if(Math.floor(loc / 4) < canv.width * (canv.height - 1))
+		out.push(loc + 4 * canv.width);
+	if(Math.floor(loc / 4) % canv.width >= 1)
+		out.push(loc - 4);
+	if(Math.floor(loc / 4) % canv.width < canv.width - 1)
+		out.push(loc + 4);
+	return out;
+}
+
+function getRow(loc)
+{
+	return Math.floor(Math.floor(loc / 4) / canv.width);
+}
+
+function getCol(loc)
+{
+	return Math.floor(loc / 4) % canv.width;
+}
+
+function getDir(r, c)
+{
+	ra = Math.abs(r - rowCent);
+	ca = Math.abs(c - colCent);
+	if(ra > ca) return (r > rowCent ? "up" : "down");
+	return (c > colCent ? "left" : "right");
+}
+
 function screenUpdate()
 {
 	ctx.drawImage(video, 0, 0, canv.width, canv.height);
-	var dat = ctx.getImageData(0, 0, canv.width, canv.height).data;
+	var dat2 = ctx.getImageData(0, 0, canv.width, canv.height).data;
+	if(!dat) dat = [...dat2];
+	if(!showDat) showDat = [...dat2];
+	datMem = [...dat2];
+	rowSum = 0;
+	colSum = 0;
+	nSamp = 0;
+	for(var i = 0; i < dat2.length; i += 4)
+	{
+		del = 0;
+		for(var j = 0; j < 3; j++)
+		{
+			showDat[i + j] = Math.floor((Math.abs(dat2[i + j] - dat[i + j]) + BLUR * showDat[i + j]) / (1 + BLUR));
+			del += showDat[i + j];
+			//dat2[i + j] = Math.min(255, showDat[i + j] * (1 + BLUR));
+		}
+		for(var j = 0; j < 3; j++)
+		{
+			dat2[i + j] = (del > THRESH ? 255 : 0);
+		}
+		if(dat2[i] > 0)
+		{
+			rowSum += getRow(i);
+			colSum += getCol(i);
+			nSamp++;
+		}
+	}
+	d = getDir(Math.floor(rowSum / nSamp), Math.floor(colSum / nSamp));
+	rowCent = Math.floor(rowSum / nSamp);
+	colCent = Math.floor(colSum / nSamp);
+	document.querySelector('#rc').innerHTML = "" + Math.floor(rowSum / nSamp);
+	document.querySelector('#cc').innerHTML = "" + Math.floor(colSum / nSamp);
+	document.querySelector('#dir').innerHTML = d;
+	dat = [...datMem];
+	createImageBitmap(new ImageData(dat2, canv.width)).then((val) => {ctx.drawImage(val, 0, 0, canv.width, canv.height)});
 }
 </script>
 
