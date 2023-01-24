@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chess Openings Quizzer</title>
+        <style>
+            table {
+                border-collapse: collapse;
+                border: 1px solid;
+            }
+
+            td {
+                height: 30px;
+                width: 30px;
+                text-align: center;
+                padding: 0; 
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <table><tr><td id="a8" onclick="toggle('a8')" style="background-color:white;color:black"></td><td id="b8" onclick="toggle('b8')" style="background-color:black;color:white"></td><td id="c8" onclick="toggle('c8')" style="background-color:white;color:black"></td><td id="d8" onclick="toggle('d8')" style="background-color:black;color:white"></td><td id="e8" onclick="toggle('e8')" style="background-color:white;color:black"></td><td id="f8" onclick="toggle('f8')" style="background-color:black;color:white"></td><td id="g8" onclick="toggle('g8')" style="background-color:white;color:black"></td><td id="h8" onclick="toggle('h8')" style="background-color:black;color:white"></td></tr><tr><td id="a7" onclick="toggle('a7')" style="background-color:black;color:white"></td><td id="b7" onclick="toggle('b7')" style="background-color:white;color:black"></td><td id="c7" onclick="toggle('c7')" style="background-color:black;color:white"></td><td id="d7" onclick="toggle('d7')" style="background-color:white;color:black"></td><td id="e7" onclick="toggle('e7')" style="background-color:black;color:white"></td><td id="f7" onclick="toggle('f7')" style="background-color:white;color:black"></td><td id="g7" onclick="toggle('g7')" style="background-color:black;color:white"></td><td id="h7" onclick="toggle('h7')" style="background-color:white;color:black"></td></tr><tr><td id="a6" onclick="toggle('a6')" style="background-color:white;color:black"></td><td id="b6" onclick="toggle('b6')" style="background-color:black;color:white"></td><td id="c6" onclick="toggle('c6')" style="background-color:white;color:black"></td><td id="d6" onclick="toggle('d6')" style="background-color:black;color:white"></td><td id="e6" onclick="toggle('e6')" style="background-color:white;color:black"></td><td id="f6" onclick="toggle('f6')" style="background-color:black;color:white"></td><td id="g6" onclick="toggle('g6')" style="background-color:white;color:black"></td><td id="h6" onclick="toggle('h6')" style="background-color:black;color:white"></td></tr><tr><td id="a5" onclick="toggle('a5')" style="background-color:black;color:white"></td><td id="b5" onclick="toggle('b5')" style="background-color:white;color:black"></td><td id="c5" onclick="toggle('c5')" style="background-color:black;color:white"></td><td id="d5" onclick="toggle('d5')" style="background-color:white;color:black"></td><td id="e5" onclick="toggle('e5')" style="background-color:black;color:white"></td><td id="f5" onclick="toggle('f5')" style="background-color:white;color:black"></td><td id="g5" onclick="toggle('g5')" style="background-color:black;color:white"></td><td id="h5" onclick="toggle('h5')" style="background-color:white;color:black"></td></tr><tr><td id="a4" onclick="toggle('a4')" style="background-color:white;color:black"></td><td id="b4" onclick="toggle('b4')" style="background-color:black;color:white"></td><td id="c4" onclick="toggle('c4')" style="background-color:white;color:black"></td><td id="d4" onclick="toggle('d4')" style="background-color:black;color:white"></td><td id="e4" onclick="toggle('e4')" style="background-color:white;color:black"></td><td id="f4" onclick="toggle('f4')" style="background-color:black;color:white"></td><td id="g4" onclick="toggle('g4')" style="background-color:white;color:black"></td><td id="h4" onclick="toggle('h4')" style="background-color:black;color:white"></td></tr><tr><td id="a3" onclick="toggle('a3')" style="background-color:black;color:white"></td><td id="b3" onclick="toggle('b3')" style="background-color:white;color:black"></td><td id="c3" onclick="toggle('c3')" style="background-color:black;color:white"></td><td id="d3" onclick="toggle('d3')" style="background-color:white;color:black"></td><td id="e3" onclick="toggle('e3')" style="background-color:black;color:white"></td><td id="f3" onclick="toggle('f3')" style="background-color:white;color:black"></td><td id="g3" onclick="toggle('g3')" style="background-color:black;color:white"></td><td id="h3" onclick="toggle('h3')" style="background-color:white;color:black"></td></tr><tr><td id="a2" onclick="toggle('a2')" style="background-color:white;color:black"></td><td id="b2" onclick="toggle('b2')" style="background-color:black;color:white"></td><td id="c2" onclick="toggle('c2')" style="background-color:white;color:black"></td><td id="d2" onclick="toggle('d2')" style="background-color:black;color:white"></td><td id="e2" onclick="toggle('e2')" style="background-color:white;color:black"></td><td id="f2" onclick="toggle('f2')" style="background-color:black;color:white"></td><td id="g2" onclick="toggle('g2')" style="background-color:white;color:black"></td><td id="h2" onclick="toggle('h2')" style="background-color:black;color:white"></td></tr><tr><td id="a1" onclick="toggle('a1')" style="background-color:black;color:white"></td><td id="b1" onclick="toggle('b1')" style="background-color:white;color:black"></td><td id="c1" onclick="toggle('c1')" style="background-color:black;color:white"></td><td id="d1" onclick="toggle('d1')" style="background-color:white;color:black"></td><td id="e1" onclick="toggle('e1')" style="background-color:black;color:white"></td><td id="f1" onclick="toggle('f1')" style="background-color:white;color:black"></td><td id="g1" onclick="toggle('g1')" style="background-color:black;color:white"></td><td id="h1" onclick="toggle('h1')" style="background-color:white;color:black"></td></tr></table>
+        <br>
+        <table><tr>Turn:<td id="turn" style="background-color:white"></td></tr></table>
+        <br>
+        <input type="button" value="Long Castle" onclick="longcastle()">
+        <input type="button" value="Short Castle" onclick="shortcastle()">
+        <input type="button" value="En Passant" onclick="enpassant()">
+        <script>
+            var stack = [];
+
+            function toggle(id)
+            {
+                theStyle = document.getElementById(id).style;
+                if(theStyle.backgroundColor == "white")
+                {
+                    theStyle.backgroundColor = "lightblue";
+                    stack.push(id);
+                }
+                else if(theStyle.backgroundColor == "black")
+                {
+                    theStyle.backgroundColor = "darkblue";
+                    stack.push(id);
+                }
+                else if(theStyle.backgroundColor == "lightblue")
+                {
+                    theStyle.backgroundColor = "white";
+                    stack.pop();
+                }
+                else if(theStyle.backgroundColor == "darkblue")
+                {
+                    theStyle.backgroundColor = "black";
+                    stack.pop();
+                }
+                if(stack.length == 2)
+                {
+                    document.getElementById(stack[1]).innerHTML = document.getElementById(stack[0]).innerHTML;
+                    document.getElementById(stack[0]).innerHTML = "";
+                    toggle(stack[1]);
+                    toggle(stack[0]);
+                    if(document.getElementById("turn").style.backgroundColor == "black") document.getElementById("turn").style.backgroundColor = "white";
+                    else document.getElementById("turn").style.backgroundColor = "black";
+                }
+            }
+
+            function longcastle()
+            {
+                if(stack.length == 1 && stack[0] == "e1" && document.getElementById("e1").innerHTML == "K")
+                {
+                    document.getElementById("a1").innerHTML = "";
+                    document.getElementById("c1").innerHTML = "K";
+                    document.getElementById("d1").innerHTML = "R";
+                    document.getElementById("e1").innerHTML = "";
+                    if(document.getElementById("turn").style.backgroundColor == "black") document.getElementById("turn").style.backgroundColor = "white";
+                    else document.getElementById("turn").style.backgroundColor = "black";
+                    toggle("e1");
+                }
+                else if(stack.length == 1 && stack[0] == "e8" && document.getElementById("e8").innerHTML == "k")
+                {
+                    document.getElementById("a8").innerHTML = "";
+                    document.getElementById("c8").innerHTML = "k";
+                    document.getElementById("d8").innerHTML = "r";
+                    document.getElementById("e8").innerHTML = "";
+                    if(document.getElementById("turn").style.backgroundColor == "black") document.getElementById("turn").style.backgroundColor = "white";
+                    else document.getElementById("turn").style.backgroundColor = "black";
+                    toggle("e8");
+                }
+            }
+
+            function load(fen)
+            {
+                terms = fen.split(" ");
+                if(terms[1] == "w") document.getElementById("turn").style.backgroundColor = "white";
+                else document.getElementById("turn").style.backgroundColor = "black";
+                ranks = terms[0].split("/");
+                for(var r = 0; r < 8; r++)
+                {
+                    for(var f = 0, c = 0; f < 8; f++, c++)
+                    {
+                        if("12345678".indexOf(ranks[r][c]) != -1)
+                        {
+                            for(var j = 0; j < parseInt(ranks[r][c]); f++, j++)
+                            {
+                                document.getElementById("abcdefgh"[f]+"87654321"[r]).innerHTML = "";
+                            }
+                            f--;
+                        }
+                        else
+                        {
+                            document.getElementById("abcdefgh"[f]+"87654321"[r]).innerHTML = ranks[r][c];
+                        }
+                    }
+                }
+            }
+            load("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+        </script>
+    </body>
+</html>
