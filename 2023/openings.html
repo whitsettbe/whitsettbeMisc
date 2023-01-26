@@ -18,13 +18,23 @@
 </head>
 <body>
 
+<div id="playstate">
+	<label>Opening:</label>
+	<div id="opening"></div>
+	<label>Variant:</label>
+	<div id="variant"></div>
+	<label>Progress:</label>
+	<div id="progress"></div>
+</div>
 <div id="myBoard" style="width: 400px"></div>
-<label>Status:</label>
-<div id="status"></div>
-<label>FEN:</label>
-<div id="fen"></div>
-<label>PGN:</label>
-<div id="pgn"></div>
+<div id="info">
+	<label>Status:</label>
+	<div id="status"></div>
+	<label>FEN:</label>
+	<div id="fen"></div>
+	<label>PGN:</label>
+	<div id="pgn"></div>
+</div>
 <!-- openings from https://github.com/lichess-org/chess-openings -->
 <!-- game board script modified from https://chessboardjs.com/examples -->
 <div id="openings" style="display: none">
@@ -3422,6 +3432,10 @@ E99	King's Indian Defense: Orthodox Variation, Classical System, Benko Attack	1.
 E99	King's Indian Defense: Orthodox Variation, Classical System, Traditional Line	1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Nc6 8. d5 Ne7 9. Ne1 Nd7 10. f3 f5	d2d4 g8f6 c2c4 g7g6 b1c3 f8g7 e2e4 d7d6 g1f3 e8g8 f1e2 e7e5 e1g1 b8c6 d4d5 c6e7 f3e1 f6d7 f2f3 f7f5	r1bq1rk1/pppnn1bp/3p2p1/3Ppp2/2P1P3/2N2P2/PP2B1PP/R1BQNRK1 w - -
 </div>
 <script>
+
+/*
+board handler
+*/
 // NOTE: this example uses the chess.js library:
 // https://github.com/jhlywa/chess.js
 
@@ -3453,7 +3467,7 @@ function greySquare (square)
 function onDragStart (source, piece)
 {
 	// do not pick up pieces if the game is over
-	if (game.game_over()) return false;
+	if (game.game_over() || playProgress < 0) return false;
 
 	// or if it's not that side's turn
 	if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
@@ -3491,7 +3505,7 @@ function onDrop (source, target)
 		})
 	}
 	
-	updateStatus();
+	updateBoardStatus();
 }
 
 function onMouseoverSquare (square, piece)
@@ -3525,7 +3539,7 @@ function onSnapEnd ()
 	board.position(game.fen());
 }
 
-function updateStatus () {
+function updateBoardStatus () {
 	var status = ''
 
 	var moveColor = 'White'
@@ -3556,6 +3570,8 @@ function updateStatus () {
 	$status.html(status)
 	$fen.html(game.fen())
 	$pgn.html(game.pgn())
+
+	updatePlayStatus()
 }
 
 var config = {
@@ -3569,8 +3585,84 @@ var config = {
 	pieceTheme: 'pieces/{piece}.png'
 }
 
+/*
+opening handler
+*/
+
+class Opening
+{
+	constructor(code)
+	{
+		code = code.split('\t');
+		this.name = code[1];
+		this.pgn = code[2];
+		this.uci = code[3];
+		if(this.name.indexOf(': ') != -1)
+		{
+			this.variant = this.name.substring(this.name.indexOf(': ') + 2)
+			this.name = this.name.substring(0, this.name.indexOf(': '));
+		}
+		else
+		{
+			this.variant = '';
+		}
+	}
+}
+
+function openingComp(a, b)
+{
+	return a.uci.localeCompare(b.uci);
+}
+
+//get openings
+var openings = [];
+var progress = [];
+var openingStrs = $('#openings')[0].innerHTML.split('\n');
+openingStrs = openingStrs.slice(2, openingStrs.length-1);
+for(var i = 0; i < openingStrs.length; i++)
+{
+	openings.push(new Opening(openingStrs[i]));
+	progress.push(false);
+}
+openings.sort(openingComp);
+
+var playing = -1;
+var playProgress = 0;
+
+function loadOpening()
+{
+	var baseOpening = Math.floor(Math.random() * openings.length);
+	var target = baseOpening;
+	for(var i = baseOpening - 1; i >= 0; i--)
+	{
+		if(openings[baseOpening].uci.startsWith(openings[i].uci) && !progress[i])
+		{
+			target = i;
+		}
+	}
+	playing = target;
+	game.reset();
+	board.position(game.fen());
+	$('#opening').html(openings[playing].name)
+	$('#variation').html(openings[playing].variant)
+	updateBoardStatus();
+}
+
+function updatePlayStatus()
+{
+	//"fix" pgn of the opening we're playing, and compare it to the current pgn
+	// set playProgress based on the number of accurately played moves so far (positive)
+	// on failure, playProgress = - (# of move on which failure occurred, 1-indexed)
+	// update info in $('#progress')
+}
+
+/*
+start the program
+*/
+
 board = Chessboard('myBoard', config);
-updateStatus();
+updateBoardStatus();
+
 </script>
 
 </body>
