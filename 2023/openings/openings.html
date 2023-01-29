@@ -26,7 +26,9 @@
 	<label>Progress:</label>
 	<u id="progress"></u><br>
 </div>
+<div id="boardHolder">
 <div id="myBoard" style="width: 400px"></div>
+</div>
 <div id="info">
 	<label>Status:</label>
 	<u id="status"></u><br>
@@ -3433,6 +3435,24 @@ E99	King's Indian Defense: Orthodox Variation, Classical System, Traditional Lin
 </div>
 <script>
 
+if(window.innerWidth * .8 < window.innerHeight * 0.6)
+{
+	$('#boardHolder')[0].innerHTML = '<div id="myBoard" style="width: ' + (window.innerWidth * 0.8) + 'px"></div>';
+	els = $('*');
+	for(var i = 0; i < els.length; i++)
+	{
+		els[i].style.fontSize = '30px';
+	}
+}
+else
+{
+	$('#boardHolder')[0].innerHTML = '<div id="myBoard" style="width: ' + (window.innerHeight * 0.6) + 'px"></div>';
+	els = $('*');
+	for(var i = 0; i < els.length; i++)
+	{
+		els[i].style.fontSize = '16px';
+	}
+}
 /*
 board handler
 */
@@ -3692,10 +3712,13 @@ function updatePlayStatus()
 					pgnTerms[i].localeCompare(shouldPlay[i]) != 0)
 			{
 				shouldPlay = shouldPlay[i];
+				//find the partial opening we did wrong
 				break;
 			}
 		$('#progress')[0].innerHTML = (-playProgress-1) + ' / ' + openings[playing].uci.split(' ').length +
 				' - should have played ' + shouldPlay;
+		
+		saveProgress();
 		setTimeout(loadOpening, 4000);
 	}
 }
