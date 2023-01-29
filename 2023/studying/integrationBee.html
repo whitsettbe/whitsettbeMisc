@@ -1,0 +1,126 @@
+<!doctype HTML>
+<html>
+    <head>
+        <title>Integration Bee Studying</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+    </head>
+    <body onload="next()">
+		<label>Progress: </label><p id="toStudy"></p>
+        <p id="q"></p>
+        <input type="text" id="in" autocomplete="off" style="width:80%"><br>
+		<input type="button" id="nxt" value="Next" onclick="next()" style="display:none"><br>
+        <p id="resp"></p>
+        <div id="a" style="display:none"></div>
+<div id="dat" style="display:none">
+product->sum: sin(a)sin(b)	1/2(cos(a-b)-cos(a+b))
+product->sum: cos(a)cos(b)	1/2(cos(a-b)+cos(a+b))
+product->sum: sin(a)cos(b)	1/2(sin(a-b)+sin(a+b))
+product->sum: tan(a)tan(b)	1-(tan(a)+tan(b))/tan(a+b)
+power reduction: sin(x)^2	1/2(1-cos(2x))
+power reduction: cos(x)^2	1/2(1+cos(2x))
+trig ddx: d/dx[sin(x)]	cos(x)
+trig ddx: d/dx[cos(x)]	-sin(x)
+trig ddx: d/dx[tan(x)]	sec(x)^2
+trig ddx: d/dx[csc(x)]	-csc(x)cot(x)
+trig ddx: d/dx[sec(x)]	sec(x)tan(x)
+trig ddx: d/dx[cot(x)]	-csc(x)^2
+a-trig ddx: d/dx[asin(x)]	1/sqrt(1-x^2)
+a-trig ddx: d/dx[acos(x)]	1/sqrt(1-x^2)
+a-trig ddx: d/dx[atan(x)]	1/(1+x^2)
+h-trig ddx: d/dx[sinh(x)]	cosh(x)
+h-trig ddx: d/dx[cosh(x)]	sinh(x)
+h-trig ddx: d/dx[tanh(x)]	sech(x)^2
+h-trig ddx: d/dx[csch(x)]	-csch(x)coth(x)
+h-trig ddx: d/dx[sech(x)]	-sech(x)tan(x)
+h-trig ddx: d/dx[coth(x)]	-csch(x)^2
+a-h-trig ddx: d/dx[asinh(x)]	1/sqrt(x^2+1)
+a-h-trig ddx: d/dx[acosh(x)]	1/sqrt(x^2-1)
+a-h-trig ddx: d/dx[atanh(x)]	1/(1-x^2)
+trig recursion: int[sin(x)^n,x]	-1/n*sin(x)^(n-1)*cos(x)+(n-1)/n*int[sin(x)^(n-2),x]
+trig recursion: int[cos(x)^n,x]	1/n*cos(x)^(n-1)*sin(x)+(n-1)/n*int[cos(x)^(n-2),x]
+trig recursion: int[tan(x)^n,x]	1/(n-1)*tan(x)^(n-1)-int[tan(x)^(n-2),x]
+trig recursion: int[cot(x)^n,x] -1/(n-1)*cot(x)^(n-1)-int[cot(x)^(n-2),x]
+trig recursion: int[csc(x)^n,x]	-1/(n-1)*csc(x)^(n-2)*cot(x)+(n-2)/(n-1)*int[csc(x)^(n-2),x]
+trig recursion: int[sec(x)^n,x]	1/(n-1)*sec(x)^(n-2)*tan(x)+(n-2)/(n-1)*int[sec(x)^(n-2),x]
+trig int: int[sin(x),x]	-cos(x)
+trig int: int[cos(x),x]	sin(x)
+trig int: int[tan(x),x]	ln(sec(x))
+trig int: int[csc(x),x]	-ln(csc(x)+cot(x))
+trig int: int[sec(x),x]	ln(sec(x)+tan(x))
+trig int: int[cot(x),x]	ln(sin(x))
+h-trig int: int[sinh(x),x]	cosh(x)
+h-trig int: int[cosh(x),x]	sinh(x)
+h-trig int:	int[tanh(x),x]	ln(cosh(x))
+h-trig int: int[csch(x),x]	ln(tanh(x/2))
+h-trig int: int[sech(x),x]	atan(sinh(x))
+h-trig int: int[coth(x),x]	ln(sinh(x))
+</div>
+        <script>
+		var ops = $('#dat')[0].innerHTML.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t'))
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var as = [];
+		for(var i = 0; i < ops.length; i++)
+		{
+			qs.push(ops[i].split('\t')[0]);
+			as.push(ops[i].split('\t')[1]);
+		}
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+
+		$('#in').keypress(function(event)
+		{
+			if (event.keyCode == 13 || event.which == 13)
+			{
+				event.preventDefault();
+				if(!showing)
+				{
+					if($('#in')[0].value === $('#a')[0].innerHTML)
+					{
+						$('#resp')[0].innerHTML = "Correct! The answer is:";
+						qs.splice(idx, 1);
+						as.splice(idx, 1);
+					}
+					else
+					{
+						$('#resp')[0].innerHTML = "Incorrect. The answer is:";
+						errs++;
+					}
+					$('#a')[0].style.display = "inline";
+					$('#nxt')[0].style.display = "inline";
+					showing = true;
+					$('#toStudy')[0].innerHTML = qs.length + ' remaining, ' + errs + ' mistakes';
+				}
+				else
+				{
+					next();
+				}
+			}
+		});
+
+		function next()
+		{
+			$('#toStudy')[0].innerHTML = qs.length + ' remaining, ' + errs + ' mistakes';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			$('#q')[0].innerHTML = qs[idx];
+			$('#in')[0].value = '';
+			$('#resp')[0].innerHTML = '';
+			$('#a')[0].innerHTML = as[idx];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+		}
+        </script>
+    </body>
+</html>
