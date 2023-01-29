@@ -20,20 +20,20 @@
 
 <div id="playstate">
 	<label>Opening:</label>
-	<div id="opening"></div>
+	<u id="opening"></u><br>
 	<label>Variant:</label>
-	<div id="variant"></div>
+	<u id="variant"></u><br>
 	<label>Progress:</label>
-	<div id="progress"></div>
+	<u id="progress"></u><br>
 </div>
 <div id="myBoard" style="width: 400px"></div>
 <div id="info">
 	<label>Status:</label>
-	<div id="status"></div>
+	<u id="status"></u><br>
 	<label>FEN:</label>
-	<div id="fen"></div>
+	<u id="fen"></u><br>
 	<label>PGN:</label>
-	<div id="pgn"></div>
+	<u id="pgn"></u><br>
 </div>
 <!-- openings from https://github.com/lichess-org/chess-openings -->
 <!-- game board script modified from https://chessboardjs.com/examples -->
@@ -3571,7 +3571,7 @@ function updateBoardStatus () {
 	$fen.html(game.fen())
 	$pgn.html(game.pgn())
 
-	updatePlayStatus()
+	updatePlayStatus();
 }
 
 var config = {
@@ -3641,10 +3641,14 @@ function loadOpening()
 		}
 	}
 	playing = target;
+	playProgress = 0;
 	game.reset();
 	board.position(game.fen());
 	$('#opening').html(openings[playing].name)
 	$('#variation').html(openings[playing].variant)
+	pgnFixer = new Chess();
+	pgnFixer.load_pgn(openings[playing].pgn);
+	openings[playing].pgn = pgnFixer.pgn();
 	updateBoardStatus();
 }
 
@@ -3654,14 +3658,100 @@ function updatePlayStatus()
 	// set playProgress based on the number of accurately played moves so far (positive)
 	// on failure, playProgress = - (# of move on which failure occurred, 1-indexed)
 	// update info in $('#progress')
+	if(!game.pgn())
+	{
+		if(playing >= 0)
+			$('#progress')[0].innerHTML = '0 / ' + openings[playing].uci.split(' ').length;
+		return;
+	}
+	if(openings[playing].pgn.startsWith(game.pgn()))
+	{
+		//get number of played moves
+		pgnTerms = game.pgn().split(' ');
+		playProgress = 0;
+		for(var i = 0; i < pgnTerms.length; i++)
+			if(pgnTerms[i].length > 0 && !'0123456789'.includes(pgnTerms[i][0]))
+				playProgress++;
+		$('#progress')[0].innerHTML = playProgress + ' / ' + openings[playing].uci.split(' ').length;
+		if(playProgress == openings[playing].uci.split(' ').length)
+		{
+			$('#progress')[0].innerHTML += ' - solved!';
+			playProgress = -1 - playProgress;
+			progress[playing] = true;
+			saveProgress();
+			setTimeout(loadOpening, 2000);
+		}
+	}
+	else
+	{
+		playProgress = -1 - playProgress;
+		pgnTerms = game.pgn().split(' ');
+		shouldPlay = openings[playing].pgn.split(' ');
+		for(var i = 0; i < pgnTerms.length; i++)
+			if(pgnTerms[i].length > 0 && !'0123456789'.includes(pgnTerms[i][0]) &&
+					pgnTerms[i].localeCompare(shouldPlay[i]) != 0)
+			{
+				shouldPlay = shouldPlay[i];
+				break;
+			}
+		$('#progress')[0].innerHTML = (-playProgress-1) + ' / ' + openings[playing].uci.split(' ').length +
+				' - should have played ' + shouldPlay;
+		setTimeout(loadOpening, 4000);
+	}
 }
 
+/*
+cookie handler
+*/
+
+function saveProgress()
+{
+	var o = "";
+	var c = 0;
+	for(var i = 0; i < progress.length; i += 8)
+	{
+		c = 0;
+		for(var j = 0; j < 8 && i + j < progress.length; j++)
+		{
+			c = (c << 1) + (progress[i+j]? 1 : 0);
+		}
+		o += String.fromCharCode(c);
+	}
+	//setCookie('progress', btoa(o), 365);
+}
+/*
+//from w3schools
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+//from w3schools
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+*/
 /*
 start the program
 */
 
 board = Chessboard('myBoard', config);
 updateBoardStatus();
+loadOpening();
 
 </script>
 
