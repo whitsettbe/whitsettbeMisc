@@ -3616,7 +3616,12 @@ class Opening
 	{
 		code = code.split('\t');
 		this.name = code[1];
+
 		this.pgn = code[2];
+		pgnFixer = new Chess();
+		pgnFixer.load_pgn(this.pgn);
+		this.pgn = pgnFixer.pgn();
+
 		this.uci = code[3];
 		if(this.name.indexOf(': ') != -1)
 		{
@@ -3667,9 +3672,6 @@ function loadOpening()
 	board.position(game.fen());
 	$('#opening').html(openings[playing].name)
 	$('#variation').html(openings[playing].variant)
-	pgnFixer = new Chess();
-	pgnFixer.load_pgn(openings[playing].pgn);
-	openings[playing].pgn = pgnFixer.pgn();
 	updateBoardStatus();
 }
 
@@ -3713,7 +3715,16 @@ function updatePlayStatus()
 					pgnTerms[i].localeCompare(shouldPlay[i]) != 0)
 			{
 				shouldPlay = shouldPlay[i];
-				//find the partial opening we did wrong
+				target = playing;
+				for(var i = playing - 1; i >= 0; i--)
+        			{
+                			if(openings[i].pgn.startsWith(game.pgn().uci))
+                			{
+                        			target = i;
+                			}
+        			}				
+				progress[target] = false;
+				saveProgress();
 				break;
 			}
 		$('#progress')[0].innerHTML = (-playProgress-1) + ' / ' + openings[playing].uci.split(' ').length +
