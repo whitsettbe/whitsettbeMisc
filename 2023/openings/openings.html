@@ -3434,26 +3434,7 @@ E99	King's Indian Defense: Orthodox Variation, Classical System, Benko Attack	1.
 E99	King's Indian Defense: Orthodox Variation, Classical System, Traditional Line	1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Nc6 8. d5 Ne7 9. Ne1 Nd7 10. f3 f5	d2d4 g8f6 c2c4 g7g6 b1c3 f8g7 e2e4 d7d6 g1f3 e8g8 f1e2 e7e5 e1g1 b8c6 d4d5 c6e7 f3e1 f6d7 f2f3 f7f5	r1bq1rk1/pppnn1bp/3p2p1/3Ppp2/2P1P3/2N2P2/PP2B1PP/R1BQNRK1 w - -
 </div>
 <script>
-/*
-if(window.innerWidth * .8 < window.innerHeight * 0.6)
-{
-	$('#boardHolder')[0].innerHTML = '<div id="myBoard" style="width: ' + (window.innerWidth * 0.8) + 'px"></div>';
-	els = $('*');
-	for(var i = 0; i < els.length; i++)
-	{
-		els[i].style.fontSize = '30px';
-	}
-}
-else
-{
-	$('#boardHolder')[0].innerHTML = '<div id="myBoard" style="width: ' + (window.innerHeight * 0.6) + 'px"></div>';
-	els = $('*');
-	for(var i = 0; i < els.length; i++)
-	{
-		els[i].style.fontSize = '16px';
-	}
-}
-*/
+
 /*
 board handler
 */
@@ -3666,7 +3647,7 @@ function loadOpening()
 	game.reset();
 	board.position(game.fen());
 	$('#opening').html(openings[playing].name)
-	$('#variation').html(openings[playing].variant)
+	$('#variant').html(openings[playing].variant)
 	updateBoardStatus();
 }
 
