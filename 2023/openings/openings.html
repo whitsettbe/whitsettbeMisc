@@ -3758,7 +3758,7 @@ function loadProgress()
 	{
 		for(var j = 0; j < 8 && i + j < progress.length; j++)
 		{
-			progress[i+j] = ((o.charCodeAt(i) >> j) & 1);
+			progress[i+j] = ((o.charCodeAt(Math.floor(i / 8)) >> j) & 1) > 0;
 		}
 	}
 }
