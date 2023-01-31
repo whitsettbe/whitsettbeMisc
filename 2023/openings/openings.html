@@ -3616,12 +3616,7 @@ class Opening
 	{
 		code = code.split('\t');
 		this.name = code[1];
-
-		this.pgn = code[2];
-		pgnFixer = new Chess();
-		pgnFixer.load_pgn(this.pgn);
-		this.pgn = pgnFixer.pgn();
-
+		this.pgn = code[2]; // the database has been verified against chess.js format
 		this.uci = code[3];
 		if(this.name.indexOf(': ') != -1)
 		{
@@ -3714,15 +3709,16 @@ function updatePlayStatus()
 			if(pgnTerms[i].length > 0 && !'0123456789'.includes(pgnTerms[i][0]) &&
 					pgnTerms[i].localeCompare(shouldPlay[i]) != 0)
 			{
+				targPgn = shouldPlay.slice(0, i + 1).join(' ');
 				shouldPlay = shouldPlay[i];
 				target = playing;
 				for(var i = playing - 1; i >= 0; i--)
-        			{
-                			if(openings[i].pgn.startsWith(game.pgn().uci))
-                			{
-                        			target = i;
-                			}
-        			}				
+				{
+					if(openings[i].pgn.startsWith(targPgn))
+					{
+						target = i;
+					}
+				}
 				progress[target] = false;
 				saveProgress();
 				break;
@@ -3752,9 +3748,21 @@ function saveProgress()
 		}
 		o += String.fromCharCode(c);
 	}
-	//setCookie('progress', btoa(o), 365);
+	setCookie('progress', btoa(o), 365);
 }
-/*
+
+function loadProgress()
+{
+	var o = atob(getCookie('progress'));
+	for(var i = 0; i < progress.length; i += 8)
+	{
+		for(var j = 0; j < 8 && i + j < progress.length; j++)
+		{
+			progress[i+j] = ((o.charCodeAt(i) >> j) & 1);
+		}
+	}
+}
+
 //from w3schools
 function setCookie(cname, cvalue, exdays) {
   const d = new Date();
@@ -3779,11 +3787,12 @@ function getCookie(cname) {
   }
   return "";
 }
-*/
+
 /*
 start the program
 */
 
+loadProgress();
 board = Chessboard('myBoard', config);
 updateBoardStatus();
 loadOpening();
