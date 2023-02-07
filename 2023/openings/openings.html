@@ -16,7 +16,7 @@
 		integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
 		crossorigin="anonymous"></script>
 <style>
-	body, div, label, u {
+	* {
 		font-size: 30px;
 	}
 </style>
@@ -33,6 +33,7 @@
 </div>
 <div id="boardHolder">
 <div id="myBoard" style="width: 80%"></div>
+<input type="button" id="cont" onclick="loadOpening()" value="Continue" style="display:none;">
 </div>
 <div id="info">
 	<label>Status:</label>
@@ -3638,6 +3639,8 @@ var playProgress = 0;
 
 function loadOpening()
 {
+	$('#cont')[0].style.display = 'none';
+
 	var baseOpening = Math.floor(Math.random() * openings.length);
 	var target = baseOpening;
 	for(var i = baseOpening - 1; i >= 0; i--)
@@ -3713,7 +3716,7 @@ function updatePlayStatus()
 				' - should have played ' + shouldPlay;
 		
 		saveProgress();
-		setTimeout(loadOpening, 4000);
+		$('#cont')[0].style.display = 'inline';
 	}
 }
 
