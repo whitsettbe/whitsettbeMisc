@@ -56,6 +56,12 @@ h-trig int: int[tanh(x),x]	ln(cosh(x))
 h-trig int: int[csch(x),x]	ln(tanh(x/2))
 h-trig int: int[sech(x),x]	atan(sinh(x))
 h-trig int: int[coth(x),x]	ln(sinh(x))
+weierstrass: sin(x)	2t/(1+t^2)
+weierstrass: cos(x)	(1-t^2)/(1+t^2)
+weierstrass: tan(x)	2t/(1-t^2)
+weierstrass: cot(x)	(1-t^2)/(2t)
+weierstrass: sec(x)	(1+t^2)/(1-t^2)
+weierstrass: csc(x)	(1+t^2)/(2t)
 </div>
         <script>
 		var ops = $('#dat')[0].innerHTML.split('\n');
