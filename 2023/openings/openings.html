@@ -33,7 +33,7 @@
 </div>
 <div id="boardHolder">
 <div id="myBoard" style="width: 100%"></div>
-<input type="button" id="cont" onclick="loadOpening()" value="Continue" style="display:none;width:50%;height:4em">
+<input type="button" id="cont" onclick="loadOpening(false)" value="Continue" style="display:none;width:50%;height:4em">
 </div>
 <div id="info">
 	<label>Status:</label>
@@ -3636,11 +3636,12 @@ openings.sort(openingComp);
 
 var playing = -1;
 var playProgress = 0;
+var canProgress = true;
 
-function loadOpening()
+function loadOpening(r = true)
 {
 	$('#cont')[0].style.display = 'none';
-
+	if(r){
 	var baseOpening = Math.floor(Math.random() * openings.length);
 	var target = baseOpening;
 	for(var i = baseOpening - 1; i >= 0; i--)
@@ -3651,6 +3652,8 @@ function loadOpening()
 		}
 	}
 	playing = target;
+	canProgress = true;
+	}
 	playProgress = 0;
 	game.reset();
 	board.position(game.fen());
@@ -3684,7 +3687,7 @@ function updatePlayStatus()
 		{
 			$('#progress')[0].innerHTML += ' - solved!';
 			playProgress = -1 - playProgress;
-			progress[playing] = true;
+			progress[playing] = canProgress;
 			saveProgress();
 			setTimeout(loadOpening, 2000);
 		}
@@ -3714,7 +3717,7 @@ function updatePlayStatus()
 			}
 		$('#progress')[0].innerHTML = (-playProgress-1) + ' / ' + openings[playing].uci.split(' ').length +
 				' - should have played ' + shouldPlay;
-		
+		canProgress = false;
 		saveProgress();
 		$('#cont')[0].style.display = 'inline';
 	}
