@@ -15,7 +15,7 @@
 	<body>
 	<!--<input type="button" value="Generate Chord" onclick="load()">-->
 	<div id="symbol"></div><br>
-	<div id="type"></div><br>
+	<div id="type" style="display:none;"></div>
 	<div id="result"></div>
 	
 <div id="types" style="display:none;">
@@ -50,6 +50,10 @@ aug	Augmented	0 4 8
 			WebMidi.inputs[0].channels[1].addListener("noteoff",
 				e => {isOn[e.note.number] = false});
 		});
+
+		//set low/high notes
+		const low = 48;
+		const high = 71;
 		
 		//make chords
 		const chords = [];
@@ -61,16 +65,22 @@ aug	Augmented	0 4 8
 		var checkInterval = -1;
 		var chordNum = -1;
 		var baseNum = -1;
+		var firstTry = true;
 		
 		function load()
 		{
 			clearInterval(checkInterval);
 			chordNum = Math.floor(Math.random() * chords.length);
-			baseNum = 60;
+			baseNum = 128;
+			while(baseNum + Math.max(...chords[chordNum].notes) > high)
+			{
+				baseNum = Math.floor(Math.random() * (high + 1 - low) + low);
+			}
 			$('#symbol')[0].innerHTML = noteNames[baseNum % 12] + chords[chordNum].symb + ' ' + Math.floor(baseNum / 12 - 1);
 			$('#type')[0].innerHTML = '(' + chords[chordNum].name + ')';
 			$('#result')[0].innerHTML = '';
 			for(var i = 0; i < target.length; i++) target[i] = (chords[chordNum].notes.indexOf(i - baseNum) != -1);
+			firstTry = true;
 			checkInterval = setInterval(checkStatus, 100);
 		}
 		
@@ -81,7 +91,7 @@ aug	Augmented	0 4 8
 			{
 				if(isOn[i] && !target[i])
 				{
-					markWrong();
+					if(firstTry) markWrong();
 					return;
 				}
 				if(target[i] && !isOn[i])
@@ -93,12 +103,11 @@ aug	Augmented	0 4 8
 
 		function markWrong()
 		{
-			clearInterval(checkInterval);
 			$('#result')[0].innerHTML = 'Incorrect: ';
 			for(var i = 0; i < chords[chordNum].notes.length; i++)
 				$('#result')[0].innerHTML += noteNames[(baseNum + chords[chordNum].notes[i]) % 12] + ' ';
 			// + chords[chordNum].notes.join(' ');
-			setTimeout(load, 8000);
+			firstTry = false;
 		}
 
 		function markRight()
