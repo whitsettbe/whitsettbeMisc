@@ -4,14 +4,16 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>WebMidi.js Quick Start</title>
+		<title>Midi Chord Learner</title>
 		<script src="https://cdn.jsdelivr.net/npm/webmidi@latest/dist/iife/webmidi.iife.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-
+		<style>
+			div {font-size: xx-large;}
+		</style>
 	</head>
   
 	<body>
-	<input type="button" value="Generate Chord" onclick="load()">
+	<!--<input type="button" value="Generate Chord" onclick="load()">-->
 	<div id="symbol"></div><br>
 	<div id="type"></div><br>
 	<div id="result"></div>
@@ -56,22 +58,57 @@ aug	Augmented	0 4 8
 			if(chordStrs[i].indexOf('\t') != -1)
 				chords.push(new Chord(chordStrs[i]));
 		const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+		var checkInterval = -1;
+		var chordNum = -1;
+		var baseNum = -1;
 		
 		function load()
 		{
-			var chordNum = Math.floor(Math.random() * chords.length);
-			var baseNum = 61;
+			clearInterval(checkInterval);
+			chordNum = Math.floor(Math.random() * chords.length);
+			baseNum = 60;
 			$('#symbol')[0].innerHTML = noteNames[baseNum % 12] + chords[chordNum].symb + ' ' + Math.floor(baseNum / 12 - 1);
 			$('#type')[0].innerHTML = '(' + chords[chordNum].name + ')';
 			$('#result')[0].innerHTML = '';
-			for(var i = 0; i < target.length; i++) target.push(chords[chordNum].notes.indexOf(i - baseNum) != -1);
+			for(var i = 0; i < target.length; i++) target[i] = (chords[chordNum].notes.indexOf(i - baseNum) != -1);
+			checkInterval = setInterval(checkStatus, 100);
 		}
 		
-		setInterval(checkStatus, 100);
 		function checkStatus()
 		{
-			//console.log('x');
+			var allRight = true;
+			for(var i = 0; i < isOn.length; i++)
+			{
+				if(isOn[i] && !target[i])
+				{
+					markWrong();
+					return;
+				}
+				if(target[i] && !isOn[i])
+					allRight = false;
+			}
+			if(allRight)
+				markRight();
 		}
+
+		function markWrong()
+		{
+			clearInterval(checkInterval);
+			$('#result')[0].innerHTML = 'Incorrect: ';
+			for(var i = 0; i < chords[chordNum].notes.length; i++)
+				$('#result')[0].innerHTML += noteNames[(baseNum + chords[chordNum].notes[i]) % 12] + ' ';
+			// + chords[chordNum].notes.join(' ');
+			setTimeout(load, 8000);
+		}
+
+		function markRight()
+		{
+			clearInterval(checkInterval);
+			$('#result')[0].innerHTML = 'Correct!';
+			setTimeout(load, 2000);
+		}
+
+		load();
 		
 		</script>
 	
