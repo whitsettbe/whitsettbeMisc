@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>WebMidi.js Quick Start</title>
+		<script src="https://cdn.jsdelivr.net/npm/webmidi@latest/dist/iife/webmidi.iife.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+	</head>
+  
+	<body>
+	<input type="button" value="Generate Chord" onclick="load()">
+	<div id="symbol"></div><br>
+	<div id="type"></div><br>
+	<div id="result"></div>
+	
+<div id="types" style="display:none;">
+	Major	0 4 7
+m	Minor	0 3 7
+dim	Diminished	0 3 6
+aug	Augmented	0 4 8
+</div>
+		<script>
+		
+		class Chord
+		{
+			constructor(s)
+			{
+				s = s.split('\t');
+				this.symb = s[0];
+				this.name = s[1];
+				this.notes = [];
+				s[2] = s[2].split(' ');
+				for(var i = 0; i < s[2].length; i++) this.notes.push(parseInt(s[2][i]));
+			}
+		}
+
+		//space for active notes 0..127
+		var isOn = []; for(var i = 0; i < 128; i++) isOn.push(false);
+		var target = []; for(var i = 0; i < 128; i++) target.push(false);
+
+		// Enable WEBMIDI.js
+		WebMidi.enable().then(function(){
+			WebMidi.inputs[0].channels[1].addListener("noteon",
+				e => {isOn[e.note.number] = true});
+			WebMidi.inputs[0].channels[1].addListener("noteoff",
+				e => {isOn[e.note.number] = false});
+		});
+		
+		//make chords
+		const chords = [];
+		var chordStrs = $('#types')[0].innerHTML.split('\n');
+		for(var i = 0; i < chordStrs.length; i++)
+			if(chordStrs[i].indexOf('\t') != -1)
+				chords.push(new Chord(chordStrs[i]));
+		const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+		
+		function load()
+		{
+			var chordNum = Math.floor(Math.random() * chords.length);
+			var baseNum = 61;
+			$('#symbol')[0].innerHTML = noteNames[baseNum % 12] + chords[chordNum].symb + ' ' + Math.floor(baseNum / 12 - 1);
+			$('#type')[0].innerHTML = '(' + chords[chordNum].name + ')';
+			$('#result')[0].innerHTML = '';
+			for(var i = 0; i < target.length; i++) target.push(chords[chordNum].notes.indexOf(i - baseNum) != -1);
+		}
+		
+		setInterval(checkStatus, 100);
+		function checkStatus()
+		{
+			//console.log('x');
+		}
+		
+		</script>
+	
+  </body>
+
+</html>
