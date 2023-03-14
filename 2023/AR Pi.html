@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>AR Pi</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	</head>
+	<body>
+		<input id="start" type="button" onclick="start()" value="Let's go!">
+		<div id="loc"></div>
+
+
+		<script>
+			function locUpdate(pos)
+			{
+				$('#loc')[0].innerHTML = pos.coords.latitude + "," + pos.coords.longitude;
+			}
+
+			function start()
+			{
+				if(navigator.geolocation)
+				{
+					navigator.geolocation.watchPosition(locUpdate);
+				}
+			}
+
+		</script>
+	</body>
+	<footer style="position: fixed; bottom: 0">
+		3-14-2023 6:21 PM
+	</footer>
+</html>
