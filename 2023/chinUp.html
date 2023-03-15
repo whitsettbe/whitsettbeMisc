@@ -14,10 +14,10 @@
 		const canvas = $("#canv")[0];
 		setInterval(function()
 		{
-			if(Math.abs(canvas.height / window.innerHeight - .9) > 0.05 || Math.abs(canvas.width / window.innerWidth - .9) > .05)
+			if(Math.abs(canvas.width / window.innerWidth - .9) > 0.05)
 			{
-				canvas.height = 0.9 * window.innerHeight;
 				canvas.width = 0.9 * window.innerWidth;
+				canvas.height = canvas.width * 4 / 3;
 			}
 		}, 1000);
 		const ctx = canvas.getContext("2d");
@@ -54,6 +54,6 @@
 	</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-14-2023 9:28 PM
+		3-14-2023 9:35 PM
 	</footer>
 </html>
