@@ -21,11 +21,11 @@
 		acl.addEventListener("reading", () => {
 			if(Math.atan2(acl.z, Math.sqrt(acl.x * acl.x + acl.y * acl.y)) * 180 / Math.PI < -60)
 			{
-				$('body').style.backgroundColor = '#FFFF99';
+				$('body')[0].style.backgroundColor = '#FFFF99';
 			}
 			else
 			{
-				$('body').style.backgroundColor = '#FFFFFF';
+				$('body')[0].style.backgroundColor = '#FFFFFF';
 			}
 		});
 
@@ -33,6 +33,6 @@
 	</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-14-2023 9:04 PM
+		3-14-2023 9:05 PM
 	</footer>
 </html>
