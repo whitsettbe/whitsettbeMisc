@@ -128,7 +128,10 @@
 
 		function updateScreen()
 		{
-			ctx.drawImage($('#vid')[0], 0, 0, canvas.height * 3 / 4, canvas.height);
+			if(canvas.height > canvas.width)
+				ctx.drawImage($('#vid')[0], 0, 0, canvas.height * 3 / 4, canvas.height);
+			else
+				ctx.drawImage($('#vid')[0], 0, 0, canvas.width, canvas.width * 3 / 4);
 			if(lookedUp)
 			{
 				if($('#loop')[0].paused || $('#loop')[0].currentTime == 0)
@@ -139,7 +142,7 @@
 				noteNum = search(durSums, Math.floor((Date.now() - songStart) / MILS_PER_TICK));
 				if(lookingUp)
 				{
-					drawRot(ctx, srcImage, canvas.width / 2, canvas.height / 2, srcImage.width, srcImage.height, noteNum % 2 * 14 - 7);
+					drawRot(ctx, srcImage, canvas.width / 2, canvas.height / 2, min(canvas.width, canvas.height), min(canvas.width, canvas.height), noteNum % 2 * 14 - 7);
 				}
 			}
 			else
@@ -155,6 +158,6 @@
 	</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-15-2023 4:25 PM
+		3-15-2023 4:34 PM
 	</footer>
 </html>
