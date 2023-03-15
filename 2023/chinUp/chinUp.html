@@ -21,7 +21,7 @@
 	</head>
 	<body>
 	<!--<div id="start" onclick="start()" style="font-size: larger"><div style="vertical-align: middle">Start</div></div>-->
-	<pre id="info"></pre>
+	<i>Please lock device orientation in portrait and enable motion sensors.</i>
 	<input type="button" id="start" onclick="start()" value="Start">
 	<video autoplay="true" id="vid" hidden></video><br>
 	<canvas id="canv" style="border:1px solid black; display: none"></canvas>
@@ -43,25 +43,16 @@
 		var player;
 		var video;
 		var lookedUp = false;
-		var lookingUp = false;
 		var yAngle = 0;
+		var xAngle = 0;
 		
 		const acl = new Accelerometer({ frequency: 60 });
 		acl.addEventListener("reading", () => {
-			//acc = Math.sqrt(acl.x * acl.x + acl.y * acl.y);
-			//if(canvas.width < canvas.height && acl.y < 0 || acl.x < 0) acc *= -1;
-			//yAngle = 
-			$('#info')[0].innerHTML = Math.round(Math.atan2(acl.z, acl.y) * 180 / Math.PI) + "\n" + Math.round(Math.atan2(acl.z, acl.x) * 180 / Math.PI)
-			if(Math.atan2(acl.z, Math.sqrt(acl.x * acl.x + acl.y * acl.y)) * 180 / Math.PI < -60)
+			yAngle = Math.atan2(acl.z, acl.y) * 180 / Math.PI;
+			xAngle = Math.atan2(acl.z, acl.x) * 180 / Math.PI;
+			if(Math.abs(yAngle + 90) < 30 && Math.abs(xAngle + 90) < 20)
 			{
-				//$('body')[0].style.backgroundColor = '#FFFF99';
 				lookedUp = true;
-				lookingUp = true;
-			}
-			else
-			{
-				//$('body')[0].style.backgroundColor = '#FFFFFF';
-				lookingUp = false;
 			}
 		});
 
@@ -69,7 +60,6 @@
 		{
 			$('#start')[0].style.display = "none";
 			$('#canv')[0].style.display = "inline";
-			screen.orientation.lock("portrait");
 			acl.start();
 
 			if (navigator.mediaDevices.getUserMedia)
@@ -147,11 +137,8 @@
 					songStart = Date.now();
 				}
 				noteNum = search(durSums, Math.floor((Date.now() - songStart) / MILS_PER_TICK));
-				if(lookingUp)
-				{
-					drawRot(ctx, srcImage, canvas.width / 2, canvas.height / 2, Math.min(canvas.width, canvas.height),
-							Math.min(canvas.width, canvas.height), noteNum % 2 * 14 - 7);
-				}
+				drawRot(ctx, srcImage, canvas.width * (xAngle + 110) / 40, canvas.height * (-yAngle - 60) / 60, Math.min(canvas.width, canvas.height),
+						Math.min(canvas.width, canvas.height), noteNum % 2 * 14 - 7);
 			}
 			else
 			{
@@ -166,6 +153,6 @@
 	</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-15-2023 5:19 PM
+		3-15-2023 5:38 PM
 	</footer>
 </html>
