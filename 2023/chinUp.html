@@ -23,16 +23,19 @@
 		const ctx = canvas.getContext("2d");
 		var player;
 		var video;
+		var lookingUp = false;
 		
 		const acl = new Accelerometer({ frequency: 60 });
 		acl.addEventListener("reading", () => {
 			if(Math.atan2(acl.z, Math.sqrt(acl.x * acl.x + acl.y * acl.y)) * 180 / Math.PI < -60)
 			{
-				$('body')[0].style.backgroundColor = '#FFFF99';
+				//$('body')[0].style.backgroundColor = '#FFFF99';
+				lookingUp = true;
 			}
 			else
 			{
-				$('body')[0].style.backgroundColor = '#FFFFFF';
+				//$('body')[0].style.backgroundColor = '#FFFFFF';
+				lookingUp = false;
 			}
 		});
 
@@ -46,10 +49,15 @@
 					function(stream)
 					{
 						$('#vid')[0].srcObject = stream;
-						setInterval(function(){ctx.drawImage($('#vid')[0], 0, 0, canvas.height * 3 / 4, canvas.height);}, 30);
+						setInterval(updateScreen, 30);
 					});
 				
 			}
+		}
+
+		function updateScreen()
+		{
+			ctx.drawImage($('#vid')[0], 0, 0, canvas.height * 3 / 4, canvas.height);
 		}
 	</script>
 	</body>
