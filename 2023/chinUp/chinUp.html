@@ -32,12 +32,12 @@
 		const canvas = $("#canv")[0];
 		setInterval(function()
 		{
-			if(Math.abs(canvas.width / window.innerWidth - .9) > 0.05 || Math.abs(canvas.height / window.innerHeight - .9) > .05)
+			if(Math.abs(canvas.width / window.innerWidth - .9) > 0.01 || Math.abs(canvas.height / window.innerHeight - .9) > .01)
 			{
 				canvas.width = 0.9 * window.innerWidth;
 				canvas.height = 0.9 * window.innerHeight;
 			}
-		}, 1000);
+		}, 100);
 		const ctx = canvas.getContext("2d");
 		var player;
 		var video;
@@ -142,7 +142,8 @@
 				noteNum = search(durSums, Math.floor((Date.now() - songStart) / MILS_PER_TICK));
 				if(lookingUp)
 				{
-					drawRot(ctx, srcImage, canvas.width / 2, canvas.height / 2, min(canvas.width, canvas.height), min(canvas.width, canvas.height), noteNum % 2 * 14 - 7);
+					drawRot(ctx, srcImage, canvas.width / 2, canvas.height / 2, Math.min(canvas.width, canvas.height),
+							Math.min(canvas.width, canvas.height), noteNum % 2 * 14 - 7);
 				}
 			}
 			else
@@ -158,6 +159,6 @@
 	</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-15-2023 4:34 PM
+		3-15-2023 4:39 PM
 	</footer>
 </html>
