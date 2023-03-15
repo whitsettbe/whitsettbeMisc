@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Chin Up</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+		<style>
+			#start
+			{
+				display: inline;
+				position: absolute;
+				left: 10px;
+				right: 10px;
+				top: 10px;
+				bottom: 30px;
+				background-color: gray;
+				border: 3px solid black;
+				font-size: x-large;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+	<!--<div id="start" onclick="start()" style="font-size: larger"><div style="vertical-align: middle">Start</div></div>-->
+	<input type="button" id="start" onclick="start()" value="Start">
+	<video autoplay="true" id="vid" hidden></video><br>
+	<canvas id="canv" style="border:1px solid black; display: none"></canvas>
+	<audio id="loop" src="loop.mp3"></audio>
+	<audio id="bit" src="bit.mp3"></audio>
+	<script>
+
+
+		const canvas = $("#canv")[0];
+		setInterval(function()
+		{
+			if(Math.abs(canvas.width / window.innerWidth - .9) > 0.05 || Math.abs(canvas.height / window.innerHeight - .9) > .05)
+			{
+				canvas.width = 0.9 * window.innerWidth;
+				canvas.height = 0.9 * window.innerHeight;
+			}
+		}, 1000);
+		const ctx = canvas.getContext("2d");
+		var player;
+		var video;
+		var lookedUp = false;
+		var lookingUp = false;
+		
+		const acl = new Accelerometer({ frequency: 60 });
+		acl.addEventListener("reading", () => {
+			if(Math.atan2(acl.z, Math.sqrt(acl.x * acl.x + acl.y * acl.y)) * 180 / Math.PI < -60)
+			{
+				//$('body')[0].style.backgroundColor = '#FFFF99';
+				lookedUp = true;
+				lookingUp = true;
+			}
+			else
+			{
+				//$('body')[0].style.backgroundColor = '#FFFFFF';
+				lookingUp = false;
+			}
+		});
+
+		function start()
+		{
+			$('#start')[0].style.display = "none";
+			$('#canv')[0].style.display = "inline";
+			acl.start();
+
+			if (navigator.mediaDevices.getUserMedia)
+			{
+				navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}}).then(
+					function(stream)
+					{
+						$('#vid')[0].srcObject = stream;
+						setInterval(updateScreen, 10);
+					});
+				
+			}
+		}
+
+		//handle audio and screen updates
+		const MILS_PER_TICK = (60 * 1000) / (112 * 4);
+		const DURS = [
+				4, 4, 4, 4,
+				1, 1, 1, 1, 2, 2, 2, 2, 4,
+				4, 4, 4, 4,
+				1, 1, 1, 1, 2, 2, 2, 2, 4,
+				3, 5, 3, 5,
+				1, 1, 1, 1, 2, 2, 8,
+				1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2,
+				2, 1, 1, 1, 1, 2, 8,
+				4, 3, 1, 2, 2, 2, 2,
+				3, 1, 4, 2, 2, 2, 2,
+				4, 3, 1, 2, 2, 1, 3,
+				4, 3, 1, 2, 2, 1, 3,
+				4, 4, 4, 4,
+				1, 1, 1, 1, 2, 2, 2, 2, 4,
+				4, 4, 4, 4,
+				1, 1, 1, 1, 2, 2, 2, 2, 4,
+				3, 5, 3, 5,
+				1, 1, 1, 1, 2, 2, 8,
+				1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2,
+				2, 1, 1, 1, 1, 2, 8];
+		var loaded = Date.now();
+		var songStart;
+		var srcImage = new Image(); srcImage.src = "sun.png";
+
+		var durSums = [0];
+		for(var i = 0; i < DURS.length; i++) durSums.push(durSums[durSums.length - 1] + DURS[i]);
+
+		function search(arr, x)
+		{
+			for(var i = 0; i < arr.length; i++)
+			{
+				if(arr[i] > x) return i - 1;
+			}
+			return arr.length - 1;
+		}
+
+		function drawRot(context, image, x, y, width, height, degrees)
+		{
+			//console.log(x, y, width, height, degrees);
+			context.translate(x, y);
+			context.rotate(degrees * Math.PI / 180);
+			context.drawImage(image, -width / 2, -height / 2, width, height);
+			context.rotate(-degrees * Math.PI / 180);
+			context.translate(-x, -y);
+		}
+
+		function updateScreen()
+		{
+			ctx.drawImage($('#vid')[0], 0, 0, canvas.height * 3 / 4, canvas.height);
+			if(lookedUp)
+			{
+				if($('#loop')[0].paused || $('#loop')[0].currentTime == 0)
+				{
+					$('#loop')[0].play();
+					songStart = Date.now();
+				}
+				noteNum = search(durSums, Math.floor((Date.now() - songStart) / MILS_PER_TICK));
+				if(lookingUp)
+				{
+					drawRot(ctx, srcImage, canvas.width / 2, canvas.height / 2, srcImage.width, srcImage.height, noteNum % 2 * 14 - 7);
+				}
+			}
+			else
+			{
+				if(($('#bit')[0].paused || $('#bit')[0].currentTime == 0) && (Date.now() - loaded) % 10000 > 9000)
+				{
+					$('#bit')[0].play();
+				}
+			}
+		}
+
+		
+	</script>
+	</body>
+	<footer style="position: fixed; bottom: 0">
+		3-15-2023 4:25 PM
+	</footer>
+</html>
