@@ -19,13 +19,13 @@
 
 		const acl = new Accelerometer({ frequency: 60 });
 		acl.addEventListener("reading", () => {
-			$('#dat')[0].innerHTML = round(acl.x, 2) + "\n" + round(acl.y, 2) + "\n" + round(acl.z, 2);
+			$('#dat')[0].innerHTML = (Math.atan2(acl.z, Math.sqrt(acl.x * acl.x + acl.y * acl.y)) * 180 / Math.PI) + "";
 		});
 
 		acl.start();
 	</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-14-2023 7:52 PM
+		3-14-2023 8:36 PM
 	</footer>
 </html>
