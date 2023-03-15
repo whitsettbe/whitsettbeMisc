@@ -19,13 +19,20 @@
 
 		const acl = new Accelerometer({ frequency: 60 });
 		acl.addEventListener("reading", () => {
-			$('#dat')[0].innerHTML = (Math.atan2(acl.z, Math.sqrt(acl.x * acl.x + acl.y * acl.y)) * 180 / Math.PI) + "";
+			if(Math.atan2(acl.z, Math.sqrt(acl.x * acl.x + acl.y * acl.y)) * 180 / Math.PI < -60)
+			{
+				$('body').style.backgroundColor = '#FFFF99';
+			}
+			else
+			{
+				$('body').style.backgroundColor = '#FFFFFF';
+			}
 		});
 
 		acl.start();
 	</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-14-2023 8:36 PM
+		3-14-2023 9:04 PM
 	</footer>
 </html>
