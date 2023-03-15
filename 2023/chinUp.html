@@ -12,9 +12,14 @@
 	<body>
 	<div id="dat"></div>
 	<script>
+		function round(n, d)
+		{
+			return Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
+		}
+
 		const acl = new Accelerometer({ frequency: 60 });
 		acl.addEventListener("reading", () => {
-			$('#dat')[0].innerHTML = acl.x + "," + acl.y + "," + acl.z;
+			$('#dat')[0].innerHTML = round(acl.x, 2) + "\n" + round(acl.y, 2) + "\n" + round(acl.z, 2);
 		});
 
 		acl.start();
