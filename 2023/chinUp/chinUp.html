@@ -45,11 +45,19 @@
 		var lookedUp = false;
 		var yAngle = 0;
 		var xAngle = 0;
+		const DROP = 0.9;
 		
 		const acl = new Accelerometer({ frequency: 60 });
 		acl.addEventListener("reading", () => {
-			yAngle = Math.atan2(acl.z, acl.y) * 180 / Math.PI;
-			xAngle = Math.atan2(acl.z, acl.x) * 180 / Math.PI;
+			
+			newY = Math.atan2(acl.z, acl.y) * 180 / Math.PI;
+			newX = Math.atan2(acl.z, acl.x) * 180 / Math.PI;
+
+			if(Math.abs(newY - yAngle) > 180) yAngle = newY;
+			else yAngle = yAngle * DROP + newY * (1 - DROP);
+			if(Math.abs(newX - xAngle) > 180) xAngle = newX;
+			else xAngle = xAngle * DROP + newX * (1 - DROP); 
+
 			if(Math.abs(yAngle + 90) < 30 && Math.abs(xAngle + 90) < 20)
 			{
 				lookedUp = true;
@@ -153,6 +161,6 @@
 	</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-15-2023 5:38 PM
+		3-15-2023 5:47 PM
 	</footer>
 </html>
