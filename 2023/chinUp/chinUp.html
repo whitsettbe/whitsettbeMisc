@@ -44,12 +44,13 @@
 		var video;
 		var lookedUp = false;
 		var lookingUp = false;
-		var angle = 0;
+		var yAngle = 0;
 		
 		const acl = new Accelerometer({ frequency: 60 });
 		acl.addEventListener("reading", () => {
 			//acc = Math.sqrt(acl.x * acl.x + acl.y * acl.y);
 			//if(canvas.width < canvas.height && acl.y < 0 || acl.x < 0) acc *= -1;
+			//yAngle = 
 			$('#info')[0].innerHTML = Math.round(Math.atan2(acl.z, acl.y) * 180 / Math.PI) + "\n" + Math.round(Math.atan2(acl.z, acl.x) * 180 / Math.PI)
 			if(Math.atan2(acl.z, Math.sqrt(acl.x * acl.x + acl.y * acl.y)) * 180 / Math.PI < -60)
 			{
@@ -68,6 +69,7 @@
 		{
 			$('#start')[0].style.display = "none";
 			$('#canv')[0].style.display = "inline";
+			screen.orientation.lock("portrait");
 			acl.start();
 
 			if (navigator.mediaDevices.getUserMedia)
@@ -164,6 +166,6 @@
 	</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-15-2023 5:05 PM
+		3-15-2023 5:19 PM
 	</footer>
 </html>
