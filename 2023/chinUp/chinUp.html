@@ -21,6 +21,7 @@
 	</head>
 	<body>
 	<!--<div id="start" onclick="start()" style="font-size: larger"><div style="vertical-align: middle">Start</div></div>-->
+	<div id="info"></div>
 	<input type="button" id="start" onclick="start()" value="Start">
 	<video autoplay="true" id="vid" hidden></video><br>
 	<canvas id="canv" style="border:1px solid black; display: none"></canvas>
@@ -43,9 +44,13 @@
 		var video;
 		var lookedUp = false;
 		var lookingUp = false;
+		var angle = 0;
 		
 		const acl = new Accelerometer({ frequency: 60 });
 		acl.addEventListener("reading", () => {
+			acc = Math.sqrt(acl.x * acl.x + acl.y * acl.y);
+			if(Math.abs(acl.x) < Math.abs(acl.y) && acl.y < 0 || acl.x < 0) acc *= -1;
+			$('#info')[0].innerHTML = Math.round(Math.atan2(acl.z, acc) * 180 / Math.PI)
 			if(Math.atan2(acl.z, Math.sqrt(acl.x * acl.x + acl.y * acl.y)) * 180 / Math.PI < -60)
 			{
 				//$('body')[0].style.backgroundColor = '#FFFF99';
@@ -159,6 +164,6 @@
 	</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-15-2023 4:39 PM
+		3-15-2023 4:57 PM
 	</footer>
 </html>
