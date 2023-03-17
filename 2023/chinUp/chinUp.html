@@ -14,7 +14,7 @@
 				bottom: 30px;
 				background-color: gray;
 				border: 3px solid black;
-				font-size: xx-large;
+				font-size: 30pt;
 				text-align: center;
 			}
 		</style>
@@ -22,7 +22,8 @@
 	<body>
 	<!--<div id="start" onclick="start()" style="font-size: larger"><div style="vertical-align: middle">Start</div></div>-->
 <!--	<i style="font-size: large">Please lock device orientation in portrait and enable motion sensors.</i>-->
-	<input type="button" id="start" onclick="start()" value="1. Lock orientation in portrait&#10;2. Enable motion sensing in chrome site settings&#10;3. Click to start (and enable camera access)">
+	<input type="button" id="start" onclick="start()" value=
+		"1. Lock orientation in portrait&#10;2. Enable motion sensing in chrome site settings&#10;3. Turn up media volume&#10;4. Click to start (and enable camera access)">
 	<video autoplay="true" id="vid" hidden></video><br>
 	<canvas id="canv" style="border:1px solid black; display: none; position: absolute; left: 5px;"></canvas>
 	<audio id="loop" src="loop.mp3"></audio>
@@ -33,10 +34,10 @@
 		const canvas = $("#canv")[0];
 		setInterval(function()
 		{
-			if(Math.abs(canvas.width / window.innerWidth - .97) > 0.01 || Math.abs(canvas.height / window.innerHeight - .95) > .01)
+			if(Math.abs(canvas.width / window.innerWidth - .97) > 0.01 || Math.abs(canvas.height / window.innerHeight - .97) > .01)
 			{
 				canvas.width = window.innerWidth * .97;
-				canvas.height = window.innerHeight * .95;
+				canvas.height = window.innerHeight * .97;
 			}
 		}, 100);
 		const ctx = canvas.getContext("2d");
@@ -152,15 +153,15 @@
 					$('#bit')[0].play();
 				}
 			}
-noteNum = search(durSums, Math.floor((Date.now() - songStart) / MILS_PER_TICK));
-				drawRot(ctx, srcImage, canvas.width * (xAngle + 110) / 40, canvas.height * (-yAngle - 60) / 60, Math.min(canvas.width, canvas.height),
-						Math.min(canvas.width, canvas.height), noteNum % 2 * 10 - 5);
+			noteNum = search(durSums, Math.floor((Date.now() - songStart) / MILS_PER_TICK));
+			drawRot(ctx, srcImage, canvas.width * (xAngle + 110) / 40, canvas.height * (-yAngle - 60) / 60, Math.min(canvas.width, canvas.height),
+					Math.min(canvas.width, canvas.height), noteNum % 2 * 10 - 5);
 		}
 
 		
 	</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-16-2023 9:29 PM
+		3-17-2023 5:38 PM
 	</footer>
 </html>
