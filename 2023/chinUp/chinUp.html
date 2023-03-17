@@ -106,7 +106,7 @@
 				1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2,
 				2, 1, 1, 1, 1, 2, 8];
 		var loaded = Date.now();
-		var songStart;
+		var songStart = Date.now();
 		var srcImage = new Image(); srcImage.src = "sun.png";
 
 		var durSums = [0];
@@ -144,9 +144,6 @@
 					$('#loop')[0].play();
 					songStart = Date.now();
 				}
-				noteNum = search(durSums, Math.floor((Date.now() - songStart) / MILS_PER_TICK));
-				drawRot(ctx, srcImage, canvas.width * (xAngle + 110) / 40, canvas.height * (-yAngle - 60) / 60, Math.min(canvas.width, canvas.height),
-						Math.min(canvas.width, canvas.height), noteNum % 2 * 14 - 7);
 			}
 			else
 			{
@@ -155,6 +152,9 @@
 					$('#bit')[0].play();
 				}
 			}
+noteNum = search(durSums, Math.floor((Date.now() - songStart) / MILS_PER_TICK));
+				drawRot(ctx, srcImage, canvas.width * (xAngle + 110) / 40, canvas.height * (-yAngle - 60) / 60, Math.min(canvas.width, canvas.height),
+						Math.min(canvas.width, canvas.height), noteNum % 2 * 10 - 5);
 		}
 
 		
