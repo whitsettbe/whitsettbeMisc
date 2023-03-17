@@ -22,7 +22,7 @@
 	<body>
 	<!--<div id="start" onclick="start()" style="font-size: larger"><div style="vertical-align: middle">Start</div></div>-->
 	<i style="font-size: large">Please lock device orientation in portrait and enable motion sensors.</i>
-	<input type="button" id="start" onclick="start()" value="Start">
+	<input type="button" id="start" onclick="start()" value="Start\nhere">
 	<video autoplay="true" id="vid" hidden></video><br>
 	<canvas id="canv" style="border:1px solid black; display: none; position: absolute; left: 5px;"></canvas>
 	<audio id="loop" src="loop.mp3"></audio>
@@ -106,7 +106,7 @@
 				1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2,
 				2, 1, 1, 1, 1, 2, 8];
 		var loaded = Date.now();
-		var songStart = Date.now();
+		var songStart = 0;
 		var srcImage = new Image(); srcImage.src = "sun.png";
 
 		var durSums = [0];
@@ -161,6 +161,6 @@ noteNum = search(durSums, Math.floor((Date.now() - songStart) / MILS_PER_TICK));
 	</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-15-2023 5:59 PM
+		3-16-2023 9:16 PM
 	</footer>
 </html>
