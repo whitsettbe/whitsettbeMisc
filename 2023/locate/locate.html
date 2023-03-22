@@ -93,10 +93,10 @@
 				{
 					const d = Math.sqrt(this.xn * this.xn + this.xe * this.xe);
 					const brng = Math.atan2(this.xe, this.xn);
-					console.log(this.xe, this.xn, this.φ1, this.λ1);
+					//console.log(this.xe, this.xn, this.φ1, this.λ1);
 					if(!brng) return this.φ1 * 180 / Math.PI + "N, " + this.λ1 * 180 / Math.PI + "E"
 					const R = 6371e3;
-					console.log(this.xe, this.xn, d, brng);
+					//console.log(this.xe, this.xn, d, brng);
 					const φ2 = Math.asin(Math.sin(this.φ1)*Math.cos(d/R) +
 							Math.cos(this.φ1)*Math.sin(d/R)*Math.cos(brng) );
 					const λ2 = this.λ1 + Math.atan2(Math.sin(brng)*Math.sin(d/R)*Math.cos(this.φ1),
@@ -123,8 +123,9 @@
 					navigator.geolocation.getCurrentPosition(function(initPos){
 						console.log(initPos);
 						k = new Kalman(PROC_ERR, NOISE_ERR, initPos.coords.latitude, initPos.coords.longitude);
-						navigator.geolocation.watchPosition(posUpdate);
-						setInterval(function(){$('#loc')[0].innerHTML = k.currentLoc();}, 100);
+						//navigator.geolocation.watchPosition(posUpdate);
+						setInterval(navigator.geolocation.getCurrentPosition(posUpdate,function(err){console.log(err)}, {enableHighAccuracy: true}), 1000);
+						setInterval(function(){$('#loc')[0].innerHTML += k.currentLoc();}, 1000);
 					});
 				}
 			}
