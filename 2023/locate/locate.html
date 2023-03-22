@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Locator</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+		<script>
+			//https://www.movable-type.co.uk/scripts/latlong.html
+			function neMeters(lat1, lon1, lat2, lon2)
+			{
+				const R = 6371e3; // metres
+				const φ1 = lat1 * Math.PI/180; // φ, λ in radians
+				const φ2 = lat2 * Math.PI/180;
+				const Δφ = (lat2-lat1) * Math.PI/180;
+				const Δλ = (lon2-lon1) * Math.PI/180;
+
+				const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+						Math.cos(φ1) * Math.cos(φ2) *
+						Math.sin(Δλ/2) * Math.sin(Δλ/2);
+				const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+				const d = R * c; // in metres
+
+				const y = Math.sin(Δλ) * Math.cos(φ2);
+				const x = Math.cos(φ1)*Math.sin(φ2) -
+						Math.sin(φ1)*Math.cos(φ2)*Math.cos(Δλ);
+				const θ = Math.atan2(y, x);
+				const brng = (θ*180/Math.PI + 360) % 360; // in degrees
+
+				return [d * Math.cos(θ), d * Math.sin(θ)];
+			}
+
+			//https://en.wikipedia.org/wiki/Alpha_beta_filter#Alpha_beta_gamma_filter
+			class Kalman
+			{
+				constructor(σw, σv, lat1, long1)
+				{
+					//process covariance: typical deviation from an accurate model
+					//noise covariance: typical deviation in the sensors
+					this.then = Date.now();
+					this.σw = σw;
+					this.σv = σv;
+					this.lat1 = lat1;
+					this.long1 = long1;
+					this.φ1 = lat1 * Math.PI / 180;
+					this.λ1 = long1 * Math.PI / 180;
+					this.xn = 0;
+					this.vn = 0;
+					this.an = 0;
+					this.xe = 0;
+					this.ve = 0;
+					this.ae = 0;
+				}
+
+				//https://en.wikipedia.org/wiki/Alpha_beta_filter#Alpha_beta_gamma_filter
+				update(lat2, long2)
+				{
+					const t = Date.now();
+					const T = (t - this.then) / 1000;
+					this.then = t;
+
+					//calculate update parameters
+					const λ = this.σw * T * T / this.σv;
+					const b = λ / 2 - 3;
+					const c = λ / 2 + 3;
+					const d = -1;
+					const p = c - b * b / 3;
+					const q = 2 * b * b * b / 27 - b * c / 3 + d;
+					const v = Math.sqrt(q * q + 4 * p * p * p / 27);
+					const z = - Math.pow(q + v / 2, 1/3);
+					const s = z - p / (3 * z) - b / 3;
+					const α = 1 - s * s;
+					const β = 2 * (1 - s) * (1 - s);
+					const γ = β * β / (2 * α);
+
+					//project from previous information
+					this.xn += T * this.vn + T * T / 2 * this.an;
+					this.vn += T * this.an;
+					this.xe += T * this.ve + T * T / 2 * this.ae;
+					this.ve += T * this.ae;
+
+					//calculate error
+					const newLoc = neMeters(this.lat1, this.long1, lat2, long2);
+					console.log(newLoc);
+					const rn = newLoc[0] - this.xn;
+					const re = newLoc[1] - this.xe;
+
+					//correct location
+					this.xn += α * rn; this.vn += β / T * rn; this.an += 2 * γ / (T * T) * rn;
+					this.xe += α * re; this.ve += β / T * re; this.ae += 2 * γ / (T * T) * re;
+				}
+
+				currentLoc()
+				{
+					const d = Math.sqrt(this.xn * this.xn + this.xe * this.xe);
+					const brng = Math.atan2(this.xe, this.xn);
+					const R = 6371e3;
+					console.log(this.xe, this.xn, d, brng);
+					const φ2 = Math.asin(Math.sin(this.φ1)*Math.cos(d/R) +
+							Math.cos(this.φ1)*Math.sin(d/R)*Math.cos(brng) );
+					const λ2 = this.λ1 + Math.atan2(Math.sin(brng)*Math.sin(d/R)*Math.cos(this.φ1),
+							Math.cos(d/R)-Math.sin(this.φ1)*Math.sin(φ2));
+					return φ2 * 180 / Math.PI + "N, " + λ2 * 180 / Math.PI + "E";
+				}
+			}
+
+		</script>
+	</head>
+	<body>
+		<input type="button" value="Start" onclick="start()">
+		<div id="loc"></div>
+		<script>
+			const PROC_ERR = 1;
+			const NOISE_ERR = 100;
+
+			var k;
+
+			function start()
+			{
+				if(navigator.geolocation)
+				{
+					const initPos = navigator.geolocation.getCurrentPosition();
+					k = new Kalman(PROC_ERR, NOISE_ERR, initPos.latitude, initPos.longitude);
+					navigator.geolocation.watchPosition(posUpdate);
+					setInterval(function(){$('#loc')[0].innerHTML = k.currentLoc();}, 100);
+				}
+			}
+
+			function posUpdate(position)
+			{
+				k.update(position.latitude, position.longitude);
+			}
+		</script>
+	</body>
+</html>
