@@ -32,11 +32,11 @@
 			//https://en.wikipedia.org/wiki/Alpha_beta_filter#Alpha_beta_gamma_filter
 			class Kalman
 			{
-				constructor(σw, σv, lat1, long1)
+				constructor(σw, σv, lat1, long1, t)
 				{
 					//process covariance: typical deviation from an accurate model
 					//noise covariance: typical deviation in the sensors
-					this.then = Date.now();
+					this.then = t;
 					this.σw = σw;
 					this.σv = σv;
 					this.lat1 = lat1;
@@ -53,9 +53,8 @@
 				}
 
 				//https://en.wikipedia.org/wiki/Alpha_beta_filter#Alpha_beta_gamma_filter
-				update(lat2, long2)
+				update(lat2, long2, t)
 				{
-					const t = Date.now();
 					const T = (t - this.then) / 1000;
 					this.then = t;
 
@@ -123,7 +122,7 @@
 				{
 					navigator.geolocation.getCurrentPosition(function(initPos){
 						console.log(initPos);
-						k = new Kalman(PROC_ERR, NOISE_ERR, initPos.coords.latitude, initPos.coords.longitude);
+						k = new Kalman(PROC_ERR, NOISE_ERR, initPos.coords.latitude, initPos.coords.longitude, initPos.timestamp);
 						//navigator.geolocation.watchPosition(posUpdate);
 						//setInterval(navigator.geolocation.getCurrentPosition(posUpdate,function(err){console.log(err)}, {enableHighAccuracy: true}), 1000);
 						//setInterval(function(){$('#loc')[0].innerHTML += " " + k.currentLoc();}, 1000);
@@ -135,7 +134,7 @@
 			function posUpdate(position)
 			{
 				$('#loc')[0].innerHTML += " " + position.coords.latitude + "," + position.coords.longitude + "(" + position.timestamp % 100000 + ")";
-				k.update(position.coords.latitude, position.coords.longitude);
+				k.update(position.coords.latitude, position.coords.longitude, position.timestamp);
 			}
 		</script>
 	</body>
