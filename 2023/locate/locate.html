@@ -72,6 +72,7 @@
 					const α = 1 - s * s;
 					const β = 2 * (1 - s) * (1 - s);
 					const γ = β * β / (2 * α);
+					$('#loc')[0].innerHTML += " (" + λ + "," + b + "," + c + "," + d + "," + p + "," + q + "," + v + "," + z + "," + s + "," + α + "," + β + "," + γ + ")";
 
 					//project from previous information
 					this.xn += T * this.vn + T * T / 2 * this.an;
@@ -125,7 +126,7 @@
 						k = new Kalman(PROC_ERR, NOISE_ERR, initPos.coords.latitude, initPos.coords.longitude);
 						//navigator.geolocation.watchPosition(posUpdate);
 						setInterval(navigator.geolocation.getCurrentPosition(posUpdate,function(err){console.log(err)}, {enableHighAccuracy: true}), 1000);
-						setInterval(function(){$('#loc')[0].innerHTML += k.currentLoc();}, 1000);
+						setInterval(function(){$('#loc')[0].innerHTML += " " + k.currentLoc();}, 1000);
 					});
 				}
 			}
