@@ -72,7 +72,7 @@
 					const α = 1 - s * s;
 					const β = 2 * (1 - s) * (1 - s);
 					const γ = β * β / (2 * α);
-					$('#loc')[0].innerHTML += " (" + λ + "," + b + "," + c + "," + d + "," + p + "," + q + "," + v + "," + z + "," + s + "," + α + "," + β + "," + γ + ")";
+					$('#loc')[0].innerHTML += " (("+T+")," + λ + "," + b + "," + c + "," + d + "," + p + "," + q + "," + v + "," + z + "," + s + "," + α + "," + β + "," + γ + ")";
 
 					//project from previous information
 					this.xn += T * this.vn + T * T / 2 * this.an;
