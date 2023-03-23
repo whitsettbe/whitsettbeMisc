@@ -123,18 +123,18 @@
 				{
 					navigator.geolocation.getCurrentPosition(function(initPos){
 						console.log(initPos);
-						//k = new Kalman(PROC_ERR, NOISE_ERR, initPos.coords.latitude, initPos.coords.longitude);
+						k = new Kalman(PROC_ERR, NOISE_ERR, initPos.coords.latitude, initPos.coords.longitude);
 						//navigator.geolocation.watchPosition(posUpdate);
 						//setInterval(navigator.geolocation.getCurrentPosition(posUpdate,function(err){console.log(err)}, {enableHighAccuracy: true}), 1000);
 						//setInterval(function(){$('#loc')[0].innerHTML += " " + k.currentLoc();}, 1000);
-						navigator.geolocation.watchPosition(function(position){console.log(position); $('#loc')[0].innerHTML = position.coords.latitude;});
+						navigator.geolocation.watchPosition(posUpdate);
 					});
 				}
 			}
 
 			function posUpdate(position)
 			{
-				console.log(position);
+				$('#loc')[0].innerHTML += " " + position.coords.latitude + "," + position.coords.longitude;
 				k.update(position.coords.latitude, position.coords.longitude);
 			}
 		</script>
