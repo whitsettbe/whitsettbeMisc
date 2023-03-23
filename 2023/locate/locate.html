@@ -134,7 +134,7 @@
 
 			function posUpdate(position)
 			{
-				$('#loc')[0].innerHTML += " " + position.coords.latitude + "," + position.coords.longitude;
+				$('#loc')[0].innerHTML += " " + position.coords.latitude + "," + position.coords.longitude + "(" + position.timestamp % 100000 + ")";
 				k.update(position.coords.latitude, position.coords.longitude);
 			}
 		</script>
