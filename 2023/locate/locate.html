@@ -55,7 +55,7 @@
 				//https://en.wikipedia.org/wiki/Alpha_beta_filter#Alpha_beta_gamma_filter
 				update(lat2, long2, t)
 				{
-					const T = (t - this.then) / 1000;
+					const T = Math.floor(t - this.then) * .001;
 					this.then = t;
 
 					//calculate update parameters
