@@ -134,13 +134,15 @@
 				}
 			}
 
-			function rotate(v, q)
+			function rotate(v, q, d=-1)
 			{
 				[x,y,z] = v;
-				[r,i,j,k] = q;
-				return [x * (1 - 2 * (j * j + k * k)) + y * 2 * (i * j + k * r) + z * 2 * (i * k - j * r),
-						x * 2 * (i * j - k * r) + y * (1 - 2 * (i * i + k * k)) + z * 2 * (j * k + i * r),
-						x * 2 * (i * k + j * r) + y * 2 * (j * k - i * r) + z * (1 - 2 * (i * i + j * j))];
+				[i,j,k,r] = q;
+				o = [x * (1 - 2 * (j * j + k * k)) + y * 2 * (i * j + k * r) + z * 2 * (i * k - j * r),
+					x * 2 * (i * j - k * r) + y * (1 - 2 * (i * i + k * k)) + z * 2 * (j * k + i * r),
+					x * 2 * (i * k + j * r) + y * 2 * (j * k - i * r) + z * (1 - 2 * (i * i + j * j))];
+				if(d < 0) return o
+				return [Math.round(o[0]*Math.pow(10,d))/Math.pow(10,d), Math.round(o[1]*Math.pow(10,d))/Math.pow(10,d), Math.round(o[2]*Math.pow(10,d))/Math.pow(10,d)]
 			}
 
 			function posUpdate(position)
@@ -185,10 +187,10 @@
 				sensor.start();
 			} else { dat[4] = [0]; }});
 
-			setInterval(function(){dat[5] = rotate([linacc.x, linacc.y, linacc.z], sensor.quaternion)}, 20);
+			setInterval(function(){dat[5] = rotate([linacc.x, linacc.y, linacc.z], sensor.quaternion, 3)}, 20);
 		</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-26-2023 9:30 AM
+		3-26-2023 9:56 AM
 	</footer>
 </html>
