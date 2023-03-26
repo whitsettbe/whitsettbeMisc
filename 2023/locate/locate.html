@@ -136,6 +136,7 @@
 
 			function rotate(v, q, d=-1)
 			{
+				if(!q) return [0,0,0];
 				[x,y,z] = v;
 				[i,j,k,r] = q;
 				o = [x * (1 - 2 * (j * j + k * k)) + y * 2 * (i * j + k * r) + z * 2 * (i * k - j * r),
@@ -156,7 +157,13 @@
 			setInterval(function(){
 				var s = "";
 				for(var i = 0; i < dat.length; i++)
-					s += dat[i].toString().split(",").join("\t") + "\n";
+				{
+					for(var j = 0; j < dat[i].length; j++)
+					{
+						s += (dat[i][j] >= 0 ? ' ' : '') + dat[i][j] + '\t';
+					}
+					s += '\n';
+				}
 				$('#sense')[0].innerHTML = s;
 			}, 10);
 
@@ -191,6 +198,6 @@
 		</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-26-2023 9:56 AM
+		3-26-2023 10:05 AM
 	</footer>
 </html>
