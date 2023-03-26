@@ -142,22 +142,27 @@
 			}
 
 			var dat = [[0, 0, 0],[0,0,0],[0,0,0],[0,0,0],[0,0,0,0]];
-			setInterval(function(){var s = ""; for(var i = 0; i < dat.length; i++) s += dat[i].toString() + "\n"; $('#sense')[0].innerHTML = s;}, 10);
+			setInterval(function(){
+				var s = "";
+				for(var i = 0; i < dat.length; i++)
+					s += dat[i].toString().split(",").join("\t") + "\n";
+				$('#sense')[0].innerHTML = s;
+			}, 10);
 
 			const acl = new Accelerometer({ frequency: 60 });
-			acl.addEventListener("reading", () => {dat[0] = [Math.round(acl.x*10)/10, Math.round(acl.y*10)/10, Math.round(acl.z*10)/10]});
+			acl.addEventListener("reading", () => {dat[0] = [Math.round(acl.x*100)/100, Math.round(acl.y*100)/100, Math.round(acl.z*100)/100]});
 			acl.start();
 
 			const grav = new GravitySensor({ frequency: 60 });
-			grav.addEventListener("reading", (e) => {dat[1] = [Math.round(grav.x*10)/10, Math.round(grav.y*10)/10, Math.round(grav.z*10)/10]});
+			grav.addEventListener("reading", (e) => {dat[1] = [Math.round(grav.x*100)/100, Math.round(grav.y*100)/100, Math.round(grav.z*100)/100]});
 			grav.start();
 
 			const gyro = new Gyroscope({ frequency: 60 });
-			gyro.addEventListener("reading", (e) => {dat[2] = [Math.round(gyro.x*10)/10, Math.round(gyro.y*10)/10, Math.round(gyro.z*10)/10]});
+			gyro.addEventListener("reading", (e) => {dat[2] = [Math.round(gyro.x*100)/100, Math.round(gyro.y*100)/100, Math.round(gyro.z*100)/100]});
 			gyro.start();
 
 			const linacc = new LinearAccelerationSensor({frequency: 60});
-			linacc.addEventListener("reading", (e) => {dat[3] = [Math.round(linacc.x*10)/10, Math.round(linacc.y*10)/10, Math.round(linacc.z*10)/10]});
+			linacc.addEventListener("reading", (e) => {dat[3] = [Math.round(linacc.x*100)/100, Math.round(linacc.y*100)/100, Math.round(linacc.z*100)/100]});
 			linacc.start();
 
 			const sensor = new AbsoluteOrientationSensor();
@@ -173,6 +178,6 @@
 		</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-26-2023 9:01 AM
+		3-26-2023 9:04 AM
 	</footer>
 </html>
