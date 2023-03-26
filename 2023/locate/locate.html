@@ -43,7 +43,7 @@
 					this.long1 = long1;
 					this.φ1 = lat1 * Math.PI / 180;
 					this.λ1 = long1 * Math.PI / 180;
-					console.log(this.lat1, this.long1, this.φ1, this.λ1);
+					//console.log(this.lat1, this.long1, this.φ1, this.λ1);
 					this.xn = 0;
 					this.vn = 0;
 					this.an = 0;
@@ -111,6 +111,7 @@
 	<body>
 		<input type="button" value="Start" onclick="start()">
 		<pre id="loc"></pre>
+		<pre id="sense"></pre>
 		<script>
 			const PROC_ERR = 1;
 			const NOISE_ERR = 10;
@@ -139,9 +140,16 @@
 				k.updateGPS(position.coords.latitude, position.coords.longitude, position.timestamp);
 				$('#loc')[0].innerHTML = k.currentLoc();
 			}
+
+			var dat = [[0, 0, 0]];
+			setInterval(function(){var s = ""; for(var i = 0; i < dat.length; i++) s += dat[i].toString() + "\n"; $('#sense')[0].innerHTML = s;}, 10);
+
+			const acl = new Accelerometer({ frequency: 60 });
+			acl.addEventListener("reading", () => {dat[0] = [acl.x, acl.y, acl.z]});
+			acl.start();
 		</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-26-2023 8:32 AM
+		3-26-2023 8:46 AM
 	</footer>
 </html>
