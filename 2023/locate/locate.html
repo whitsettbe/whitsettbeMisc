@@ -167,12 +167,12 @@
 				navigator.permissions.query({ name: "gyroscope" }),
 			]).then((results) => {
 			if (results.every((result) => result.state === "granted")) {
-				sensor.addEventListener("reading", (e) => {dat[4] = sensor.quaternion;});
+				sensor.addEventListener("reading", (e) => {dat[4] = [Math.round(sensor.quaternion[0]*100)/100, Math.round(sensor.quaternion[1]*100)/100, Math.round(sensor.quaternion[2]*100)/100, Math.round(sensor.quaternion[3]*100)/100]});
 				sensor.start();
 			} else { dat[4] = [0]; }});
 		</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-26-2023 8:48 AM
+		3-26-2023 9:01 AM
 	</footer>
 </html>
