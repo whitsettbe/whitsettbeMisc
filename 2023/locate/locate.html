@@ -141,15 +141,38 @@
 				$('#loc')[0].innerHTML = k.currentLoc();
 			}
 
-			var dat = [[0, 0, 0]];
+			var dat = [[0, 0, 0],[0,0,0],[0,0,0],[0,0,0],[0,0,0,0]];
 			setInterval(function(){var s = ""; for(var i = 0; i < dat.length; i++) s += dat[i].toString() + "\n"; $('#sense')[0].innerHTML = s;}, 10);
 
 			const acl = new Accelerometer({ frequency: 60 });
-			acl.addEventListener("reading", () => {dat[0] = [acl.x, acl.y, acl.z]});
+			acl.addEventListener("reading", () => {dat[0] = [Math.round(acl.x*10)/10, Math.round(acl.y*10)/10, Math.round(acl.z*10)/10]});
 			acl.start();
+
+			const grav = new GravitySensor({ frequency: 60 });
+			grav.addEventListener("reading", (e) => {dat[1] = [Math.round(grav.x*10)/10, Math.round(grav.y*10)/10, Math.round(grav.z*10)/10]});
+			grav.start();
+
+			const gyro = new Gyroscope({ frequency: 60 });
+			gyro.addEventListener("reading", (e) => {dat[2] = [Math.round(gyro.x*10)/10, Math.round(gyro.y*10)/10, Math.round(gyro.z*10)/10]});
+			gyro.start();
+
+			const linacc = new LinearAccelerationSensor({frequency: 60});
+			linacc.addEventListener("reading", (e) => {dat[3] = [Math.round(linacc.x*10)/10, Math.round(linacc.y*10)/10, Math.round(linacc.z*10)/10]});
+			linacc.start();
+
+			const sensor = new AbsoluteOrientationSensor();
+			Promise.all([
+				navigator.permissions.query({ name: "accelerometer" }),
+				navigator.permissions.query({ name: "magnetometer" }),
+				navigator.permissions.query({ name: "gyroscope" }),
+			]).then((results) => {
+			if (results.every((result) => result.state === "granted")) {
+				sensor.addEventListener("reading", (e) => {dat[4] = sensor.quaternion;});
+				sensor.start();
+			} else { dat[4] = [0]; }});
 		</script>
 	</body>
 	<footer style="position: fixed; bottom: 0">
-		3-26-2023 8:46 AM
+		3-26-2023 8:48 AM
 	</footer>
 </html>
