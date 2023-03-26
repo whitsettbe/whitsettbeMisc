@@ -53,13 +53,13 @@
 				}
 
 				//https://en.wikipedia.org/wiki/Alpha_beta_filter#Alpha_beta_gamma_filter
-				update(lat2, long2, t)
+				updateGPS(lat2, long2, t)
 				{
 					const T = Math.floor(t - this.then) * .001;
 					this.then = t;
 
 					//calculate update parameters
-					const λ = this.σw * T * T / this.σv;
+					/*const λ = this.σw * T * T / this.σv;
 					const b = λ / 2 - 3;
 					const c = λ / 2 + 3;
 					const d = -1;
@@ -67,11 +67,11 @@
 					const q = 2 * b * b * b / 27 - b * c / 3 + d;
 					const v = Math.sqrt(q * q + 4 * p * p * p / 27);
 					const z = - Math.pow(q + v / 2, 1/3);
-					const s = z - p / (3 * z) - b / 3;
-					const α = 1 - s * s;
-					const β = 2 * (1 - s) * (1 - s);
-					const γ = β * β / (2 * α);
-					$('#loc')[0].innerHTML += " (("+T+")," + λ + "," + b + "," + c + "," + d + "," + p + "," + q + "," + v + "," + z + "," + s + "," + α + "," + β + "," + γ + ")";
+					const s = z - p / (3 * z) - b / 3;*/
+					const α = 1;//1 - s * s;
+					const β = 1.5;//2 * (1 - s) * (1 - s);
+					const γ = 1.5;//β * β / (2 * α);
+					//$('#loc')[0].innerHTML += " (("+T+")," + λ + "," + b + "," + c + "," + d + "," + p + "," + q + "," + v + "," + z + "," + s + "," + α + "," + β + "," + γ + ")";
 
 					//project from previous information
 					this.xn += T * this.vn + T * T / 2 * this.an;
@@ -101,7 +101,8 @@
 							Math.cos(this.φ1)*Math.sin(d/R)*Math.cos(brng) );
 					const λ2 = this.λ1 + Math.atan2(Math.sin(brng)*Math.sin(d/R)*Math.cos(this.φ1),
 							Math.cos(d/R)-Math.sin(this.φ1)*Math.sin(φ2));
-					return φ2 * 180 / Math.PI + "N, " + λ2 * 180 / Math.PI + "E";
+					return φ2 * 180 / Math.PI + "N, " + λ2 * 180 / Math.PI + "E\n" +
+							"(" + Math.floor(this.xn) + "m N, " + Math.floor(this.xe) + "m E of start)";
 				}
 			}
 
@@ -133,8 +134,9 @@
 
 			function posUpdate(position)
 			{
-				$('#loc')[0].innerHTML += " " + position.coords.latitude + "," + position.coords.longitude + "(" + position.timestamp % 100000 + ")";
+				//$('#loc')[0].innerHTML += " " + position.coords.latitude + "," + position.coords.longitude + "(" + position.timestamp % 100000 + ")";
 				k.update(position.coords.latitude, position.coords.longitude, position.timestamp);
+				$('#loc')[0].innerHTML = k.currentLoc();
 			}
 		</script>
 	</body>
