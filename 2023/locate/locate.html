@@ -94,7 +94,7 @@
 					const d = Math.sqrt(this.xn * this.xn + this.xe * this.xe);
 					const brng = Math.atan2(this.xe, this.xn);
 					//console.log(this.xe, this.xn, this.φ1, this.λ1);
-					if(!brng) return this.φ1 * 180 / Math.PI + "N, " + this.λ1 * 180 / Math.PI + "E"
+					if(!brng) return this.φ1 * 180 / Math.PI + "N, " + this.λ1 * 180 / Math.PI + "E\n(0m N, 0mE of start)"
 					const R = 6371e3;
 					//console.log(this.xe, this.xn, d, brng);
 					const φ2 = Math.asin(Math.sin(this.φ1)*Math.cos(d/R) +
@@ -110,7 +110,7 @@
 	</head>
 	<body>
 		<input type="button" value="Start" onclick="start()">
-		<div id="loc"></div>
+		<pre id="loc"></pre>
 		<script>
 			const PROC_ERR = 1;
 			const NOISE_ERR = 10;
@@ -122,8 +122,9 @@
 				if(navigator.geolocation)
 				{
 					navigator.geolocation.getCurrentPosition(function(initPos){
-						console.log(initPos);
+						//console.log(initPos);
 						k = new Kalman(PROC_ERR, NOISE_ERR, initPos.coords.latitude, initPos.coords.longitude, initPos.timestamp);
+						$('#loc')[0].innerHTML = k.currentLoc();
 						//navigator.geolocation.watchPosition(posUpdate);
 						//setInterval(navigator.geolocation.getCurrentPosition(posUpdate,function(err){console.log(err)}, {enableHighAccuracy: true}), 1000);
 						//setInterval(function(){$('#loc')[0].innerHTML += " " + k.currentLoc();}, 1000);
@@ -135,9 +136,12 @@
 			function posUpdate(position)
 			{
 				//$('#loc')[0].innerHTML += " " + position.coords.latitude + "," + position.coords.longitude + "(" + position.timestamp % 100000 + ")";
-				k.update(position.coords.latitude, position.coords.longitude, position.timestamp);
+				k.updateGPS(position.coords.latitude, position.coords.longitude, position.timestamp);
 				$('#loc')[0].innerHTML = k.currentLoc();
 			}
 		</script>
 	</body>
+	<footer style="position: fixed; bottom: 0">
+		3-26-2023 8:32 AM
+	</footer>
 </html>
