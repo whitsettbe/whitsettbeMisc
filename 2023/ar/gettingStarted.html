@@ -37,8 +37,9 @@
 				session.updateRenderState({
 					baseLayer: new XRWebGLLayer(session, gl)
 				});
-				const referenceSpace = await session.requestReferenceSpace('unbounded');
+				const referenceSpace = await session.requestReferenceSpace('local');
 				const viewerSpace = await session.requestReferenceSpace('viewer');
+				const unbounded = await session.requestReferenceSpace('unbounded');
 				const hitTestSource = await session.requestHitTestSource({space: viewerSpace});
 				
 				const loader = new THREE.GLTFLoader();
