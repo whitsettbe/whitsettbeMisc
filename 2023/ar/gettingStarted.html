@@ -37,7 +37,7 @@
 				session.updateRenderState({
 					baseLayer: new XRWebGLLayer(session, gl)
 				});
-				const referenceSpace = await session.requestReferenceSpace('local');
+				const referenceSpace = await session.requestReferenceSpace('unbounded');
 				const viewerSpace = await session.requestReferenceSpace('viewer');
 				const hitTestSource = await session.requestHitTestSource({space: viewerSpace});
 				
