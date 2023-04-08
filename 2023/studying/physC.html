@@ -20,6 +20,9 @@
 Astronomy: Sun mass	1.99e30 kg
 Astronomy: Earth mass	5.98e24 kg
 Astronomy: Earth radius	6.37e6 m
+Dynamics: Reynolds number	rho*v*L/eta
+Dynamics: Quadratic drag	1/2*Cd*rho*A*v^2
+Dynamics: Linear drag (spherical)	6*pi*eta*r*v
 </div>
         <script>
 		var ops = $('#dat')[0].innerHTML.split('\n');
@@ -50,7 +53,7 @@ Astronomy: Earth radius	6.37e6 m
 				event.preventDefault();
 				if(!showing)
 				{
-					if($('#in')[0].value === $('#a')[0].innerHTML)
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerHTML.toLowerCase())
 					{
 						$('#resp')[0].innerHTML = "Correct! The answer is:";
 						qs.splice(idx, 1);
