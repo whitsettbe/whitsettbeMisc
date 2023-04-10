@@ -1,36 +1,94 @@
 <!doctype HTML>
 <html>
-    <head>
-        <title>Physics C Studying</title>
+	<head>
+		<title>Physics C Studying</title>
 		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
 			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
 			crossorigin="anonymous"></script>
-    </head>
-    <body onload="next()">
+	</head>
+	<body onload="next()">
 		<label>Progress: </label><p id="toStudy"></p>
-        <p id="q"></p>
-        <input type="text" id="in" autocomplete="off" style="width:80%"><br>
+		<p id="q"></p>
+		<input type="text" id="in" autocomplete="off" style="width:80%"><br>
 		<div id="nxt">
 			<input type="button" value="Appeal" onclick="appeal()"><br>
 			<input type="button" value="Next" onclick="next()"><br>
 		</div>
-        <p id="resp"></p>
-        <div id="a" style="display:none"></div>
+		<p id="resp"></p>
+		<div id="a" style="display:none"></div>
 <div id="dat" style="display:none">
-Astronomy: Sun mass	1.99e30 kg
-Astronomy: Earth mass	5.98e24 kg
-Astronomy: Earth radius	6.37e6 m
-Dynamics: Reynolds number	rho*v*L/eta
-Dynamics: Quadratic drag	1/2*Cd*rho*A*v^2
-Dynamics: Linear drag (spherical)	6*pi*eta*r*v
-Electricity: Line electric field strength	2*k*lambda/r
-Electricity: Plane electric field strength	eta/(2*epsilon0)
-Electricity: Electric field torque on dipole	p dot E
-Electricity: Parallel-plate capacitor electric field strength	eta/epsilon0
-Electricity: Gauss's Law	int[E dot dA]=q/epsilon0
-
+Ch06: Reynolds number	rho*v*L/eta
+Ch06: Quadratic drag	1/2*Cd*rho*A*v^2
+Ch06: Linear drag (spherical)	6*pi*eta*r*v
+Ch13: Sun mass	1.99e30 kg
+Ch13: Earth mass	5.98e24 kg
+Ch13: Earth radius	6.37e6 m
+Ch22: Coulomb's Law	F = k*Q*q/r^2
+Ch22: Point charge electric field strength (E)	k*q/r^2
+Ch23: Dipole distant on-axis electric field strength (E)	2*k*p/r^3
+Ch23: Dipole distant bisecting electric field strength (E)	k*p/r^3
+Ch23: Line electric field strength (E)	2*k*lambda/r
+Ch23: Ring on-axis electric field strength (E)	k*z*q/(z^2+r^2)^(3/2)
+Ch23: Disk on-axis electric field strength (E)	eta/(2*epsilon0)*(1-z/sqrt(z^2+R^2))
+Ch23: Plane electric field strength (E)	eta/(2*epsilon0)
+Ch23: Sphere electric field strength (E)	k*q/r^2
+Ch23: Parallel-plate capacitor electric field strength (E)	eta/epsilon0
+Ch23: Dipole torque (tau) due to uniform electric field	p cross E
+Ch24: Gauss's Law	int[E dot dA] = q/epsilon0
+Ch24: Conductor internal electric field strength (E)	0
+Ch25: Particle pair potential energy (U)	k*Q*q/r
+Ch25: Dipole potential energy (U) due to uniform electric field	-p dot E
+Ch25: Parallel-plate capacitor voltage drop (V) due to electric field	E*d
+Ch25: Point charge electric potential (V)	k*q/r
+Ch25: Sphere electric potential (V)	k*q/r
+Ch25: Ring on-axis electric potential (V)	k*q/sqrt(z^2+r^2)
+Ch25: Disk on-axis electric potential (V)	eta/(2*epsilon0)*(sqrt(z^2+r^2)-z)
+Ch26: Electric potential (V) due to electric field along s	-int[E dot ds]
+Ch26: Tangential electric field (E) due to potential along s	-d/ds[V]
+Ch26: Loop electric potential (V)	0
+Ch26: Capacitor charge (q) due to capacitance and potential difference	C*V
+Ch26: Parallel-plate capacitor capacitance (C)	epsilon0*A/d
+Ch26: Capacitor energy (U) due to capacitance and potential difference	1/2*C*V^2
+Ch26: Energy density of the electric field (ue)	epsilon0/2*E^2
+Ch26: Capacitor electric field (E) with a dielectric	E0/kappa
+Ch26: Capacitor capacitance (C) with a dielectric	C0*kappa
+Ch26: Capacitor dielectric induced surface charge density (eta1)	eta0*(1-1/kappa)
+Ch27: Wire electron current (ie) due to drift velocity	ne*A*vd
+Ch27: Drift velocity (vd) due to charge carrier properties	e*tau/m*E
+Ch27: Wire electron current (ie) due to electric field	ne*e*tau*A/m*E
+Ch27: Current (I) due to electron current	e*ie
+Ch27: Current density (J) due to current	I/A
+Ch27: Current density (J) due to conductivity	sigma*E
+Ch27: Current density (J) due to resistivity	E/rho
+Ch27: Cylindrical resistor resistance (R)	rho*L/A
+Ch27: Ohm's Law	I = V/R
+Ch28: Power (P) due to emf	I*epsilon
+Ch28: Power (P) dissipated by a resistor	I*V
+Ch28: Voltage (V) delivered by a battery due to internal resistance	R/(R+r)*epsilon
+Ch28: Time constant (tau) of an RC circuit	R*C
+Ch29: Moving point charge magnetic field (B)	mu0/(4*pi)*(q*v cross rHat)/r^2
+Ch29: Current segment magnetic field (B)	mu0/(4*pi)*(I*l cross rHat)/r^2
+Ch29: Wire magnetic field strength (B)	mu0/(2*pi)*I/r
+Ch29: Flat coil central magnetic field strength (B)	mu0/2*N*I/r
+Ch29: Dipole on-axis magnetic field (B)	mu0/(4*pi)*2*m/z^3
+Ch29: Ampere's Law	int[B dot ds] = mu0*I
+Ch29: Solenoid internal magnetic field strength (B)	mu0*N*I/l
+Ch29: Magnetic force (F) due to charge motion	q*v cross B
+Ch29: Magnetic force (F) due to current	I*l cross B
+Ch29: Parallel wire magnetic force (B)	mu0*l*I1*I2/(2*pi*d)
+Ch29: Dipole torque (tau) due to uniform magnetic field	m cross B
+Ch30: Moving conductor induced voltage (V) due to uniform perpendicular magnetic field	v*l*B
+Ch30: Moving conductor resistive force (F) due to uniform perpendicular magnetic field	v*l^2*B^2/R
+Ch30: Closed loop emf magnitude (epsilon) due to magnetic flux	d/dt[phi]
+Ch30: Secondary coil transformer voltage (V2)	N2/N1*V1
+Ch30: Coil inductance (L)	phi/I
+Ch30: Inductor potential difference (V)	-L*d/dt[I]
+Ch30: Inductor potential energy (U)	1/2*L*I^2
+Ch30: Solenoid magnetic field energy density (ub)	1/(2*mu0)*B^2
+Ch30: Angular frequency (omega) of an LC circuit	1/sqrt(L*C)
+Ch30: Time constant (tau) of an LR circuit	L/R
 </div>
-        <script>
+		<script>
 		var ops = $('#dat')[0].innerHTML.split('\n');
 		for(var i = 0; i < ops.length; i++)
 		{
@@ -109,6 +167,6 @@ Electricity: Gauss's Law	int[E dot dA]=q/epsilon0
 			showing = false;
 			appealed = false;
 		}
-        </script>
-    </body>
+		</script>
+	</body>
 </html>
