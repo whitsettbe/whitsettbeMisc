@@ -94,7 +94,7 @@ Ch29: Parallel wire magnetic force (B)	mu0*l*I1*I2/(2*pi*d)
 Ch29: Dipole torque (tau) due to uniform magnetic field	m cross B
 Ch30: Moving conductor induced voltage (V) due to uniform perpendicular magnetic field	v*l*B
 Ch30: Moving conductor resistive force (F) due to uniform perpendicular magnetic field	v*l^2*B^2/R
-Ch30: Closed loop emf magnitude (epsilon) due to magnetic flux	d/dt[phi]
+Ch30: Closed loop emf magnitude (epsilon) due to magnetic flux	d/dt[phiM]
 Ch30: Secondary coil transformer voltage (V2)	N2/N1*V1
 Ch30: Coil inductance (L)	phi/I
 Ch30: Inductor potential difference (V)	-L*d/dt[I]
@@ -102,6 +102,11 @@ Ch30: Inductor potential energy (U)	1/2*L*I^2
 Ch30: Solenoid magnetic field energy density (ub)	1/(2*mu0)*B^2
 Ch30: Angular frequency (omega) of an LC circuit	1/sqrt(L*C)
 Ch30: Time constant (tau) of an LR circuit	L/R
+Ch31: Gauss's Law for Magnetism	int[B dot dA] = 0
+Ch31: Faraday's Law	int[E dot ds] = -d/dt[phiM]
+Ch31: Ampere-Maxwell Law	int[B dot ds] = mu0*(I+d/dt[phiE])
+Ch31: Combined Lorentz Force (F)	q*E+q*(v cross B)
+Ch31: Speed of light (c) due to permittivity and permeability	1/sqrt(epsilon0*mu0)
 </div>
 		<script>
 		var ops = $('#dat')[0].innerHTML.split('\n');
