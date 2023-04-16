@@ -1,0 +1,109 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>DiffEQ Studying</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+	</head>
+	<body onload="next()">
+		<label>Progress: </label><p id="toStudy"></p>
+		<p id="q"></p>
+		<input type="text" id="in" autocomplete="off" style="width:80%"><br>
+		<div id="nxt">
+			<input type="button" value="Appeal" onclick="appeal()"><br>
+			<input type="button" value="Next" onclick="next()"><br>
+		</div>
+		<p id="resp"></p>
+		<div id="a" style="display:none"></div>
+<div id="dat" style="display:none">
+8.5: Bessel function of the first kind of order p (J[p])	sum[(-1)^m/(m!*gamma(m+p+1))*(x/2)^(2*m+p), m, 0, inf]
+8.5: Bessel function of the second kind of order n (Y[n])	2/pi*(gamma+ln(x/2))*J[n]-1/pi*sum[(n-m-1)!/m!*(x/2)^(2*m-n), m, 0, n-1]-1/pi*sum[(-1)^m*(H[m]+H[m+n])/(m!*(m+n)!)*(x/2)^(2*m+n), m, 0, inf]
+8.5: d/dx[x^p*J[p]]	x^p*J[p-1]
+8.5: d/dx[x^(-p)*J[p]]	-x^(-p)*J[p+1]
+8.5: (decrease index) d/dt[J[p]]	J[p-1]-p/x*J[p]
+8.5: (increase index) d/dt[J[p]]	p/x*J[p]+J[p+1]
+8.5: J[p+1]+J[p-1]	2*p/x*J[p]
+</div>
+		<script>
+		var ops = $('#dat')[0].innerHTML.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var as = [];
+		for(var i = 0; i < ops.length; i++)
+		{
+			qs.push(ops[i].split('\t')[0]);
+			as.push(ops[i].split('\t')[1]);
+		}
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var appealed = false;
+
+		$('#in').keypress(function(event)
+		{
+			if (event.keyCode == 13 || event.which == 13)
+			{
+				event.preventDefault();
+				if(!showing)
+				{
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerHTML.toLowerCase())
+					{
+						$('#resp')[0].innerHTML = "Correct! The answer is:";
+						qs.splice(idx, 1);
+						as.splice(idx, 1);
+						appealed = true;
+					}
+					else
+					{
+						$('#resp')[0].innerHTML = "Incorrect. The answer is:";
+						errs++;
+					}
+					$('#a')[0].style.display = "inline";
+					$('#nxt')[0].style.display = "block";
+					showing = true;
+					$('#toStudy')[0].innerHTML = qs.length + ' remaining, ' + errs + ' mistakes';
+				}
+				else
+				{
+					next();
+				}
+			}
+		});
+
+		function appeal()
+		{
+			if(!appealed)
+			{
+				$('#resp')[0].innerHTML = "(Appealed)";
+				qs.splice(idx, 1);
+				as.splice(idx, 1);
+				errs--;
+				appealed = true;
+			}
+		}
+
+		function next()
+		{
+			$('#toStudy')[0].innerHTML = qs.length + ' remaining, ' + errs + ' mistakes';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			$('#q')[0].innerHTML = qs[idx];
+			$('#in')[0].value = '';
+			$('#resp')[0].innerHTML = '';
+			$('#a')[0].innerHTML = as[idx];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+			appealed = false;
+		}
+		</script>
+	</body>
+</html>
