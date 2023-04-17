@@ -24,6 +24,8 @@
 8.5: (decrease index) d/dt[J[p]]	J[p-1]-p/x*J[p]
 8.5: (increase index) d/dt[J[p]]	p/x*J[p]+J[p+1]
 8.5: J[p+1]+J[p-1]	2*p/x*J[p]
+8.6: Given x^2*y''+A*x*y'+(B+C*x^q)*y=0, coefficients of Bessel form (alpha, beta, k, p)	(1-A)/2, q/2, 2*sqrt(C)/q, sqrt((1-A)^2-4*B)/q
+8.6: Given Bessel form alpha, beta, k, p, solution (y) in terms of coefficients c1, c2	x^alpha*(c1*J[p](k*x^beta)+c2*J[-p](k*x^beta))
 </div>
 		<script>
 		var ops = $('#dat')[0].innerHTML.split('\n');
