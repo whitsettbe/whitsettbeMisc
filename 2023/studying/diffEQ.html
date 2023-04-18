@@ -17,8 +17,11 @@
 		<p id="resp"></p>
 		<div id="a" style="display:none"></div>
 <div id="dat" style="display:none">
+8.5: Bessel equation of order p	x^2*y''+x*y'+(x^2-p^2)*y = 0
 8.5: Bessel function of the first kind of order p (J[p])	sum[(-1)^m/(m!*gamma(m+p+1))*(x/2)^(2*m+p), m, 0, inf]
-8.5: Bessel function of the second kind of order n (Y[n])	2/pi*(gamma+ln(x/2))*J[n]-1/pi*sum[(n-m-1)!/m!*(x/2)^(2*m-n), m, 0, n-1]-1/pi*sum[(-1)^m*(H[m]+H[m+n])/(m!*(m+n)!)*(x/2)^(2*m+n), m, 0, inf]
+8.5: Bessel function of the second kind of order n (Y[n]) first term	2/pi*(gamma+ln(x/2))*J[n]
+8.5: Bessel function of the second kind of order n (Y[n]) second term	-1/pi*sum[(n-m-1)!/m!*(x/2)^(2*m-n), m, 0, n-1]
+8.5: Bessel function of the second kind of order n (Y[n]) third term	-1/pi*sum[(-1)^m*(H[m]+H[m+n])/(m!*(m+n)!)*(x/2)^(2*m+n), m, 0, inf]
 8.5: d/dx[x^p*J[p]]	x^p*J[p-1]
 8.5: d/dx[x^(-p)*J[p]]	-x^(-p)*J[p+1]
 8.5: (decrease index) d/dt[J[p]]	J[p-1]-p/x*J[p]
@@ -26,6 +29,18 @@
 8.5: J[p+1]+J[p-1]	2*p/x*J[p]
 8.6: Given x^2*y''+A*x*y'+(B+C*x^q)*y=0, coefficients of Bessel form (alpha, beta, k, p)	(1-A)/2, q/2, 2*sqrt(C)/q, sqrt((1-A)^2-4*B)/q
 8.6: Given Bessel form alpha, beta, k, p, solution (y) in terms of coefficients c1, c2	x^alpha*(c1*J[p](k*x^beta)+c2*J[-p](k*x^beta))
+10.1: Sturm-Liouville problem internal condition	d/dx[p(x)*d/dx[y]]-q(x)*y+lambda*r(x)*y = 0
+10.1: Sturm-Liouville problem lower endpoint condition	alpha1*y(a)-alpha2*y'(a) = 0
+10.1: Sturm-Liouville problem upper endopoint condition	beta1*y(b)+beta2*y'(b) = 0
+10.1: Weighted orthogonality constraint of SL eigenvalues	int[y[i]*y[j]*r*dx, a, b] = 0
+10.1: SL coefficient (c[n]) in terms of f(x)	int[f*y[n]*r*dx, a, b]/int[y[n]^2*r*dx, a, b]
+10.2: Unforced longitudinal bar vibration	u[t^2] = E/delta*u[x^2]
+10.3: Unforced transverse bar vibration	y[t^2]+E*I/rho*y[x^4] = 0
+10.4: Cylindrical laplacian of u	u[r^2]+1/r*u[r]+1/r^2*u[theta^2]+u[z^2]
+10.4: Bessel gamma condition J[n] = 0 denominator integral	c^2/2*J[n+1]^2
+10.4: Bessel gamma condition h*J[n]+x*J'[n] = 0 denominator integral	c^2*(gamma^2-n^2+h^2)/(2*gamma^2)*J[n]^2
+10.4: Bessel gamma condition J'[0] = 0 denominator integral	c^2/2*J[0]^2
+10.5: Spherical laplacian of u	1/rho^2*(d/drho[rho^2*u[rho]]+1/sin(phi)*d/dphi[u[phi]*sin(phi)]+1/sin(phi)^2*u[theta^2])
 </div>
 		<script>
 		var ops = $('#dat')[0].innerHTML.split('\n');
