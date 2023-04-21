@@ -19,8 +19,15 @@
 <div id="dat" style="display:none">
 5.2: Characteristic equation of matrix A	det(A-lambda*I) = 0
 5.2: Eigenvector (v) equation for matrix A	(A-lambda*I)*v = 0
-5.2: When lambda=p+-q*i and v=a+b*i is an eigenvector for lambda+, we have x=e^(p*t)*	a*cos(q*t)-b*sin(q*t), a*sin(q*t)+b*cos(q*t)
+5.2: When lambda=p+-q*i, and v=a+b*i is an eigenvector for lambda+, we have x=e^(p*t)*	a*cos(q*t)-b*sin(q*t), a*sin(q*t)+b*cos(q*t)
 5.3: Given complex eigenvector v for a pure imaginary lambda, vector with real/imaginary phase ellipse bases	v*(1+i)/2
+5.4: Unforced mass-spring matrix system	M*x'' = K*x
+5.4: Mass-spring system with external force-per-mass	x'' = A*x+f
+5.4: When f=F[0]*cos(omega*t), x[p]=c*cos(omega*t) satisfies:	(A+omega^2*I)*c = -F[0]
+5.5: Generalized eigenvector index (k) decrease	(A-lambda*I)*v[k] = v[k-1]
+5.6: Fundamental matrix solution of x'=A*x given x[0]	phi(t)*phi(0)^-1*x[0]
+5.6: Matrix exponential form	phi(t)*phi(0)^-1
+5.7: Particular solution of x'=P*x+f by variation of parameters	phi(t)*int[phi(t)^-1*f(t)*dt]
 8.5: Bessel equation of order p	x^2*y''+x*y'+(x^2-p^2)*y = 0
 8.5: Bessel function of the first kind of order p (J[p])	sum[(-1)^m/(m!*gamma(m+p+1))*(x/2)^(2*m+p), m, 0, inf]
 8.5: Bessel function of the second kind of order n (Y[n]) first term	2/pi*(gamma+ln(x/2))*J[n]
