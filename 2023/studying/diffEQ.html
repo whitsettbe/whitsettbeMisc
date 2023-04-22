@@ -28,6 +28,35 @@
 5.6: Fundamental matrix solution of x'=A*x given x[0]	phi(t)*phi(0)^-1*x[0]
 5.6: Matrix exponential form	phi(t)*phi(0)^-1
 5.7: Particular solution of x'=P*x+f by variation of parameters	phi(t)*int[phi(t)^-1*f(t)*dt]
+7.1: L[t^a]	gamma(a+1)/s^(a+1)
+7.1: L[e^(a*t)]	1/(s-a)
+7.1: L[cos(k*t)]	s/(s^2+k^2)
+7.1: L[sin(k*t)]	k/(s^2+k^2)
+7.1: L[cosh(k*t)]	s/(s^2-k^2)
+7.1: L[sinh(k*t)]	k/(s^2-k^2)
+7.1: L[u(t-a)]	e^(-a*s)/s
+7.2: Exponential order constraining magnitude	M*e^(c*t)
+7.2: L[d/dt[f]], f continuous	s*L[f(t)]-f(0)
+7.2: L[int[f(tau)*dtau, 0, t]]	L[f(t)]/s
+7.3: L[e^(a*t)*f(t)]	F(s-a)
+7.4: f(t) conv g(t)	int[f(tau)*g(t-tau)*dtau, 0, t]
+7.4: L[f(t) conv g(t)]	F(s)*G(s)
+7.4: L^-1[F'(s)]	-t*f(t)
+7.4: L^-1[int[F(sigma)*dsigma, s, inf]]	f(t)/t
+7.5: L[u(t-a)*f(t-a)]	e^(-a*s)*F(s)
+7.5: Laplace transform of f(t) with period p	1/(1-e^(-p*s))*int[e^(-s*t)*f(t)*dt, 0, p]
+7.6: int[g(t)*delta(t-a)*dt, 0, inf]	g(a)
+7.6: L[delta(t)]	1
+7.6: a*x''+b*x'+c*x=f(t) Duhamel's principle transfer function W(s)	1/(a*s^2+b*s+c)
+7.6: Duhamel's principle weight function w(t)	L^-1[W(s)]
+7.6: Duhamel's principle weight-function-convolved solution x(t)	int[w(tau)*f(t-tau)*dtau, 0, t]
+8.3: Regular/irregular singularity equidimensional homogeneous second-order form	y''+p/x*y'+q/x^2*y = 0
+8.3: Frobenius method indicial equation	r*(r-1)+p[0]*r+q[0] = 0
+8.3: What must be neither zero nor a positive integer to guarantee a second independent Frobenius solution?	r1-r2
+8.4: When r1-r2=N, what is the index of the coefficient which requires special consideration?	N
+8.4: Reduction of order formula for y2, given y1 solving y''+P(x)*y'+Q(x)*y=0	y1*int[e^(-int[P(x)*dx])/y1^2*dx]
+8.4: Exceptional Frobenius y2 with r1=r2 (abbreviate power series as ps)	y1*ln(x)+x^(r1+1)*ps
+8.4: Exceptional Frobenius y2 with r1-r2=N>0 (abbreviate power series as ps)	C*y1*ln(x)+x^r2*ps
 8.5: Bessel equation of order p	x^2*y''+x*y'+(x^2-p^2)*y = 0
 8.5: Bessel function of the first kind of order p (J[p])	sum[(-1)^m/(m!*gamma(m+p+1))*(x/2)^(2*m+p), m, 0, inf]
 8.5: Bessel function of the second kind of order n (Y[n]) first term	2/pi*(gamma+ln(x/2))*J[n]
