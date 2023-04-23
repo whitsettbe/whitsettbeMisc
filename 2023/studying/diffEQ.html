@@ -28,6 +28,9 @@
 5.6: Fundamental matrix solution of x'=A*x given x[0]	phi(t)*phi(0)^-1*x[0]
 5.6: Matrix exponential form	phi(t)*phi(0)^-1
 5.7: Particular solution of x'=P*x+f by variation of parameters	phi(t)*int[phi(t)^-1*f(t)*dt]
+7.1: L[f(t)]	int[e^(-s*t)*f(t)*dt, 0, inf]
+7.1: gamma(x) integral	int[e^(-t)*t^(x-1)*dt, 0, inf]
+7.1: gamma(x) factorial offset	gamma(n+1) = n!
 7.1: L[t^a]	gamma(a+1)/s^(a+1)
 7.1: L[e^(a*t)]	1/(s-a)
 7.1: L[cos(k*t)]	s/(s^2+k^2)
@@ -44,7 +47,7 @@
 7.4: L^-1[F'(s)]	-t*f(t)
 7.4: L^-1[int[F(sigma)*dsigma, s, inf]]	f(t)/t
 7.5: L[u(t-a)*f(t-a)]	e^(-a*s)*F(s)
-7.5: Laplace transform of f(t) with period p	1/(1-e^(-p*s))*int[e^(-s*t)*f(t)*dt, 0, p]
+7.5: L[f(t)] with period p	1/(1-e^(-p*s))*int[e^(-s*t)*f(t)*dt, 0, p]
 7.6: int[g(t)*delta(t-a)*dt, 0, inf]	g(a)
 7.6: L[delta(t)]	1
 7.6: a*x''+b*x'+c*x=f(t) Duhamel's principle transfer function W(s)	1/(a*s^2+b*s+c)
@@ -69,6 +72,16 @@
 8.5: J[p+1]+J[p-1]	2*p/x*J[p]
 8.6: Given x^2*y''+A*x*y'+(B+C*x^q)*y=0, coefficients of Bessel form (alpha, beta, k, p)	(1-A)/2, q/2, 2*sqrt(C)/q, sqrt((1-A)^2-4*B)/q
 8.6: Given Bessel form alpha, beta, k, p, solution (y) in terms of coefficients c1, c2	x^alpha*(c1*J[p](k*x^beta)+c2*J[-p](k*x^beta))
+9.2: Full-period Fourier cosine integral	1/L*int[f(t)*cos(n*pi*t/L)*dt, -L, L]
+9.2: Full-period Fourier sine integral	1/L*int[f(t)*sin(n*pi*t/L)*dt, -L, L]
+9.3: Fourier cosine series expansion integral	2/L*int[f(t)*cos(n*pi*t/L)*dt, 0, L]
+9.3: Fourier sine series expansion integral	2/L*int[f(t)*sin(n*pi*t/L)*dt, 0, L]
+9.4: Solution of m*x''+c*x'+k*x=F[0]*sin(omega*t)	F[0]/sqrt((k-m*omega^2)^2+(c*omega)^2)*sin(omega*t-atan(c*omega/(k-m*omega^2)))
+9.4: Resonance solution of m*x''+k*x=B[N]*sin(omega[0]*t)	-B[N]/(2*m*omega[0])*t*cos(omega[0]*t)
+9.5: 1D heat equation	u[t] = k*u[x^2]
+9.6: 1D wave equation	y[t^2] = T/rho*y[x^2]
+9.6: With F(x) and G(x) as odd expansions of y(x,0) and y[t](x,0), d'Alembert gives wave solution	1/2*(F(x+a*t)+F(x-a*t))+1/(2*a)*int[G(s)*ds, x-a*t, x+a*t]
+9.7: Potential equation	del^2*u = 0
 10.1: Sturm-Liouville problem internal condition	d/dx[p(x)*d/dx[y]]-q(x)*y+lambda*r(x)*y = 0
 10.1: Sturm-Liouville problem lower endpoint condition	alpha1*y(a)-alpha2*y'(a) = 0
 10.1: Sturm-Liouville problem upper endopoint condition	beta1*y(b)+beta2*y'(b) = 0
