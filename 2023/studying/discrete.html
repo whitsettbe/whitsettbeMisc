@@ -1,0 +1,127 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>Discrete Math Studying</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+	</head>
+	<body onload="next()">
+		<label>Progress: </label><p id="toStudy"></p>
+		<p id="q"></p>
+		<input type="text" id="in" autocomplete="off" style="width:80%"><br>
+		<div id="nxt">
+			<input type="button" value="Appeal" onclick="appeal()"><br>
+			<input type="button" value="Next" onclick="next()"><br>
+		</div>
+		<p id="resp"></p>
+		<div id="a" style="display:none"></div>
+<div id="dat" style="display:none">
+1.1: Critical path analysis horizontal diagram name	PERT diagram
+1.4: Evaluate polynomial by adding successive terms	polynomial evaluation
+1.4: Evaluate polynomial by adding coefficients and multiplying	Horner's algorithm
+2.1: A∪B operation name	union
+2.1: A∩B operation name	intersection
+2.1: -A operation name	complement
+2.1: {(a,b): a∈A and b∈B} notation, name	AxB, Cartesian Product
+2.2: Relations from A to B are subsets of	AxB
+2.2: "x is related to y by R" notation	xRy
+2.2: Term for a subset of SxS	relation on S
+2.2: Three qualities of an equivalence relation	reflexive, symmetric, transitive
+2.2: Given equivalence relation R, [x] is an	equivalence class
+2.3: If x and y have the same remainder when divided by m, they are	congruent modulo m
+2.4: When xRy and yRx implies x=y always, R is	antisymmetric
+2.4: Three qualities of a partial ordering relation	reflexive, antisymmetric, transitive
+2.4: Given R1 partial ordering of S1, R2 partial ordering of S2, lexicographic order is a partial order of	S1xS2
+2.4: Subset-restricted relation R'=	R and (S'xS')
+2.4: When xRy or yRx for all x, y in S, R is a	total order
+2.4: Partial order vertically-oriented diagram name	Hasse diagram
+2.4: Construct total order from repeatedly "popping" minimal elements of S	Topological sorting algorithm
+2.5: xfy	image of x under f
+2.5: Function inputs are from the domain, and outputs are from the	codomain
+2.5: Two qualities of a one-to-one correspondence	one-to-one, onto
+2.5: A function is "onto" if there is equality between the	codomain, range
+2.6: In inductive proof, the quality that always holds is the	loop invariant
+</div>
+		<script>
+		var ops = $('#dat')[0].innerHTML.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var as = [];
+		for(var i = 0; i < ops.length; i++)
+		{
+			qs.push(ops[i].split('\t')[0]);
+			as.push(ops[i].split('\t')[1]);
+		}
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var appealed = false;
+
+		$('#in').keypress(function(event)
+		{
+			if (event.keyCode == 13 || event.which == 13)
+			{
+				event.preventDefault();
+				if(!showing)
+				{
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerHTML.toLowerCase())
+					{
+						$('#resp')[0].innerHTML = "Correct! The answer is:";
+						qs.splice(idx, 1);
+						as.splice(idx, 1);
+						appealed = true;
+					}
+					else
+					{
+						$('#resp')[0].innerHTML = "Incorrect. The answer is:";
+						errs++;
+					}
+					$('#a')[0].style.display = "inline";
+					$('#nxt')[0].style.display = "block";
+					showing = true;
+					$('#toStudy')[0].innerHTML = qs.length + ' remaining, ' + errs + ' mistakes';
+				}
+				else
+				{
+					next();
+				}
+			}
+		});
+
+		function appeal()
+		{
+			if(!appealed)
+			{
+				$('#resp')[0].innerHTML = "(Appealed)";
+				qs.splice(idx, 1);
+				as.splice(idx, 1);
+				errs--;
+				appealed = true;
+			}
+		}
+
+		function next()
+		{
+			$('#toStudy')[0].innerHTML = qs.length + ' remaining, ' + errs + ' mistakes';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			$('#q')[0].innerHTML = qs[idx];
+			$('#in')[0].value = '';
+			$('#resp')[0].innerHTML = '';
+			$('#a')[0].innerHTML = as[idx];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+			appealed = false;
+		}
+		</script>
+	</body>
+</html>
