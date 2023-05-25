@@ -1,0 +1,122 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>Complex Variables Studying</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+	</head>
+	<body onload="next()">
+		<label>Progress: </label><p id="toStudy"></p>
+		<p id="q"></p>
+		<input type="text" id="in" autocomplete="off" style="width:80%"><br>
+		<div id="nxt">
+			<input type="button" value="Appeal" onclick="appeal()"><br>
+			<input type="button" value="Next" onclick="next()"><br>
+		</div>
+		<p id="resp"></p>
+		<div id="a" style="display:none"></div>
+<div id="dat" style="display:none">
+2.1: Given z=x+i*y, zbar=	x-i*y
+2.1: z*zbar	x^2+y^2
+2.2: Given epsilon, there is some delta s.t. _ for all z s.t. _	abs(f(z)-f0)&lt;epsilon, 0&lt;abs(z-z0)&lt;delta
+Squeeze Theorem: If abs(g(z))&lt;=abs(f(z)) in a deleted neighborhood of z0 and f(z)-->0 at z0, lim[g(z),z,z0]=	0
+Squeeze Theorem: If lim[f(z),z,z0]=0 and abs(g(z))&lt;=C in a deleted neighborhood of z0, lim[f(z)*g(z),z,z0]=	0
+2.3: x-based derivative expression f'(z) of f=u(x,y)+i*v(x,y)	u[x]+i*v[x]
+2.3: y-based derivative expression f'(z) of f=u(x,y)+i*v(x,y)	-i*u[y]+v[y]
+2.3: Cauchy-Riemann differentiability conditions on f(z)=u(x,y)+i*v(x,y)	u[x] = v[y], v[x] = -u[y]
+2.3: If u, v, and their first partials are continuous, C-R satisfaction is	necessary and sufficient
+2.4: When f'(z) exists in a neighborhood of z0, there it is	analytic
+2.4: A function analytic in all finite regions is	entire function
+2.4: When f is analytic at any point in a deleted neighborhood of z0 but not at z0, z0 is	singularity
+2.4: Polar C-R conditions	u[r] = 1/r*v[theta], v[r] = -1/r*u[theta]
+2.4: r-based derivative expression f'(z)	(u[r]+i*v[r])*(cos(theta)-i*sin(theta))
+2.4: theta-based derivative expression f'(z)	(u[theta]+i*v[theta])*(-i/r)*(cos(theta)-i*sin(theta))
+2.5: Real and imaginary parts of an analytic function must satisfy which equation?	Laplace's equation
+2.5: Laplace's equation for phi(x,y)	phi[x^2]+phi[y^2] = 0
+2.5: A function satisfying Laplace's equation is said to be	harmonic
+2.5: The harmonic conjugate of u(x,y) is found by using the	C-R conditions
+2.5: Harmonic conjugate functions are graphically	orthogonal
+</div>
+		<script>
+		var ops = $('#dat')[0].innerHTML.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var as = [];
+		for(var i = 0; i < ops.length; i++)
+		{
+			qs.push(ops[i].split('\t')[0]);
+			as.push(ops[i].split('\t')[1]);
+		}
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var appealed = false;
+
+		$('#in').keypress(function(event)
+		{
+			if (event.keyCode == 13 || event.which == 13)
+			{
+				event.preventDefault();
+				if(!showing)
+				{
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerHTML.toLowerCase())
+					{
+						$('#resp')[0].innerHTML = "Correct! The answer is:";
+						qs.splice(idx, 1);
+						as.splice(idx, 1);
+						appealed = true;
+					}
+					else
+					{
+						$('#resp')[0].innerHTML = "Incorrect. The answer is:";
+						errs++;
+					}
+					$('#a')[0].style.display = "inline";
+					$('#nxt')[0].style.display = "block";
+					showing = true;
+					$('#toStudy')[0].innerHTML = qs.length + ' remaining, ' + errs + ' mistakes';
+				}
+				else
+				{
+					next();
+				}
+			}
+		});
+
+		function appeal()
+		{
+			if(!appealed)
+			{
+				$('#resp')[0].innerHTML = "(Appealed)";
+				qs.splice(idx, 1);
+				as.splice(idx, 1);
+				errs--;
+				appealed = true;
+			}
+		}
+
+		function next()
+		{
+			$('#toStudy')[0].innerHTML = qs.length + ' remaining, ' + errs + ' mistakes';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			$('#q')[0].innerHTML = qs[idx];
+			$('#in')[0].value = '';
+			$('#resp')[0].innerHTML = '';
+			$('#a')[0].innerHTML = as[idx];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+			appealed = false;
+		}
+		</script>
+	</body>
+</html>
