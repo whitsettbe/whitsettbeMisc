@@ -16,7 +16,8 @@
 		</div>
 		<p id="resp"></p>
 		<div id="a" style="display:none"></div>
-<div id="dat" style="display:none">
+		<script>
+const DAT = `
 1.1: Critical path analysis horizontal diagram name	PERT diagram
 1.4: Evaluate polynomial by adding successive terms	polynomial evaluation
 1.4: Evaluate polynomial by adding coefficients and multiplying	Horner's algorithm
@@ -42,9 +43,9 @@
 2.5: Two qualities of a one-to-one correspondence	one-to-one, onto
 2.5: A function is "onto" if there is equality between the	codomain, range
 2.6: In inductive proof, the quality that always holds is the	loop invariant
-</div>
-		<script>
-		var ops = $('#dat')[0].innerHTML.split('\n');
+`;
+
+var ops = DAT.split('\n');
 		for(var i = 0; i < ops.length; i++)
 		{
 			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)

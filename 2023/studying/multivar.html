@@ -16,7 +16,8 @@
 		</div>
 		<p id="resp"></p>
 		<div id="a" style="display:none"></div>
-<div id="dat" style="display:none">
+		<script>
+const DAT = `
 11.1: Cycloid parametrization in theta given r	r*(theta-sin(theta)), r*(1-cos(theta))
 11.2: Parametric dy/dx using t	(dy/dt)/(dx/dt)
 11.2: Parametric arc length integral in t on alpha..beta	int[sqrt(x'^2+y'^2)*dt, alpha, beta]
@@ -30,9 +31,9 @@
 11.5: Hyperbola focal distance equation	c^2 = a^2+b^2
 11.5: Hyperbola asymptotic slope magnitude	b/a
 11.6: Given focus-directrix distance d and eccentricity e, polar conic equation (phase is irrelevant)	r = e*d/(1+e*cos(theta))
-</div>
-		<script>
-		var ops = $('#dat')[0].innerHTML.split('\n');
+`;
+
+		var ops = DAT.split('\n');
 		for(var i = 0; i < ops.length; i++)
 		{
 			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)

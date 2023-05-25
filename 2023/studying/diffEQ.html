@@ -16,7 +16,8 @@
 		</div>
 		<p id="resp"></p>
 		<div id="a" style="display:none"></div>
-<div id="dat" style="display:none">
+		<script>
+const DAT = `
 5.2: Characteristic equation of matrix A	det(A-lambda*I) = 0
 5.2: Eigenvector (v) equation for matrix A	(A-lambda*I)*v = 0
 5.2: When lambda=p+-q*i, and v=a+b*i is an eigenvector for lambda+, we have x=e^(p*t)*	a*cos(q*t)-b*sin(q*t), a*sin(q*t)+b*cos(q*t)
@@ -94,9 +95,9 @@
 10.4: Bessel gamma condition h*J[n]+x*J'[n] = 0 denominator integral	c^2*(gamma^2-n^2+h^2)/(2*gamma^2)*J[n]^2
 10.4: Bessel gamma condition J'[0] = 0 denominator integral	c^2/2*J[0]^2
 10.5: Spherical laplacian of u	1/rho^2*(d/drho[rho^2*u[rho]]+1/sin(phi)*d/dphi[u[phi]*sin(phi)]+1/sin(phi)^2*u[theta^2])
-</div>
-		<script>
-		var ops = $('#dat')[0].innerHTML.split('\n');
+`;
+
+var ops = DAT.split('\n');
 		for(var i = 0; i < ops.length; i++)
 		{
 			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)

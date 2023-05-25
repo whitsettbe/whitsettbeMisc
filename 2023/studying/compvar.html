@@ -16,12 +16,13 @@
 		</div>
 		<p id="resp"></p>
 		<div id="a" style="display:none"></div>
-<div id="dat" style="display:none">
+		<script>
+const DAT = `
 2.1: Given z=x+i*y, zbar=	x-i*y
 2.1: z*zbar	x^2+y^2
-2.2: Given epsilon, there is some delta s.t. _ for all z s.t. _	abs(f(z)-f0)&lt;epsilon, 0&lt;abs(z-z0)&lt;delta
-Squeeze Theorem: If abs(g(z))&lt;=abs(f(z)) in a deleted neighborhood of z0 and f(z)-->0 at z0, lim[g(z),z,z0]=	0
-Squeeze Theorem: If lim[f(z),z,z0]=0 and abs(g(z))&lt;=C in a deleted neighborhood of z0, lim[f(z)*g(z),z,z0]=	0
+2.2: Given epsilon, there is some delta s.t. _ for all z s.t. _	abs(f(z)-f0)<epsilon, 0<abs(z-z0)<delta
+Squeeze Theorem: If abs(g(z))<=abs(f(z)) in a deleted neighborhood of z0 and f(z)-->0 at z0, lim[g(z),z,z0]=	0
+Squeeze Theorem: If lim[f(z),z,z0]=0 and abs(g(z))<=C in a deleted neighborhood of z0, lim[f(z)*g(z),z,z0]=	0
 2.3: x-based derivative expression f'(z) of f=u(x,y)+i*v(x,y)	u[x]+i*v[x]
 2.3: y-based derivative expression f'(z) of f=u(x,y)+i*v(x,y)	-i*u[y]+v[y]
 2.3: Cauchy-Riemann differentiability conditions on f(z)=u(x,y)+i*v(x,y)	u[x] = v[y], v[x] = -u[y]
@@ -37,9 +38,9 @@ Squeeze Theorem: If lim[f(z),z,z0]=0 and abs(g(z))&lt;=C in a deleted neighborho
 2.5: A function satisfying Laplace's equation is said to be	harmonic
 2.5: The harmonic conjugate of u(x,y) is found by using the	C-R conditions
 2.5: Harmonic conjugate functions are graphically	orthogonal
-</div>
-		<script>
-		var ops = $('#dat')[0].innerHTML.split('\n');
+`;
+		
+		var ops = DAT.split('\n');
 		for(var i = 0; i < ops.length; i++)
 		{
 			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
