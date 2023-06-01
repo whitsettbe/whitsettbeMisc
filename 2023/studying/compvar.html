@@ -68,22 +68,22 @@ Squeeze Theorem: If lim[f(z),z,z0]=0 and abs(g(z))<=C in a deleted neighborhood 
 				event.preventDefault();
 				if(!showing)
 				{
-					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerHTML.toLowerCase())
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerText.toLowerCase())
 					{
-						$('#resp')[0].innerHTML = "Correct! The answer is:";
+						$('#resp')[0].innerText = "Correct! The answer is:";
 						qs.splice(idx, 1);
 						as.splice(idx, 1);
 						appealed = true;
 					}
 					else
 					{
-						$('#resp')[0].innerHTML = "Incorrect. The answer is:";
+						$('#resp')[0].innerText = "Incorrect. The answer is:";
 						errs++;
 					}
 					$('#a')[0].style.display = "inline";
 					$('#nxt')[0].style.display = "block";
 					showing = true;
-					$('#toStudy')[0].innerHTML = qs.length + ' remaining, ' + errs + ' mistakes';
+					$('#toStudy')[0].innerText = qs.length + ' remaining, ' + errs + ' mistakes';
 				}
 				else
 				{
@@ -96,7 +96,7 @@ Squeeze Theorem: If lim[f(z),z,z0]=0 and abs(g(z))<=C in a deleted neighborhood 
 		{
 			if(!appealed)
 			{
-				$('#resp')[0].innerHTML = "(Appealed)";
+				$('#resp')[0].innerText = "(Appealed)";
 				qs.splice(idx, 1);
 				as.splice(idx, 1);
 				errs--;
@@ -106,13 +106,13 @@ Squeeze Theorem: If lim[f(z),z,z0]=0 and abs(g(z))<=C in a deleted neighborhood 
 
 		function next()
 		{
-			$('#toStudy')[0].innerHTML = qs.length + ' remaining, ' + errs + ' mistakes';
+			$('#toStudy')[0].innerText = qs.length + ' remaining, ' + errs + ' mistakes';
 			if(qs.length == 0) return;
 			idx = Math.floor(Math.random() * qs.length);
-			$('#q')[0].innerHTML = qs[idx];
+			$('#q')[0].innerText = qs[idx];
 			$('#in')[0].value = '';
-			$('#resp')[0].innerHTML = '';
-			$('#a')[0].innerHTML = as[idx];
+			$('#resp')[0].innerText = '';
+			$('#a')[0].innerText = as[idx];
 			$('#a')[0].style.display = "none";
 			$('#nxt')[0].style.display = "none";
 			showing = false;

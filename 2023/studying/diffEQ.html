@@ -106,8 +106,8 @@ const DAT = `
 10.4: Bessel gamma condition J'[0] = 0 denominator integral	c^2/2*J[0]^2
 10.5: Spherical laplacian of u	1/rho^2*(d/drho[rho^2*u[rho]]+1/sin(phi)*d/dphi[u[phi]*sin(phi)]+1/sin(phi)^2*u[theta^2])
 `;
-
-var ops = DAT.split('\n');
+		
+		var ops = DAT.split('\n');
 		for(var i = 0; i < ops.length; i++)
 		{
 			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
@@ -135,22 +135,22 @@ var ops = DAT.split('\n');
 				event.preventDefault();
 				if(!showing)
 				{
-					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerHTML.toLowerCase())
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerText.toLowerCase())
 					{
-						$('#resp')[0].innerHTML = "Correct! The answer is:";
+						$('#resp')[0].innerText = "Correct! The answer is:";
 						qs.splice(idx, 1);
 						as.splice(idx, 1);
 						appealed = true;
 					}
 					else
 					{
-						$('#resp')[0].innerHTML = "Incorrect. The answer is:";
+						$('#resp')[0].innerText = "Incorrect. The answer is:";
 						errs++;
 					}
 					$('#a')[0].style.display = "inline";
 					$('#nxt')[0].style.display = "block";
 					showing = true;
-					$('#toStudy')[0].innerHTML = qs.length + ' remaining, ' + errs + ' mistakes';
+					$('#toStudy')[0].innerText = qs.length + ' remaining, ' + errs + ' mistakes';
 				}
 				else
 				{
@@ -163,7 +163,7 @@ var ops = DAT.split('\n');
 		{
 			if(!appealed)
 			{
-				$('#resp')[0].innerHTML = "(Appealed)";
+				$('#resp')[0].innerText = "(Appealed)";
 				qs.splice(idx, 1);
 				as.splice(idx, 1);
 				errs--;
@@ -173,13 +173,13 @@ var ops = DAT.split('\n');
 
 		function next()
 		{
-			$('#toStudy')[0].innerHTML = qs.length + ' remaining, ' + errs + ' mistakes';
+			$('#toStudy')[0].innerText = qs.length + ' remaining, ' + errs + ' mistakes';
 			if(qs.length == 0) return;
 			idx = Math.floor(Math.random() * qs.length);
-			$('#q')[0].innerHTML = qs[idx];
+			$('#q')[0].innerText = qs[idx];
 			$('#in')[0].value = '';
-			$('#resp')[0].innerHTML = '';
-			$('#a')[0].innerHTML = as[idx];
+			$('#resp')[0].innerText = '';
+			$('#a')[0].innerText = as[idx];
 			$('#a')[0].style.display = "none";
 			$('#nxt')[0].style.display = "none";
 			showing = false;

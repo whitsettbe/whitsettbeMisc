@@ -1,57 +1,61 @@
 <!doctype HTML>
 <html>
-    <head>
-        <title>Integration Bee Studying</title>
+	<head>
+		<title>Integration Bee Studying</title>
 		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
 			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
 			crossorigin="anonymous"></script>
-    </head>
-    <body onload="next()">
+	</head>
+	<body onload="next()">
 		<label>Progress: </label><p id="toStudy"></p>
-        <p id="q"></p>
-        <input type="text" id="in" autocomplete="off" style="width:80%"><br>
-		<input type="button" id="nxt" value="Next" onclick="next()" style="display:none"><br>
-        <p id="resp"></p>
-        <div id="a" style="display:none"></div>
-<div id="dat" style="display:none">
-	product->sum: sin(a)sin(b)	1/2(cos(a-b)-cos(a+b))
-	product->sum: cos(a)cos(b)	1/2(cos(a-b)+cos(a+b))
-	product->sum: sin(a)cos(b)	1/2(sin(a-b)+sin(a+b))
-	product->sum: tan(a)tan(b)	1-(tan(a)+tan(b))/tan(a+b)
-	power reduction: sin(x)^2	1/2(1-cos(2x))
-	power reduction: cos(x)^2	1/2(1+cos(2x))
-	trig ddx: d/dx[sin(x)]	cos(x)
-	trig ddx: d/dx[cos(x)]	-sin(x)
-	trig ddx: d/dx[tan(x)]	sec(x)^2
-	trig ddx: d/dx[csc(x)]	-csc(x)cot(x)
-	trig ddx: d/dx[sec(x)]	sec(x)tan(x)
-	trig ddx: d/dx[cot(x)]	-csc(x)^2
-	a-trig ddx: d/dx[asin(x)]	1/sqrt(1-x^2)
-	a-trig ddx: d/dx[acos(x)]	-1/sqrt(1-x^2)
-	a-trig ddx: d/dx[atan(x)]	1/(1+x^2)
-	h-trig ddx: d/dx[sinh(x)]	cosh(x)
-	h-trig ddx: d/dx[cosh(x)]	sinh(x)
-	h-trig ddx: d/dx[tanh(x)]	sech(x)^2
-	h-trig ddx: d/dx[csch(x)]	-csch(x)coth(x)
-	h-trig ddx: d/dx[sech(x)]	-sech(x)tanh(x)
-	h-trig ddx: d/dx[coth(x)]	-csch(x)^2
-	a-h-trig ddx: d/dx[asinh(x)]	1/sqrt(x^2+1)
-	a-h-trig ddx: d/dx[acosh(x)]	1/sqrt(x^2-1)
-	a-h-trig ddx: d/dx[atanh(x)]	1/(1-x^2)
+		<p id="q"></p>
+		<input type="text" id="in" autocomplete="off" style="width:80%"><br>
+		<div id="nxt">
+			<input type="button" value="Appeal" onclick="appeal()"><br>
+			<input type="button" value="Next" onclick="next()"><br>
+		</div>
+		<p id="resp"></p>
+		<div id="a" style="display:none"></div>
+		<script>
+const DAT = `
+product->sum: sin(a)sin(b)	1/2(cos(a-b)-cos(a+b))
+product->sum: cos(a)cos(b)	1/2(cos(a-b)+cos(a+b))
+product->sum: sin(a)cos(b)	1/2(sin(a-b)+sin(a+b))
+product->sum: tan(a)tan(b)	1-(tan(a)+tan(b))/tan(a+b)
+power reduction: sin(x)^2	1/2(1-cos(2x))
+power reduction: cos(x)^2	1/2(1+cos(2x))
+trig ddx: d/dx[sin(x)]	cos(x)
+trig ddx: d/dx[cos(x)]	-sin(x)
+trig ddx: d/dx[tan(x)]	sec(x)^2
+trig ddx: d/dx[csc(x)]	-csc(x)cot(x)
+trig ddx: d/dx[sec(x)]	sec(x)tan(x)
+trig ddx: d/dx[cot(x)]	-csc(x)^2
+a-trig ddx: d/dx[asin(x)]	1/sqrt(1-x^2)
+a-trig ddx: d/dx[acos(x)]	-1/sqrt(1-x^2)
+a-trig ddx: d/dx[atan(x)]	1/(1+x^2)
+h-trig ddx: d/dx[sinh(x)]	cosh(x)
+h-trig ddx: d/dx[cosh(x)]	sinh(x)
+h-trig ddx: d/dx[tanh(x)]	sech(x)^2
+h-trig ddx: d/dx[csch(x)]	-csch(x)coth(x)
+h-trig ddx: d/dx[sech(x)]	-sech(x)tanh(x)
+h-trig ddx: d/dx[coth(x)]	-csch(x)^2
+a-h-trig ddx: d/dx[asinh(x)]	1/sqrt(x^2+1)
+a-h-trig ddx: d/dx[acosh(x)]	1/sqrt(x^2-1)
+a-h-trig ddx: d/dx[atanh(x)]	1/(1-x^2)
 trig recursion: int[sin(x)^n,x]	-1/n*sin(x)^(n-1)*cos(x)+(n-1)/n*int[sin(x)^(n-2),x]
 trig recursion: int[cos(x)^n,x]	1/n*cos(x)^(n-1)*sin(x)+(n-1)/n*int[cos(x)^(n-2),x]
 trig recursion: int[tan(x)^n,x]	1/(n-1)*tan(x)^(n-1)-int[tan(x)^(n-2),x]
 trig recursion: int[cot(x)^n,x]	-1/(n-1)*cot(x)^(n-1)-int[cot(x)^(n-2),x]
 trig recursion: int[csc(x)^n,x]	-1/(n-1)*csc(x)^(n-2)*cot(x)+(n-2)/(n-1)*int[csc(x)^(n-2),x]
 trig recursion: int[sec(x)^n,x]	1/(n-1)*sec(x)^(n-2)*tan(x)+(n-2)/(n-1)*int[sec(x)^(n-2),x]
-	trig int: int[sin(x),x]	-cos(x)
-	trig int: int[cos(x),x]	sin(x)
-	trig int: int[tan(x),x]	ln(sec(x))
-	trig int: int[csc(x),x]	-ln(csc(x)+cot(x))
-	trig int: int[sec(x),x]	ln(sec(x)+tan(x))
-	trig int: int[cot(x),x]	ln(sin(x))
-	h-trig int: int[sinh(x),x]	cosh(x)
-	h-trig int: int[cosh(x),x]	sinh(x)
+trig int: int[sin(x),x]	-cos(x)
+trig int: int[cos(x),x]	sin(x)
+trig int: int[tan(x),x]	ln(sec(x))
+trig int: int[csc(x),x]	-ln(csc(x)+cot(x))
+trig int: int[sec(x),x]	ln(sec(x)+tan(x))
+trig int: int[cot(x),x]	ln(sin(x))
+h-trig int: int[sinh(x),x]	cosh(x)
+h-trig int: int[cosh(x),x]	sinh(x)
 h-trig int: int[tanh(x),x]	ln(cosh(x))
 h-trig int: int[csch(x),x]	ln(tanh(x/2))
 h-trig int: int[sech(x),x]	atan(sinh(x))
@@ -62,9 +66,9 @@ weierstrass: tan(x)	2t/(1-t^2)
 weierstrass: cot(x)	(1-t^2)/(2t)
 weierstrass: sec(x)	(1+t^2)/(1-t^2)
 weierstrass: csc(x)	(1+t^2)/(2t)
-</div>
-        <script>
-		var ops = $('#dat')[0].innerHTML.split('\n');
+`;
+			
+		var ops = DAT.split('\n');
 		for(var i = 0; i < ops.length; i++)
 		{
 			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
@@ -83,6 +87,7 @@ weierstrass: csc(x)	(1+t^2)/(2t)
 		var showing = false;
 		var idx = 0;
 		var errs = 0;
+		var appealed = false;
 
 		$('#in').keypress(function(event)
 		{
@@ -91,21 +96,22 @@ weierstrass: csc(x)	(1+t^2)/(2t)
 				event.preventDefault();
 				if(!showing)
 				{
-					if($('#in')[0].value === $('#a')[0].innerHTML)
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerText.toLowerCase())
 					{
-						$('#resp')[0].innerHTML = "Correct! The answer is:";
+						$('#resp')[0].innerText = "Correct! The answer is:";
 						qs.splice(idx, 1);
 						as.splice(idx, 1);
+						appealed = true;
 					}
 					else
 					{
-						$('#resp')[0].innerHTML = "Incorrect. The answer is:";
+						$('#resp')[0].innerText = "Incorrect. The answer is:";
 						errs++;
 					}
 					$('#a')[0].style.display = "inline";
-					$('#nxt')[0].style.display = "inline";
+					$('#nxt')[0].style.display = "block";
 					showing = true;
-					$('#toStudy')[0].innerHTML = qs.length + ' remaining, ' + errs + ' mistakes';
+					$('#toStudy')[0].innerText = qs.length + ' remaining, ' + errs + ' mistakes';
 				}
 				else
 				{
@@ -114,19 +120,32 @@ weierstrass: csc(x)	(1+t^2)/(2t)
 			}
 		});
 
+		function appeal()
+		{
+			if(!appealed)
+			{
+				$('#resp')[0].innerText = "(Appealed)";
+				qs.splice(idx, 1);
+				as.splice(idx, 1);
+				errs--;
+				appealed = true;
+			}
+		}
+
 		function next()
 		{
-			$('#toStudy')[0].innerHTML = qs.length + ' remaining, ' + errs + ' mistakes';
+			$('#toStudy')[0].innerText = qs.length + ' remaining, ' + errs + ' mistakes';
 			if(qs.length == 0) return;
 			idx = Math.floor(Math.random() * qs.length);
-			$('#q')[0].innerHTML = qs[idx];
+			$('#q')[0].innerText = qs[idx];
 			$('#in')[0].value = '';
-			$('#resp')[0].innerHTML = '';
-			$('#a')[0].innerHTML = as[idx];
+			$('#resp')[0].innerText = '';
+			$('#a')[0].innerText = as[idx];
 			$('#a')[0].style.display = "none";
 			$('#nxt')[0].style.display = "none";
 			showing = false;
+			appealed = false;
 		}
-        </script>
-    </body>
+		</script>
+	</body>
 </html>
