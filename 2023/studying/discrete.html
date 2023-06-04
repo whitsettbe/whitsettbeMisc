@@ -43,6 +43,18 @@ const DAT = `
 2.5: Two qualities of a one-to-one correspondence	one-to-one, onto
 2.5: A function is "onto" if there is equality between the	codomain, range
 2.6: In inductive proof, the quality that always holds is the	loop invariant
+3.1: Nonempty finite set V along with a set E of 2-element subsets of V	graph
+3.1: Notation for adjacency matrix of a graph G	A(G)
+3.1: When two graphs are identical up to labeling, they are _ by _	isomorphic, isomorphism
+3.1: Property fixed under isomorphism	isomorphism invariant
+3.2: Multigraphs also contain	loops, parallel edges
+3.2: Pick a point with edges, construct a cycle on it (popped from the graph) to update the order, repeat	Euler Circuit Algorithm
+3.2: Sufficient Hamiltonian Cycle criterion - with n vertices, all degrees are >=	n/2
+3.2: Bitstring ordering with minimal Hamming distances	Gray code
+3.3: Traverse by always visiting the nearest (unweighted) vertex	Breadth-First Search
+3.3: Traverse by always visiting the nearest (weighted) vertex	Dijkstra's Algorithm
+3.5: If a digraph has a directed path from any vertex to any other vertex, it is	strongly connected
+3.5: Assigning directions to a complete graph gives	tournament
 `;
 		
 		var ops = DAT.split('\n');
