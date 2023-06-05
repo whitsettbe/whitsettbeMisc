@@ -32,6 +32,22 @@ const DAT = `
 11.5: Hyperbola focal distance equation	c^2 = a^2+b^2
 11.5: Hyperbola asymptotic slope magnitude	b/a
 11.6: Given focus-directrix distance d and eccentricity e, polar conic equation (phase is irrelevant)	r = e*d/(1+e*cos(theta))
+12.1: If a sequence is bounded and monotonic, it is	convergent
+12.2: If s[n] is the nth partial sum of a series and the sequence s[n] is convergent, the series is	convergent
+12.2: Geometric series are convergent for	abs(r) < 1
+12.2: Name the test - Unless we have a[n] converges to 0, sum[a[n]] must diverge	test for divergence
+12.3: Name the test - sum[a[n]] has the same limiting behavior as the corresponding integral when the function is monotonic	integral test
+12.3: The p-series sum[1/n^p] is convergent for	p > 1
+12.3: Remainder estimate for the integral test, of R[n] = s-s[n]	int[f(x)*dx, n+1, inf] <= R[n] <= int[f(x)*dx, n, inf]
+12.4: Rather than the direct comparison test for series, it may be convenient to take the ratio of two sequences and do the	limit comparison test
+12.5: Name the test - convergence when an alternating series has magnitudes monotonically decreasing to 0	alternating series test
+12.5: Alternating series estimation of R[n] = s-s[n] (s=sum[(-1)^(n-1)*b[n]])	abs(R[n]) <= b[n+1]
+12.6: Name the test - check the limit of the magnitudes of successive fractions (!=1) for absolute convergence	ratio test
+12.6: Name the test - check absolute convergence by the limit of the nth roots (!=1)	root test
+12.6: What type of series can be rearranged to produce any sum?	conditionally convergent
+12.10: Taylor's inequality - upper bound on abs(R[n]) given a neighborhood at a where the n+1... derivatives are bounded by M	M/(n+1)!*abs(x-a)^(n+1)
+12.10: To prove the accuracy of a taylor series, we use _ to show R[n]->0	Taylor's inequality
+12.10: Binomial series ith term for (1+x)^k (show leading 2, trailing 1)	k*(k-1)***(k-i)/i!*x^i
 `;
 		
 		var ops = DAT.split('\n');
