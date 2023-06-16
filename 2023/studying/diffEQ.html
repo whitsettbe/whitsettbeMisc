@@ -65,9 +65,7 @@ const DAT = `
 7.5: L[f(t)] with period p	1/(1-e^(-p*s))*int[e^(-s*t)*f(t)*dt, 0, p]
 7.6: int[g(t)*delta(t-a)*dt, 0, inf]	g(a)
 7.6: L[delta(t)]	1
-7.6: a*x''+b*x'+c*x=f(t) Duhamel's principle transfer function W(s)	1/(a*s^2+b*s+c)
-7.6: Duhamel's principle weight function w(t)	L^-1[W(s)]
-7.6: Duhamel's principle weight-function-convolved solution x(t)	int[w(tau)*f(t-tau)*dtau, 0, t]
+7.6: a*x''+b*x'+c*x=f(t) Duhamel solution	L^-1[1/(a*s^2+b*s+c)] conv f(t)
 8.3: Regular/irregular singularity equidimensional homogeneous second-order form	y''+p/x*y'+q/x^2*y = 0
 8.3: Frobenius method indicial equation	r*(r-1)+p[0]*r+q[0] = 0
 8.3: What must be neither zero nor a positive integer to guarantee a second independent Frobenius solution?	r1-r2
@@ -106,8 +104,8 @@ const DAT = `
 10.3: Unforced transverse bar vibration	y[t^2]+E*I/rho*y[x^4] = 0
 10.4: Cylindrical laplacian of u	u[r^2]+1/r*u[r]+1/r^2*u[theta^2]+u[z^2]
 10.4: Bessel gamma condition J[n] = 0 denominator integral	c^2/2*J[n+1]^2
-10.4: Bessel gamma condition h*J[n]+x*J'[n] = 0 denominator integral	c^2*(gamma^2-n^2+h^2)/(2*gamma^2)*J[n]^2
-10.4: Bessel gamma condition J'[0] = 0 denominator integral	c^2/2*J[0]^2
+10.4: Bessel gamma condition h*J[n](gamma[k])+x*J'[n](gamma[k]) = 0 denominator integral	c^2*(gamma[k]^2-n^2+h^2)/(2*gamma[k]^2)*J[n](gamma[k])^2
+10.4: Bessel gamma condition J'[0](gamma[k]) = 0 denominator integral	c^2/2*J[0](gamma[k])^2
 10.5: Spherical laplacian of u	1/rho^2*(d/drho[rho^2*u[rho]]+1/sin(phi)*d/dphi[sin(phi)*u[phi]]+1/sin(phi)^2*u[theta^2])
 `;
 		
