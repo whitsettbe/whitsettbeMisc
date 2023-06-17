@@ -48,6 +48,26 @@ const DAT = `
 12.10: Taylor's inequality - upper bound on abs(R[n]) given a neighborhood at a where the n+1... derivatives are bounded by M	M/(n+1)!*abs(x-a)^(n+1)
 12.10: To prove the accuracy of a taylor series, we use _ to show R[n]->0	Taylor's inequality
 12.10: Binomial series ith term for (1+x)^k (show leading 2, trailing 1)	k*(k-1)***(k-i)/i!*x^i
+13.3: Direction cosine formula for a with unit vector iHat	cos(alpha) = (a dot iHat)/abs(a)
+13.3: comp[a](b)	(a dot b)/abs(a)
+13.3: proj[a](b)	(a dot b)/abs(a)^2*a
+13.4: Determinant form of a cross b	det([[iHat, jHat, kHat][a1, a2, a3][b1, b2, b3]])
+13.4: a dot (b cross c)	(a cross b) dot c
+13.4: a cross (b cross c)	b*(a dot c)-c*(a dot b)
+13.4: The parallelipiped on a,b,c has volume	abs(a dot (b cross c))
+13.4: Determinant form of scalar triple product a dot (b cross c)	det([[a1, a2, a3][b1, b2, b3][c1, c2, c3]])
+13.5: Vector equation of a line	r = r[0]+t*v
+13.5: Symmetric equations of a line with direction vector v=<a,b,c>	(x-x[0])/a = (y-y[0])/b = (z-z[0])/c
+13.5: Vector equation of a plane	n dot (r-r[0]) = 0
+13.5: Scalar equation of a plane with n=<a,b,c>	a*(x-x[0])+b*(y-y[0])+c*(z-z[0]) = 0
+13.5: Plane standard form	a*x+b*y+c*z+d = 0
+13.5: For a plane, d=	-a*x[0]-b*y[0]-c*z[0]
+13.6: Classify x^2/a^2+y^2/b^2+z^2/c^2=1	ellipsoid
+13.6: Classify z/c=x^2/a^2+y^2/b^2	elliptic paraboloid
+13.6: Classify z/c=x^2/a^2-y^2/b^2	hyperbolic paraboloid
+13.6: Classify z^2/c^2=x^2/a^2+y^2/b^2	cone
+13.6: Classify x^2/a^2+y^2/b^2-z^2/c^2=1	hyperboloid of one sheet
+13.6: Classify -x^2/a^2-y^2/b^2+z^2/c^2=1	hyperboloid of two sheets
 `;
 		
 		var ops = DAT.split('\n');
