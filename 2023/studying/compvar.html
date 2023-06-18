@@ -18,7 +18,6 @@
 		<div id="a" style="display:none"></div>
 		<script>
 const DAT = `
-2.1: Given z=x+i*y, zbar=	x-i*y
 2.1: z*zbar	x^2+y^2
 2.2: Given epsilon, there is some delta s.t. _ for all z s.t. _	abs(f(z)-f0)<epsilon, 0<abs(z-z0)<delta
 Squeeze Theorem: If abs(g(z))<=abs(f(z)) in a deleted neighborhood of z0 and f(z)-->0 at z0, lim[g(z),z,z0]=	0
@@ -48,6 +47,20 @@ Squeeze Theorem: If lim[f(z),z,z0]=0 and abs(g(z))<=C in a deleted neighborhood 
 3.5: A line used to create an analytic domain is	branch cut
 3.5: A point that must always lie on a branch cut is	branch point
 3.8: What exists as a barrier to changing branches on encirclement of a branch point?	branch cut
+4.1: Path made up of a finite number of smooth arcs connected end to end	piecewise smooth curve
+4.1: Line integral uses ds=	sqrt(dx^2+dy^2)
+4.2: Complex line integral expansion int_C[f*dz]=	int_C[u*dx-v*dy+i*v*dx+i*u*dy]
+4.2: Parametric complex line integral int_C[f(z)*dz]=	int_C[f(z(t))*dz/dt*dt]
+4.2: ML inequality	abs(int_C[f(z)*dz]) <= M*L
+4.3: Green's Theorem in R bounded by simple closed contour C with P, Q, and partials continuous	int_C[P*dx+Q*dy] = int_R[(Q[x]-P[y])*dx*dy]
+4.3: Name the theorem - integral of f(z) analytic in R about boundary simple closed contour C is 0	Cauchy-Goursat Theorem
+4.3: Name the theorem - two simple closed contours without a singularity between them give the same line integral	principle of deformation
+4.4: Name the theorem - int_C[f(z)*dz, z1, z2] in D (f analytic) does not depend on C	principle of path independence
+4.5: Cauchy Integral Formula f(z[0])=	1/(2*pi*i)*int_C[f(z)*dz/(z-z[0])]
+4.5: Extension of the Cauchy Integral Formula d^n/dz^n[f(z[0])]=	n!/(2*pi*i)*int_C[f(z)*dz/(z-z[0])^(n+1)]
+4.5: A function harmonic in a domain has _ partials there	all
+4.6: Gauss's Mean Value Theorem f(z[0])=	1/(2*pi)*int[f(z[0]+r*e^(i*theta))*dtheta, 0, 2*pi]
+4.6: Min and max moduli of f(z) analytic on R occurs at	boundary
 `;
 		
 		var ops = DAT.split('\n');
