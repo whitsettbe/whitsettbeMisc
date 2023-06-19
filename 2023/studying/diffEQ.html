@@ -34,14 +34,16 @@ const DAT = `
 2.6: Runge-Kutta formula for y[n+1]	y[n]+h/6*(k[1]+2*k[2]+2*k[3]+k[4])
 5.2: Characteristic equation of matrix A	det(A-lambda*I) = 0
 5.2: Eigenvector (v) equation for matrix A	(A-lambda*I)*v = 0
+5.2: Determinant of matrix formed from solution columns (if nonzero, we have independence)	Wronskian
 5.2: When lambda=p+-q*i, and v=a+b*i is an eigenvector for lambda+, we have x=e^(p*t)*	a*cos(q*t)-b*sin(q*t), a*sin(q*t)+b*cos(q*t)
 5.3: Given complex eigenvector v for a pure imaginary lambda, vector with real/imaginary phase ellipse bases	v*(1+i)/2
 5.4: Unforced mass-spring matrix system	M*x'' = K*x
 5.4: Mass-spring system with external force-per-mass	x'' = A*x+f
 5.4: When f=F[0]*cos(omega*t), x[p]=c*cos(omega*t) satisfies:	(A+omega^2*I)*c = -F[0]
 5.5: Generalized eigenvector index (k) decrease	(A-lambda*I)*v[k] = v[k-1]
+5.5: Solutions from generalized eigenvectors v1, v2 for lambda	v1*e^(lambda*t), (v1*t+v2)*e^(lambda*t)
 5.6: Fundamental matrix solution of x'=A*x given x[0]	phi(t)*phi(0)^-1*x[0]
-5.6: Matrix exponential form	phi(t)*phi(0)^-1
+5.6: Matrix exponential	phi(t)*phi(0)^-1
 5.7: Particular solution of x'=P*x+f by variation of parameters	phi(t)*int[phi(t)^-1*f(t)*dt]
 7.1: L[f(t)]	int[e^(-s*t)*f(t)*dt, 0, inf]
 7.1: gamma(x) integral	int[e^(-t)*t^(x-1)*dt, 0, inf]
