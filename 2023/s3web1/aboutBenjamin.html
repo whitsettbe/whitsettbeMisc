@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test CSS (Building)</title>
+        <style>
+            body {
+                background-color: rgb(191, 255, 181);
+            }
+
+            h1 {
+                text-align: center;
+                background-color: rgb(228, 146, 228);
+                font-family: papyrus;
+                margin: 0px;
+                position: fixed;
+                top: 0px;
+                right: 0px;
+                left: 0px;
+            }
+
+            h2 {
+                font-style: italic;
+                text-decoration: underline;
+                color: rgb(29, 86, 194);
+            }
+
+            li {
+                height: 30px;
+                transition: all .2s ease-in-out;
+                /*https://travis.media/how-to-make-an-item-grow-on-hover-with-css/*/
+            }
+
+            li:hover {
+                transform: scale(1, 1.4);
+                /*https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/scale*/
+            }
+
+            table {
+                width: 600px;
+                max-width: 100%;
+            }
+
+            td {
+                background-color: red;
+                height: 51px;
+                color: white;
+                text-align: center;
+                font-weight: bold;
+                font-family: Arial;
+            }
+
+            .rowStart {
+                background-color: transparent;
+                color: red;
+                text-align: right;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>About Benjamin Whitsett<hr></h1>
+        <br><br><br><br><br>
+        <h2>Schools Attended</h2>
+        <ol>
+            <li>The Montessori School</li>
+            <li>Winchell Elementary</li>
+            <li>Maple Street Middle School</li>
+            <li>ATYP</li>
+            <li>Loy Norrix High School</li>
+            <li>KAMSC</li>
+            <li>Kalamazoo College</li>
+        </ol>
+        <h2>Hobbies</h2>
+        <ul>
+            <li>Computer Programming</li>
+            <li>Animation</li>
+            <li>Cello</li>
+            <li>Reading Science Books</li>
+        </ul>
+        <h2>Current Employment</h2>
+        <h3>Sizzlin' Summer Science Teacher</h3>
+        <table>
+            <th>
+                <td>Web Design</td>
+                <td>MathBenders</td>
+                <td>Animation</td>
+            </th>
+            <tr>
+                <td class="rowStart">Weeks</td>
+                <td>1-2</td>
+                <td>2, 4</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td class="rowStart">Ranking 1-10</td>
+                <td>10</td>
+                <td>9</td>
+                <td>8</td>
+            </tr>
+        </table>
+    </body>
+</html>
