@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Text File Editor</title>
+	<style>
+		#content
+		{
+			width: 100%;
+		}
+
+		textarea, pre
+		{
+			-moz-tab-size : 4;
+			-o-tab-size : 4;
+			tab-size : 4;
+		}
+	</style>
+</head>  
+<body>
+	<input type="file" name="inputfile" id="inputfile">
+	<br>
+	
+	<!--modified from: http://jsfiddle.net/UselessCode/qm5AG/ -->
+	<textarea id="content">File Contents</textarea><br>
+	<button id="create">Save text to file</button><br>
+	<a download="file.txt" id="downloadlink" style="display: none">Download</a>
+	
+	<script type="text/javascript">
+	//constants for element references
+	const FILE = "inputfile";
+	const CONTENT = "content";
+	const SAVE = "create";
+	const LINK = "downloadlink";
+	
+	//declare document history space
+	var old = [];
+	var curString = "";
+	var current;
+	
+	//function to reset document history
+	function resetHistory()
+	{
+		old = [];
+		current = 0;
+		curString = document.getElementById(CONTENT).value;
+		return 0;
+	}
+	resetHistory();
+	
+	//function to update document history
+	function updateHistory()
+	{
+		if(document.getElementById(CONTENT).value != curString)
+		{
+			//clear old timeline past this point, if necessary
+			old.length = current;
+			
+			//declare necessary vars
+			var val = document.getElementById(CONTENT).value;
+			var start, end;
+			
+			//find bounds of relevant string and store action info
+			for(start = 0; start <= Math.min(val.length, curString.length) + 1 && val.substring(0, start) == curString.substring(0, start); start++);
+			start--;
+			for(end = Math.min(val.length, curString.length) - start; val.substring(val.length - end) != curString.substring(curString.length - end); end--);
+			old.push([start, curString.substring(start, curString.length - end), val.substring(start, val.length - end)]);
+			curString = val;
+			current++;
+		}
+		return 0;
+	}
+	
+	//function to undo an action, if possible
+	function undo()
+	{
+		if(current > 0)
+		{
+			current--;
+			curString = document.getElementById(CONTENT).value = curString.substring(0, old[current][0]) + old[current][1] +
+					curString.substring(old[current][0] + old[current][2].length);
+			document.getElementById(CONTENT).selectionStart =
+					document.getElementById(CONTENT).selectionEnd = old[current][0] + old[current][1].length;
+		}
+		return 0;
+	}
+	
+	//function to redo an action, if possible
+	function redo()
+	{
+		if(current <= old.length)
+		{
+			curString = document.getElementById(CONTENT).value = curString.substring(0, old[current][0]) + old[current][2] +
+					curString.substring(old[current][0] + old[current][1].length);
+			document.getElementById(CONTENT).selectionStart =
+					document.getElementById(CONTENT).selectionEnd = old[current][0] + old[current][2].length;
+			current++;
+		}
+		return 0;
+	}
+	
+	//file opener (adapted from https://www.geeksforgeeks.org/how-to-read-a-local-text-file-using-javascript/)
+	// replace all 4-fold spaces with tab characters
+	document.getElementById(FILE).addEventListener('change', function()
+	{
+		var fr=new FileReader();
+		fr.onload=function()
+		{
+			document.getElementById(CONTENT).value = fr.result;
+			for(var i = 0; i <= document.getElementById(CONTENT).value.length - 4; i++)
+			{
+				if(document.getElementById(CONTENT).value.substring(i, i + 4) == "\ \ \ \ ")
+				{
+					document.getElementById(CONTENT).value = document.getElementById(CONTENT).value.substring(0, i) +
+							"\t" + document.getElementById(CONTENT).value.substring(i + 4);
+				}
+			}
+			resetHistory();
+		}
+		  
+		fr.readAsText(this.files[0]);
+		document.title = this.value.substring(this.value.lastIndexOf('\\') + 1);
+	})
+	
+	//handle keyboard activity
+	document.getElementById(CONTENT).addEventListener('keydown', function(e)
+	{
+		//update document history
+		if(e.key == "z" && e.ctrlKey == true)
+		{
+			e.preventDefault();
+			undo();
+		}
+		else if(e.key == "y" && e.ctrlKey == true)
+		{
+			e.preventDefault();
+			redo();
+		}
+		else
+		{
+			updateHistory();
+		}
+		
+		//handle tabs (forwards and backwards, single line or multiple lines)
+		// modified from: https://stackoverflow.com/questions/6637341/use-tab-to-indent-in-textarea
+		if(e.key == 'Tab')
+		{
+			e.preventDefault();
+			var start = this.selectionStart;
+			var end = this.selectionEnd;
+			var selected = this.value.substring(start, end);
+
+			if(e.shiftKey == false)
+			{
+				//generate tabbed lines
+				for(var i = 0; i < selected.length; i++)
+				{
+					if(selected.charAt(i) == '\n')
+					{
+						selected = selected.substring(0, i + 1) + "\t" + selected.substring(i + 1);
+						i++;
+					}
+				}
+	
+				//set textarea value to: text before caret + tabbed lines + text after caret
+				this.value = this.value.substring(0, start) +
+						"\t" + selected + this.value.substring(end);
+	
+				//reselect area
+				this.selectionStart = start + (start == end ? 1 : 0);
+				this.selectionEnd = start + (start != end ? selected.length : 0) + 1;
+			}
+			else
+			{
+				//delete tabs
+				while(start > 0 && selected.charAt(0) != '\t' && selected.charAt(0) != '\n' && selected.charAt(1) != '\r')
+				{
+					start--;
+					selected = this.value.substring(start, end);
+				}
+				for(var i = 0; i < selected.length; i++)
+				{
+					if(selected.charAt(i) == '\t')
+					{
+						selected = selected.substring(0, i) + selected.substring(i + 1);
+						while(selected.charAt(i) == '\t') i++;
+					}
+				}
+
+				//reinsert text
+				this.value = this.value.substring(0, start) + selected + this.value.substring(end);
+
+				//reset selection
+				this.selectionStart = start;
+				this.selectionEnd = start + selected.length;
+			}
+		}
+
+		//manually handle newlines for indent preservation
+		if(e.key == "Enter")
+		{
+			e.preventDefault();
+			var start = this.selectionStart;
+			var tStart = (start > 0 ? start - 1 : start), numTab = 0;
+			var end = this.selectionEnd;
+			var selected = this.value.substring(start, end);
+			
+			//find tabs and count them
+			while(tStart > 0 && this.value.charAt(tStart) != '\t' && this.value.charAt(tStart) != '\n' && this.value.charAt(tStart) != '\r') tStart--;
+			while(tStart > 0 && this.value.charAt(tStart) == '\t') tStart--;
+			tStart++;
+			for(; this.value.charAt(tStart) == '\t' && tStart < start; tStart++, numTab++);
+
+			//do enter, with appropriate number of tabs
+			this.value = this.value.substring(0, start) + "\n" + "\t".repeat(numTab) + this.value.substring(end);
+			//for(var i = 0; i < numTab; i++) this.value = this.value.substring(0, start + 1) + "\t" + this.value.substring(start + 1);
+
+			//reset selection
+			this.selectionStart = this.selectionEnd = start + 1 + numTab;
+		}
+	});
+	
+	//file save; modified from: http://jsfiddle.net/UselessCode/qm5AG/
+	(function ()
+	{
+		var textFile = null,
+			makeTextFile = function (text) {
+				var data = new Blob([text], {type: 'text/plain'});
+
+				// If we are replacing a previously generated file we need to
+				// manually revoke the object URL to avoid memory leaks.
+				if (textFile !== null) {
+					window.URL.revokeObjectURL(textFile);
+				}
+
+				textFile = window.URL.createObjectURL(data);
+
+				return textFile;
+			};
+
+
+			var create = document.getElementById(SAVE),
+				textbox = document.getElementById(CONTENT);
+
+			create.addEventListener('click', function () {
+				var link = document.getElementById(LINK);
+				link.href = makeTextFile(textbox.value);
+				link.click();
+			}, false);
+	})();
+	</script>
+	
+	
+	<script>
+		document.getElementById("content").style.height = screen.height * 0.6 + "px";
+	</script>
+</body>
+  
+</html>
