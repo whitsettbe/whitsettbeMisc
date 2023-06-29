@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+		<script>
+			function history()
+			{
+				$('#hist')[0].innerText += "\n\n" + $('#area')[0].value;
+				$('#area')[0].value = "";
+				alert("Thank you for your comment!")
+			}
+		</script>
+<style>
+   table,td,th {
+    border: 2px solid rgb(80, 195, 14);
+}
+td{
+    text-align: center;
+}
+body{
+    background-color: goldenrod;
+}
+h1{
+    text-align: center;
+    background-color: darkcyan;
+    position: fixed;
+    left:0px;
+    right:0px;
+    top:0px;
+    margin:0px;
+    font-family:papyrus;
+}
+h2{
+    font-style: italic;
+    text-decoration:underline;
+    color:aqua;
+    
+}
+p{
+    height: 25px;
+    transition: all .2s ease-in-out;/*Sources:Benjamin*/
+}
+p:hover {
+    transform: scale(1, 2);/*Sources:Benjamin*/
+}
+
+</style>
+    <title>About the Auther</title>
+    <script>
+
+        function warnUser()
+        {
+         alert("Hi, " + document.getElementById("textBox").value + "!\nWarning, these documents contain crazy storys. ")
+        
+        }
+        /*Sources=Benjamin*/
+    </script>
+</head>
+
+
+
+<body>
+<h1>About the Auther(Rowen)</h1> 
+<br>
+<br>
+<br>
+Name: <input type="text" id="textBox"><input type="button" value="submit" onclick="warnUser()">
+
+
+<br>
+<br>
+<h2>Sports</h2>
+<p>1.Soccer</p>
+<p>2.Baseball</p>
+<p>3.Hockey</p>
+<p>4.Gaga</p>
+<p>5.Track</p>
+<p>6.Basketball</p>
+<p>7.Air Hockey</p>
+<br>
+<h2>Favorite Movies</h2>
+<p>1.Gardians 2</p>
+<p>2.SpiderMan into the spider verse</p>
+<p>3.Space Jam 2</p>
+<p>4.IronMan 1</p>
+<p>5.Super Mario Bros</p>
+<br>
+<h2>Video Games</h2>
+<table>
+<tr>
+<td>Mario</td><td>Mario 3d World and Bowser's Fury</td><td>Smash Bros Ultimate</td>
+</tr>
+<tr><td>MegaMan</td><td>MegaMan on Nintendo</td><td>MegaMan 8</td>
+</tr>
+<tr>
+    <td>Raymen</td><td>Rayman on Nintendo Switch</td><td>Raymen on Wii</td>
+</tr>
+<tr>
+    <td>Sonic</td><td>Sonic Frontiers</td><td>Sonic Forces</td>
+</tr>
+
+</table>
+<br>
+<h2>Favorite Dad Jokes</h2>
+<p>1.What do call a girl between two poles? Annette</p>
+<p>2.I used to code a lot of HTML. But now its some &lt;BODY&gt; that I used to know.</p>
+<p>3.A Magician was walking down the street -- then he turned into a store.</p>
+<p>4.I was wondering why the baseball kept bigger and bigger. Then it hit me.</p>
+<p>5.I can tolerate algebra, maybe even a little calculus but geometry is where I draw the line.</p>
+<p>6.I just paid $100 for a belt that does not fit — what a huge waist!</p>
+<p>7.After dinner Mom asked if I could clear the table. I needed a running start, but I made it.</p>
+<!--https://www.goodhousekeeping.com/life/parenting/a36279135/best-corny-dad-jokes-for-kids/-->
+<br>
+<h2>Hobbys</h2>
+<p>1.Baseball</p>
+<p>2.Reading</p>
+<p>3.Games</p>
+<br>
+<h2>Favorite Books</h2>
+<p>1.Magnus Chase</p>
+<p>2.Big Nate</p>
+<p>3.Garfeild</p>
+<p>4.Terrible</p>
+<p>5.Hilo</p>
+<p>6.Wings of fire</p>
+<hr>
+<p>Non-permanent Comment:</p>
+		<textarea style="width: 100px; height: 25px" id="area"></textarea>
+		<input type="button" value="Add comment" onclick="history()"><br>
+		Past comments:<br>
+		<div id="hist">----</div>
+
+<!--Source:Benjnamin-->
+ 
+
+
+
+
+
+
+<h2><a href="cool.html">cool</a></h2>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
