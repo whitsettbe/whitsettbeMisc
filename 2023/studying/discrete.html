@@ -26,7 +26,6 @@ const DAT = `
 2.1: -A operation name	complement
 2.1: {(a,b): a∈A and b∈B} notation, name	AxB, Cartesian Product
 2.2: Relations from A to B are subsets of	AxB
-2.2: "x is related to y by R" notation	xRy
 2.2: Term for a subset of SxS	relation on S
 2.2: Three qualities of an equivalence relation	reflexive, symmetric, transitive
 2.2: Given equivalence relation R, [x] is an	equivalence class
@@ -68,6 +67,24 @@ const DAT = `
 4.7: Repeatedly join trees of minimal roots with new roots (sum of two prev roots)	Huffman's Optimal Binary Tree Algorithm
 4.7: By the _, initial bits of a character cannot represent another character	prefix property
 4.7: Binary tree where inorder traversal gives ascending sort of vertex labels	binary search tree
+5.1: A sequence of distinct x[i] s.t. x[i]∈S[i] for i∈[1,n]	system of distinct representatives
+5.1: {S[i]} has a system of distinct representatives iff all I⊆[1,n] have |U{S[i] s.t. i∈I}|>=|I|	Hall's Theorem
+5.2: Property of a graph s.t. V has disjoint subsets V1, V2 such that e=(v1, v2) ∀e∈E	bipartite
+5.2: Set M of edges s.t. no vertex is incident with multiple edges in M	matching
+5.2: Bipartite graph matrix has _ and _ labeling rows and columns, respectively	V1, V2
+5.2: Bipartite graph matrix matching is equivalent to constructing a _	independent set of 1s
+5.2: Set of vertices s.t. every edge is incident to at least one vertex in the set	covering
+5.2: No matching is larger than any covering; if they are equal, we have a _ and _	maximum matching, minimum covering
+5.2: Bipartite graph matrix covering is equivalent to constructing a set of _ containing all the _	lines, 1s
+5.3: Independent Set Algorithm Step 1 - label each _ containing _ with a #	column, no starred 1
+5.3: Independent Set Algorithm Step 2 - alternately scan labeled columns/rows by labeling the rows/columns with _/_ 1s, respectively, until done scanning or some _ contains _	unstarred, starred, labeled row, no starred 1
+5.3: Independent Set Algorithm Step 3 - flip star states on the 1s backwards from the _ with _, using the labels	labeled row, no starred 1
+5.3: Independent Set Algorithm operation count on an mxn matrix	(3*m*n+m+n)*min(m,n)
+5.4: If the matching is unimproved, Independent Set Algorithm _ and _ form a _	labeled rows, unlabeled columns, minimum covering
+5.4: If the matching is unimproved, Independent Set Algorithm _ form _ from Hall's Theorem	unlabeled rows, I
+5.4: To solve bottleneck problem minimizing worst job cost, search for a _ as assumed cost _	matching, increases
+5.5: Pad 0s -> square, -min, enlarge 0s, -min non-covered (add to doubly-covered) & repeat, add chosen initial values to get _ by _	minimum independent set of n entries, Hungarian Algorithm
+5.5: To find maximum independent set of n entries, a[i,j]-->_ and use the _	-a[i,j], Hungarian Algorithm
 `;
 		
 		var ops = DAT.split('\n');
