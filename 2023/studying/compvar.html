@@ -56,11 +56,29 @@ Squeeze Theorem: If lim[f(z),z,z0]=0 and abs(g(z))<=C in a deleted neighborhood 
 4.3: Name the theorem - integral of f(z) analytic in R about boundary simple closed contour C is 0	Cauchy-Goursat Theorem
 4.3: Name the theorem - two simple closed contours without a singularity between them give the same line integral	principle of deformation
 4.4: Name the theorem - int_C[f(z)*dz, z1, z2] in D (f analytic) does not depend on C	principle of path independence
-4.5: Cauchy Integral Formula f(z[0])=	1/(2*pi*i)*int_C[f(z)*dz/(z-z[0])]
-4.5: Extension of the Cauchy Integral Formula d^n/dz^n[f(z[0])]=	n!/(2*pi*i)*int_C[f(z)*dz/(z-z[0])^(n+1)]
+4.5: Cauchy Integral Formula f(z[0])=	1/(2*pi*i)*int_C[f(z)/(z-z[0])*dz]
+4.5: Extension of the Cauchy Integral Formula d^n/dz^n[f(z[0])]=	n!/(2*pi*i)*int_C[f(z)/(z-z[0])^(n+1)*dz]
 4.5: A function harmonic in a domain has _ partials there	all
 4.6: Gauss's Mean Value Theorem f(z[0])=	1/(2*pi)*int[f(z[0]+r*e^(i*theta))*dtheta, 0, 2*pi]
 4.6: Min and max moduli of f(z) analytic on R occurs at	boundary
+5.1: Power series coefficient c[n]	d^n/dx^n[f(z[0])]/n!
+5.2: Complex sequence of functions p(z) converges to P(z) when _ for all n>N ∃N∈Z ∀epsilon∈R	abs(P(z)-p[n](z)) < epsilon
+5.3: A series function converges within the	region of convergence
+5.3: We may multiply two series like polynomials when they are	absolutely convergent
+5.3: Series converges uniformly when _ does not depend on _	N, z
+5.3: Series converges uniformly when maximal term-magnitude series converges by the	Weirstrass M Test
+5.3: When all summands are analytic, where the series converges uniformly it is	analytic
+5.4: If sum[c[n]*(z-z[0])^n] converges at z[1], the series converges absolutely for z s.t.	abs(z-z[0]) < abs(z[1]-z[0])
+5.4: If sum[c[n]*(z-z[0])^n] converges at z[1], it converges _ to a _ function for _ where r < abs(z[1]-z[0])	uniformly, analytic, abs(z-z[0]) <= r
+5.4: The circle of convergence is determined by the _ about the _	radius of convergence, center of convergence
+5.4: f(z) analytic at z[0] has a Taylor series in the _ circle where the function is _	largest, analytic
+5.6: Laurent series coefficients c[n]	1/(2*pi*i)*int_C[f(z)/(z-z[0])^(n+1)*dz]
+5.6: Point where f(z) not analytic, but where f(z) is analytic in a deleted neighborhood	isolated singular point
+5.6: Laurent series are in general convergent within a specific _ which we may control easily in the method of _	annulus, partial fractions
+5.7: z s.t. f(z)=0 but f!=0 in a deleted neighborhood	isolated zero
+5.7: Where f(z) is of the form (z-z[0])^m*phi(z), z[0] is	zero of order m
+5.7: Every zero is either _ or exists in a neighborhood where _ for all z	isolated, f(z)=0
+5.7: If f(z) analytic and is real on f(x), we have fbar(z) = 	f(zbar)
 `;
 		
 		var ops = DAT.split('\n');
