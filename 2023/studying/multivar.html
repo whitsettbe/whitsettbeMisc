@@ -72,7 +72,7 @@ const DAT = `
 14.3: Arc length L along vector function r	int[abs(r')*dt, a, b]
 14.3: Smooth r(t) satisfies r'(t) _ and _ ∀t	continuous, nonzero
 14.3: Curvature kappa given T	abs(dT/ds)
-14.3: Curvature kappa given T, r	abs(T'/r')
+14.3: Curvature kappa given T, r	abs(T')/abs(r')
 14.3: Curvature kappa given r	abs(r' cross r'')/abs(r')^3
 14.3: Curvature kappa given r=<x,f(x)>	abs(f'')/(1+f'^2)^(3/2)
 14.3: Principal unit normal vector N	T'/abs(T')
@@ -80,7 +80,7 @@ const DAT = `
 14.3: Plane containing N and B	normal plane
 14.3: Plane containing T and N	osculating plane
 14.3: Radius of the osculating circle	1/kappa
-14.4: Tangential and Normal form of acceleration a=	abs(v)'*T+k*v^2*N
+14.4: Tangential and Normal form of acceleration a=	abs(v)'*T+kappa*v^2*N
 14.4: Proving Kepler's 1st Law by h = _ (prove constant), v cross h = _ (integrate from the _), abs(h)^2 = vector triple product = _	r cross v, G*M*u+c, product rule, G*M*abs(r)+abs(r)*abs(c)*cos(theta)
 `;
 		
