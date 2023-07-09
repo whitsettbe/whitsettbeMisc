@@ -82,6 +82,19 @@ const DAT = `
 14.3: Radius of the osculating circle	1/kappa
 14.4: Tangential and Normal form of acceleration a=	abs(v)'*T+kappa*v^2*N
 14.4: Proving Kepler's 1st Law by h = _ (prove constant), v cross h = _ (integrate from the _), abs(h)^2 = vector triple product = _	r cross v, G*M*u+c, product rule, G*M*abs(r)+abs(r)*abs(c)*cos(theta)
+15.1: Points such that f(x,y)=k (constant) make up a	level curve
+15.2: 2d limits - check different axes & lines, but beware; delta-epsilon shortcut uses the _ to evaluate limits (sometimes in _)	squeeze theorem, polar
+15.3: Name the theorem - when all necessary partials are continuous, order of multiple partials is irrelevant	Clairaut's theorem
+15.4: z=f(x,y) tangent plane (partials evaluated at the point of interest)	z-z[0] = f[x]*(x-x[0])+f[y]*(y-y[0])
+15.4: Where f[x] and f[y] are _, f is _	continuous, differentiable
+15.6: Directional derivative D[u](f)	del*f dot u
+15.6: D[u](f) is maximized when _ is parallel to _	u, del*f
+15.6: Level surface F(x,y,z)=0 tangent plane	F[x]*(x-x[0])+F[y]*(y-y[0])+F[z]*(z-z[0]) = 0
+15.7: f(x,y) has critical points where	f[x]=0, f[y]=0
+15.7: Second-derivative test for f(x,y) at (a,b) gives local min or max where curvature (ish) D>0 (<0 saddle, =0 ?) where D=	f[x^2]*f[y^2]-f[x*y]^2
+15.7: A closed set will give an absolute max and min when f is _ on it	continuous
+15.8: Maxima and minima of f(x,y,z) constrained to g(x,y,z)=k occur somewhere where	del*f = lambda*del*g
+15.8: Lagrange multiplier constraint on maxima/minima using constraints g,h	del*f = lambda*del*g+mu*del*h
 `;
 		
 		var ops = DAT.split('\n');

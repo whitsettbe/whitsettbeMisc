@@ -29,7 +29,6 @@ const DAT = `
 2.2: Term for a subset of SxS	relation on S
 2.2: Three qualities of an equivalence relation	reflexive, symmetric, transitive
 2.2: Given equivalence relation R, [x] is an	equivalence class
-2.3: If x and y have the same remainder when divided by m, they are	congruent modulo m
 2.4: When xRy and yRx implies x=y always, R is	antisymmetric
 2.4: Three qualities of a partial ordering relation	reflexive, antisymmetric, transitive
 2.4: Given R1 partial ordering of S1, R2 partial ordering of S2, lexicographic order is a partial order of	S1xS2
@@ -57,7 +56,6 @@ const DAT = `
 3.5: Assigning directions to a complete graph gives	tournament
 4.1: Connected graph without cycles	tree
 4.1: Identify a tree by list of parents of successive minimal leaves	Prufer's algorithm
-4.2: BFS automatically gives us a _ of a graph	spanning tree
 4.3: Repeatedly choose min/max-weight edges to yet-unvisited vertices	Prim's MST Algorithm
 4.3: Repeatedly choose min/max-weight edges while preventing cycles	Kruskal's MST Algorithm
 4.4: DFS MST includes _ edges and excludes _ edges and numbers starting with _	tree, back, 1
@@ -85,6 +83,18 @@ const DAT = `
 5.4: To solve bottleneck problem minimizing worst job cost, search for a _ as assumed cost _	matching, increases
 5.5: Pad 0s -> square, -rowmins, enlarge 0s, -min non-covered (add to doubly-covered) & repeat, add chosen initial values to get _ by _	minimum independent set of n entries, Hungarian Algorithm
 5.5: To find maximum independent set of n entries, a[i,j]-->_ and use the _	-a[i,j], Hungarian Algorithm
+6.1: _ is a nonnegative-weighted digraph with exactly one vertex with indeg=0 (_), exactly one vertex with outdeg=0 (_)	network, source, sink
+6.1: Function f acting on each edge s.t. 0<=f(e)<=cap(e) and sum[f, inarcs]=sum[f, outarcs] ∀v∈(V-{source, sink})	flow
+6.1: Flow out of the source = flow into the sink = the _ of the flow	value
+6.1: Partition of source from sink	cut
+6.1: Capacity of a cut is the sum of arc capacities from the subgraph with the _ to the one with the _	source, sink
+6.2: Flow Augmentation Algorithm Step 1 - label the _ with (_, _, _)	source, source, +, inf
+6.2: Flow Augmentation Algorithm Step 2 - repeatedly scan labeled verts v (u,+/-,a) by labeling adjs with _, forward _ and backward _, max poss. arc change until _ labeled (or done scanning)	v, +, -, sink
+6.2: Flow Augmentation Algorithm Step 3 - starting from the _, add/subtract flow at the _ to arcs backwards until reaching the _	sink, sink, source
+6.3: In a transportation network, the max _ always equals the min _	flow, cut
+6.3: Flow Augmentation Algorithm operation count on m arcs, n vertices	m^2*n
+6.4: Flow/cut problems may also be used to find a _ for a bipartite graph	maximum matching
+6.4: Max decrease in vertices from a subset of V1 to the image in V2 is the _ of G	deficiency
 `;
 		
 		var ops = DAT.split('\n');
