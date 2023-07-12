@@ -61,13 +61,13 @@ Squeeze Theorem: If lim[f(z),z,z0]=0 and abs(g(z))<=C in a deleted neighborhood 
 4.5: A function harmonic in a domain has _ partials there	all
 4.6: Gauss's Mean Value Theorem f(z[0])=	1/(2*pi)*int[f(z[0]+r*e^(i*theta))*dtheta, 0, 2*pi]
 4.6: Min and max moduli of f(z) analytic on R occurs at	boundary
-5.1: Power series coefficient c[n]	d^n/dx^n[f(z[0])]/n!
+5.1: Power series coefficient c[n]	d^n/dz^n[f(z[0])]/n!
 5.2: Complex sequence of functions p(z) converges to P(z) when _ for all n>N ∃N∈Z ∀epsilon∈R	abs(P(z)-p[n](z)) < epsilon
 5.3: We may multiply two series like polynomials when they are	absolutely convergent
 5.3: Series converges uniformly when _ does not depend on _	N, z
 5.3: Series converges uniformly when maximal term-magnitude series converges by the	Weirstrass M Test
 5.3: When all summands are analytic, where the series converges uniformly it is	analytic
-5.4: If sum[c[n]*(z-z[0])^n] converges at z[1], it converges _ and _ to a _ function for _ where _ < abs(z[1]-z[0])	absolutely, uniformly, analytic, abs(z-z[0])
+5.4: If sum[c[n]*(z-z[0])^n] converges at z[1], it converges _ and _ to a _ function where _ < abs(z[1]-z[0])	absolutely, uniformly, analytic, abs(z-z[0])
 5.4: The circle of convergence is determined by the _ about the _	radius of convergence, center of convergence
 5.4: f(z) analytic at z[0] has a Taylor series in the _ circle where the function is _	largest, analytic
 5.6: Laurent series coefficients c[n]	1/(2*pi*i)*int_C[f(z)/(z-z[0])^(n+1)*dz]
@@ -82,18 +82,18 @@ Squeeze Theorem: If lim[f(z),z,z0]=0 and abs(g(z))<=C in a deleted neighborhood 
 6.2: Negative powers in a Laurent series constitute the _, and nonnegative powers form the _	principal part, analytic part
 6.2: When a Laurent series has most negative power (z-z[0])^-N, z[0] is a	pole of order N
 6.2: A pole of order 1 is known as a	simple pole
-6.2: If the Laurent seris has no most negative power at z[0], z[0] is	isolated essential singularity
+6.2: If the Laurent seris has no most negative power at z[0], z[0] is	essential singularity
 6.2: lim[(z-z[0])^n*f(z), z, z[0]] is nonzero finite iff n = _, the order of the _ at z[0]	N, pole
 6.2: Given f(z)=g(z)/h(z), order of pole at z[0] is order of zero for _ minus order of zero for _	h, g
 6.2: A function is meromorphic in a domain where it is everywhere _ or a _	analytic, pole
 6.3: Differential limit form of Res[f(z), z[0]] given pole order N	lim[1/(N-1)!*d^(N-1)/dz^(N-1)[(z-z[0])^N*f(z)], z, z[0]]
-6.3: The residue of f(z)=g(z)/h(z) at a simple pole is	g(z[0])/h'(z[0])
+6.3: The residue of f(z)=g(z)/h(z) at a simple pole z[0] is	g(z[0])/h'(z[0])
 6.4: To use residue calculus on int[R(sin(theta), cos(theta))*dtheta, 0, 2*pi], use substitution	z = e^(i*theta)
 6.5: Cauchy principal value	lim[int[f(x)*dx, -R, R], R, inf]
 6.5: Path integral on a limiting semicircle of f(z) is 0 when f(z) has magnitude bounded by a multiple of _ given _	1/abs(z)^k, k > 1
 6.5: When Q(x) has degree > 1 more than P(x), C.P.V. of int[P(x)/Q(x)*dx, -inf, inf]=_ in the U.H.P.	2*pi*i*sum[Res[P(z)/Q(z)]]
 6.6: To integrate f(z)*cos(z) or f(z)*sin(z) on a semicircle, use _ and split by components	f(z)*e^(i*z)
-6.6: When Q(x) has degree >= 1 more than P(x), Jordan's Lemma lets lim[_, R, inf]=0 for v>0	int_C[P(z)/Q(z)*e^(i*v*z)]
+6.6: When Q(x) has degree >= 1 more than P(x), Jordan's Lemma lets lim[_, R, inf]=0 for v>0	int_C[P(z)/Q(z)*e^(i*v*z)*dz]
 `;
 		
 		var ops = DAT.split('\n');
