@@ -76,6 +76,24 @@ Squeeze Theorem: If lim[f(z),z,z0]=0 and abs(g(z))<=C in a deleted neighborhood 
 5.7: Where f(z) is of the form (z-z[0])^m*phi(z), z[0] is a	zero of order m
 5.7: Every zero is either _ or exists in a neighborhood where _ for all z	isolated, f(z)=0
 5.7: If f(z) analytic and is real on f(x), we have fbar(z) = 	f(zbar)
+6.1: Given C about z[0] (an isolated singular point), Res[f(z), z[0]]=	1/(2*pi*i)*int_C[f(z)*dz]
+6.1: The residue of f(z) at z[0] is the coefficient of _ in the _ there	(z-z[0])^-1, Laurent Series
+6.1: By the residue theorem, int_C[f(z)*dz] = 	2*pi*i*sum[Res[f(z), z[k]]]
+6.2: Negative powers in a Laurent series constitute the _, and nonnegative powers form the _	principal part, analytic part
+6.2: When a Laurent series has most negative power (z-z[0])^-N, z[0] is a	pole of order N
+6.2: A pole of order 1 is known as a	simple pole
+6.2: If the Laurent seris has no most negative power at z[0], z[0] is	isolated essential singularity
+6.2: lim[(z-z[0])^n*f(z), z, z[0]] is nonzero finite iff n = _, the order of the _ at z[0]	N, pole
+6.2: Given f(z)=g(z)/h(z), order of pole at z[0] is order of zero for _ minus order of zero for _	h, g
+6.2: A function is meromorphic in a domain where it is everywhere _ or a _	analytic, pole
+6.3: Differential limit form of Res[f(z), z[0]] given pole order N	lim[1/(N-1)!*d^(N-1)/dz^(N-1)[(z-z[0])^N*f(z)], z, z[0]]
+6.3: The residue of f(z)=g(z)/h(z) at a simple pole is	g(z[0])/h'(z[0])
+6.4: To use residue calculus on int[R(sin(theta), cos(theta))*dtheta, 0, 2*pi], use substitution	z = e^(i*theta)
+6.5: Cauchy principal value	lim[int[f(x)*dx, -R, R], R, inf]
+6.5: Path integral on a limiting semicircle of f(z) is 0 when f(z) has magnitude bounded by a multiple of _ given _	1/abs(z)^k, k > 1
+6.5: When Q(x) has degree > 1 more than P(x), C.P.V. of int[P(x)/Q(x)*dx, -inf, inf]=_ in the U.H.P.	2*pi*i*sum[Res[P(z)/Q(z)]]
+6.6: To integrate f(z)*cos(z) or f(z)*sin(z) on a semicircle, use _ and split by components	f(z)*e^(i*z)
+6.6: When Q(x) has degree >= 1 more than P(x), Jordan's Lemma lets lim[_, R, inf]=0 for v>0	int_C[P(z)/Q(z)*e^(i*v*z)]
 `;
 		
 		var ops = DAT.split('\n');
