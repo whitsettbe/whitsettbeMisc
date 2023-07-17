@@ -44,6 +44,23 @@ const DAT = `
 5.5: Solutions from generalized eigenvectors v1, v2 for lambda	v1*e^(lambda*t), (v1*t+v2)*e^(lambda*t)
 5.6: Fundamental matrix solution of x'=A*x given x[0]	phi(t)*phi(0)^-1*x[0]
 5.7: Particular solution of x'=P*x+f by variation of parameters	phi(t)*int[phi(t)^-1*f(t)*dt]
+6.1: A system of x', y' defined in x,y only is	autonomous system
+6.1: Where x'=y'=0 (at a _), we have a _	critical point, equilibrium solution
+6.1: Figure demonstrating autonomous critical points, solution curves, and (usually) direction field	phase portrait
+6.1: When a critical point has all trajectories same delta-distance sign, and each trajectory has a tangent line there, it is a	node
+6.1: When all local trajectories have bounded distance (delta/epsilon behavior), a critical point is	stable
+6.1: When all local trajectories converge on the isolated critical point, it is	asymptotically stable
+6.2: x'=f(x,y), y'=g(x,y) linearization in u,v at isolated crit. pt. x0,y0 uses [u',v']T=J*[u,v]T, where Jacobian matrix J=	[[f[x],f[y]][g[x],g[y]]]
+6.2: Origin is an isolated critical point of x'=A*x iff _ are nonzero	eigenvalues of A
+6.2: Nonlinear descriptions require accounting for error when eigenvalues are _ or _	real equal, pure imaginary
+6.3: Predator-prey system	x'=a*x-p*x*y, y'=-b*y+q*x*y
+6.3: Competition system	x'=a1*x-b1*x^2-c1*x*y, y'=a2*y-b2*y^2-c2*x*y
+6.3: Competition system stability depends on comparison of competition _ and inhibition _	c1*c2, b1*b2
+6.3: Dividing trajectory between different terminal characteristics	separatrix
+6.4: Nonlinear spring model F(x)=_...	-k*x+beta*x^3
+6.4: When nonlinear spring has beta<0 it is _, when beta>0 it is _	hard, soft
+6.4: Soft spring separatrices seed coordinates y=0, x=	-sqrt(k/beta), 0, sqrt(k/beta)
+6.4: General nonlinear pendulum equation (omega^2=g/L)	theta''+c*theta'+omega^2*sin(theta) = 0
 7.1: L[f(t)]	int[e^(-s*t)*f(t)*dt, 0, inf]
 7.1: gamma(x) integral	int[e^(-t)*t^(x-1)*dt, 0, inf]
 7.1: gamma(x) factorial offset	gamma(n+1) = n!
