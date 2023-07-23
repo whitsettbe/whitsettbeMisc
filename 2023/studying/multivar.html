@@ -86,15 +86,28 @@ const DAT = `
 15.2: 2d limits - check different axes & lines, but beware; delta-epsilon shortcut uses the _ to evaluate limits (sometimes in _)	squeeze theorem, polar
 15.3: Name the theorem - when all necessary partials are continuous, order of multiple partials is irrelevant	Clairaut's theorem
 15.4: z=f(x,y) tangent plane (partials evaluated at the point of interest)	z-z[0] = f[x]*(x-x[0])+f[y]*(y-y[0])
-15.4: Where f[x] and f[y] are _, f is _	continuous, differentiable
+15.4: Where f[x] and f[y] are _, f is differentiable	continuous
 15.6: Directional derivative D[u](f)	del*f dot u
 15.6: D[u](f) is maximized when _ is parallel to _	u, del*f
 15.6: Level surface F(x,y,z)=0 tangent plane	F[x]*(x-x[0])+F[y]*(y-y[0])+F[z]*(z-z[0]) = 0
 15.7: f(x,y) has critical points where	f[x]=0, f[y]=0
-15.7: Second-derivative test for f(x,y) at (a,b) gives local min or max where curvature (ish) D>0 (<0 saddle, =0 ?) where D=	f[x^2]*f[y^2]-f[x*y]^2
+15.7: Second-derivative test for f(x,y) at (a,b) gives local min or max where curvature (ish) D>0 (<0 saddle, =0 ?) where D=	f[x^2]*f[y^2]-f[xy]^2
 15.7: A closed set will give an absolute max and min when f is _ on it	continuous
 15.8: Maxima and minima of f(x,y,z) constrained to g(x,y,z)=k occur somewhere where	del*f = lambda*del*g
 15.8: Lagrange multiplier constraint on maxima/minima using constraints g,h	del*f = lambda*del*g+mu*del*h
+16.4: int_R[f(x,y)*dA] to polar form	int_R[f(r*cos(theta),r*sin(theta))*r*dr*dtheta]
+16.5: Laminar moment about the x-axis given density function rho in D: M[x]=	int_D[y*rho(x,y)*dA]
+16.5: Laminar center of mass x-coordinate given moment about the y-axis	M[y]/m
+16.5: Laminar moment of inertia about the x-axis given density rho in D: I[x]=	int_D[y^2*rho(x,y)*dA]
+16.5: Given moment of inertia I for mass m, the radius of gyration R=	sqrt(I/m)
+16.6: 3d moment about the xy plane given density rho in E: M[xy]=	int_E[z*rho(x,y,z)*dV]
+16.6: 3d center of mass x-coordinate given moment about the yz plane	M[yz]/m
+16.6: 3d moment of inertia about the x-axis given density rho in E: I[x]=	int_E[(y^2+z^2)*rho(x,y,z)*dV]
+16.7: int_E[f(x,y,z)*dV] to cylindrical form on z-axis	int_E[f(r*cos(theta),r*sin(theta),z)*r*dz*dr*dtheta]
+16.8: int_E[f(x,y,z)*dV] to spherical form on z-axis	int_E[f(rho*sin(phi)*cos(theta),rho*sin(phi)*sin(theta),rho*cos(phi))*rho^2*sin(phi)*drho*dtheta*dphi]
+16.9: Given x(u,v) and y(u,v), the Jacobian of transformation d(x,y)/d(u,v)=	det([[x[u],x[v]][y[u],y[v]]])
+16.9: int_R[f(x,y)*dA] transformation into x(u,v) y(u,v) one-to-one (except perhaps on the boundary)	int_R[f(x(u,v),y(u,v))*abs(d(x,y)/d(u,v))*du*dv]
+16.9: 3d Jacobian of transformation d(x,y,z)/d(u,v,w)	det([[x[u],x[v],x[w]][y[u],y[v],y[w]][z[u],z[v],z[w]]])
 `;
 		
 		var ops = DAT.split('\n');
