@@ -101,7 +101,18 @@ const DAT = `
 7.5: A "useful" sample space will generally have events of the	same probability
 7.6: (PIE) finite sets A[i] 1..r have union size determined by n[s] sum of intersection sizes on s sets =	sum[(-1)^(i-1)*n[i], i, 1, r]
 7.7: Lexicographic Ordering of Permutations - increase the _ increasable position and list other values in _ order	last, ascending
-7.7: Lexicographic Ordering or r-Combinations - increase the _ increasable position and follow it with _ values which are _	last, minimal, greater
+7.7: Lexicographic Ordering of r-Combinations - increase the _ increasable position and follow it with _ values which are _	last, minimal, greater
+8.1: Derangement count recurrence relation D[n]=	(n-1)*(D[n-2]+D[n-1])
+8.1: Catalan numbers recurrence relation C[n+1]=	sum[C[i]*C[n-i], i, 0, n]
+8.1: Discrete analog of a DE	discrete dynamical system
+8.2: Find explicit formula by inspecting sequence values, then guessing and proving	method of iteration
+8.3: First-order linear difference equation with constant coefficients s[n]=a*s[n-1]+b, a!=1, c=_ has s[n]=_	b/(a-1), a^n*(s[0]+c)-c
+8.3: Second-order homog lin difference eq with const coeffs s[n]=a*s[n-1]+b*s[n-2] has auxiliary equation _, sol'n of form _ or _ given roots	x^2 = a*x+b, c1*r1^n+c2*r2^n, (c1+n*c2)*r^n
+8.5: Given sequence a[n], the polynomial a[0]+a[1]*x+a[2]*x^2+... is the _ of the sequence	generating function
+8.5: Selecting r items from various categories with allowed size sets N[k] uses coefficient x^r of	product[sum[x^n, n in N[k]], k]
+8.6: Given generating function G s.t. G(0)=0, (1+G+G^2+G^3+...) has inverse	1-G
+8.6: Generating function inverse may be computed by assuming an inverse and calculating successive _ whose solutions give the _	linear equations, coefficients
+8.6: Expanding a recursively-defined generating function G often gives G as a _ which may be converted via _ to an explicit-coefficient form	rational function, partial fractions
 `;
 		
 		var ops = DAT.split('\n');
