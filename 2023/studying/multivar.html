@@ -19,21 +19,15 @@
 		<script>
 const DAT = `
 11.1: Cycloid parametrization in theta given r	r*(theta-sin(theta)), r*(1-cos(theta))
-11.2: Parametric dy/dx using t	(dy/dt)/(dx/dt)
 11.2: Parametric arc length integral in t on alpha..beta	int[sqrt(x'^2+y'^2)*dt, alpha, beta]
 11.2: Parametric area integral in t on alpha..beta	int[y*x'*dt, alpha, beta]
 11.3: Polar derivative dy/dx using theta	(r'*sin(theta)+r*cos(theta))/(r'*cos(theta)-r*sin(theta))
 11.4: Polar area integral in theta on a..b	int[r^2/2*dtheta, a, b]
 11.4: Polar arc length integral in theta on a..b	int[sqrt(r^2+r'^2)*dtheta, a, b]
 11.5: Focus-directrix parabola form	x^2 = 4*p*y
-11.5: Ellipse standard form	x^2/a^2+y^2/b^2 = 1
-11.5: Ellipse focal distance equation	c^2 = a^2-b^2
-11.5: Hyperbola standard form	x^2/a^2-y^2/b^2 = 1
-11.5: Hyperbola focal distance equation	c^2 = a^2+b^2
 11.5: Hyperbola asymptotic slope magnitude	b/a
 11.6: Given focus-directrix distance d and eccentricity e, polar conic equation (phase is irrelevant)	r = e*d/(1+e*cos(theta))
 12.1: If a sequence is bounded and monotonic, it is	convergent
-12.2: If s[n] is the nth partial sum of a series and the sequence s[n] is convergent, the series is	convergent
 12.2: Geometric series are convergent for	abs(r) < 1
 12.2: Name the test - Unless we have a[n] converges to 0, sum[a[n]] must diverge	test for divergence
 12.3: Name the test - sum[a[n]] has the same limiting behavior as the corresponding integral when the function is monotonic	integral test
@@ -81,8 +75,7 @@ const DAT = `
 14.3: Plane containing T and N	osculating plane
 14.3: Radius of the osculating circle	1/kappa
 14.4: Tangential and Normal form of acceleration a=	abs(v)'*T+kappa*v^2*N
-14.4: Proving Kepler's 1st Law by h = _ (prove constant), v cross h = _ (integrate from the _), abs(h)^2 = vector triple product = _	r cross v, G*M*u+c, product rule, G*M*abs(r)+abs(r)*abs(c)*cos(theta)
-15.1: Points such that f(x,y)=k (constant) make up a	level curve
+14.4: Proving Kepler's 1st Law by h = _ (prove constant), u = _, v cross h = _ (integrate from the _), abs(h)^2 = vector triple product = _	r cross v, r/abs(r), G*M*u+c, product rule, G*M*abs(r)+abs(r)*abs(c)*cos(theta)
 15.2: 2d limits - check different axes & lines, but beware; delta-epsilon shortcut uses the _ to evaluate limits (sometimes in _)	squeeze theorem, polar
 15.3: Name the theorem - when all necessary partials are continuous, order of multiple partials is irrelevant	Clairaut's theorem
 15.4: z=f(x,y) tangent plane (partials evaluated at the point of interest)	z-z[0] = f[x]*(x-x[0])+f[y]*(y-y[0])
@@ -109,6 +102,30 @@ const DAT = `
 16.9: Given x(u,v) and y(u,v), the Jacobian of transformation d(x,y)/d(u,v)=	det([[x[u],x[v]][y[u],y[v]]])
 16.9: int_R[f(x,y)*dA] transformation into x(u,v) y(u,v) one-to-one (except perhaps on the boundary)	int_R[f(x(u,v),y(u,v))*abs(d(x,y)/d(u,v))*du*dv]
 16.9: 3d Jacobian of transformation d(x,y,z)/d(u,v,w)	det([[x[u],x[v],x[w]][y[u],y[v],y[w]][z[u],z[v],z[w]]])
+17.1: F is a conservative vector field iff there is some f (the _) for which F=_	potential function, del*f
+17.2: Scalar line integral on C	int_C[f(x,y,z)*ds]
+17.2: Scalar line integral parametrized in t on a to b	int[f(r(t))*abs(r'(t))*dt, a, b]
+17.2: Vector line integral on C	int_C[F dot dr]
+17.2: Vector line integral paramatrized in t on a to b	int[F(r(t)) dot r'(t)*dt, a, b]
+17.3: For C on a to b, int_C[del*f dot dr]=	f(r(b))-f(r(a))
+17.3: F(x,y)=<P,Q> with diff'ble P and Q is conservative in open _ region D iff _	simply-connected, P[y] = Q[x]
+17.4: Green's theorem for cont. partials P and Q in D bounded by C	int_C[P*dx+Q*dy] = int_D[(Q[x]-P[y])*dA]
+17.4: Green's theorem gives area expressions A=_, _	int_C[x*dy], int_C[-y*dx]
+17.5: curl F =	del cross F
+17.5: F is conservative iff it has continuous partials and _=0	curl F
+17.5: div F =	del dot F
+17.5: If F has continuous second-order partials, div curl F =	0
+17.5: If div F = 0, the F is said to be	incompressible
+17.5: Curl form of Green's Theorem	int_C[F dot dr] = int_D[(curl F) dot kHat*dA]
+17.5: Divergence form of Green's Theorem	int_C[F dot n*ds] = int_D[div F*dA]
+17.6: Tangent plane to vector function r(u,v) is given by the normal:	r[u] cross r[v]
+17.6: Given r(u,v)=<u,v,f(u,v)>, r[u] cross r[v] =	<-f[u], -f[v], 1>
+17.6: Parametric vector function r(u,v) has surface area	int_D[abs(r[u] cross r[v])*dA]
+17.7: Parametrized surface integral form	int_D[f(r(u,v))*abs(r[u] cross r[v])*dA]
+17.7: Flux surface integral of F over S int_S[F dot dS] =	int_S[F dot n*dS]
+17.7: Flux surface integral parametrized in r(u,v)	int_S[F dot (r[u] cross r[v])*dA]
+17.8: Stokes' Theorem on oriented S bounded by positively-oriented pcws-smooth C	int_C[F dot dr] = int_S[curl F dot dS]
+17.9: Divergence Theorem on outward-oriented S surrounding E	int_S[F dot dS] = int_E[div F*dV]
 `;
 		
 		var ops = DAT.split('\n');
