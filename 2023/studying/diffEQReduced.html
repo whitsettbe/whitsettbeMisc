@@ -84,6 +84,12 @@ const DAT = `
 7.6: int[g(t)*delta(t-a)*dt, 0, inf]	g(a)
 7.6: L[delta(t)]	1
 7.6: a*x''+b*x'+c*x=f(t) Duhamel solution	L^-1[1/(a*s^2+b*s+c)] conv f(t)
+8.3: Regular/irregular singularity equidimensional homogeneous second-order form	y''+p/x*y'+q/x^2*y = 0
+8.3: Frobenius method indicial equation	r*(r-1)+p[0]*r+q[0] = 0
+8.3: What must be neither zero nor a positive integer to guarantee a second independent Frobenius solution?	r1-r2
+8.4: Reduction of order formula for y2, given y1 solving y''+P(x)*y'+Q(x)*y=0	y1*int[e^(-int[P(x)*dx])/y1^2*dx]
+8.4: Exceptional Frobenius y2 with r1=r2 (abbreviate power series as ps)	y1*ln(x)+x^(r1+1)*ps
+8.4: Exceptional Frobenius y2 with r1-r2=N>0 (abbreviate power series as ps)	C*y1*ln(x)+x^r2*ps
 9.2: Full-period Fourier cosine integral	1/L*int[f(t)*cos(n*pi*t/L)*dt, -L, L]
 9.2: Full-period Fourier sine integral	1/L*int[f(t)*sin(n*pi*t/L)*dt, -L, L]
 9.3: Fourier cosine series expansion integral	2/L*int[f(t)*cos(n*pi*t/L)*dt, 0, L]
