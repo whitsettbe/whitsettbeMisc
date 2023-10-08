@@ -1,0 +1,112 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>Discrete Math Studying</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+	</head>
+	<body onload="next()">
+		<label>Progress: </label><p id="toStudy"></p>
+		<p id="q"></p>
+		<input type="text" id="in" autocomplete="off" style="width:80%"><br>
+		<div id="nxt">
+			<input type="button" value="Appeal" onclick="appeal()"><br>
+			<input type="button" value="Next" onclick="next()"><br>
+		</div>
+		<p id="resp"></p>
+		<div id="a" style="display:none"></div>
+		<script>
+const DAT = `
+1: Wavenumber (k) as a function of lambda	2*pi/lambda
+1: Doppler-shifted frequency f	f0/(1+(v[E] dot rHat[E])/abs(v[w]))
+2: Standing wave frequencies for like-bound waves are _ with n _	n*abs(v)/(2*L), integer
+2: Standing wave frequencies for unlike-bound waves are _ with n _	n*abs(v)/(4*L), odd
+2: Resonance amplitude proportionality given damping coeff. gamma	1/sqrt((omega[0]^2-omega^2)^2+4*gamma^2*omega^2)
+3: Distant double-slit (d apart) constructive interference rays theta[nc]	asin(n*lambda/d)
+3: Very distant double-slit constructive distance step approximation for small theta	s/D = lambda/d
+3: Rayleigh criterion for distinct point sources given aperture diameter a yields theta >	asin(1.22*lambda/a)
+4: h in Js, h in eVs, and hc in eVnm	6.63e-34, 4.15e-15, 1240
+`;
+		
+		var ops = DAT.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var as = [];
+		for(var i = 0; i < ops.length; i++)
+		{
+			qs.push(ops[i].split('\t')[0]);
+			as.push(ops[i].split('\t')[1]);
+		}
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var appealed = false;
+
+		$('#in').keypress(function(event)
+		{
+			if (event.keyCode == 13 || event.which == 13)
+			{
+				event.preventDefault();
+				if(!showing)
+				{
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerText.toLowerCase())
+					{
+						$('#resp')[0].innerText = "Correct! The answer is:";
+						qs.splice(idx, 1);
+						as.splice(idx, 1);
+						appealed = true;
+					}
+					else
+					{
+						$('#resp')[0].innerText = "Incorrect. The answer is:";
+						errs++;
+					}
+					$('#a')[0].style.display = "inline";
+					$('#nxt')[0].style.display = "block";
+					showing = true;
+					$('#toStudy')[0].innerText = qs.length + ' remaining, ' + errs + ' mistakes';
+				}
+				else
+				{
+					next();
+				}
+			}
+		});
+
+		function appeal()
+		{
+			if(!appealed)
+			{
+				$('#resp')[0].innerText = "(Appealed)";
+				qs.splice(idx, 1);
+				as.splice(idx, 1);
+				errs--;
+				appealed = true;
+			}
+		}
+
+		function next()
+		{
+			$('#toStudy')[0].innerText = qs.length + ' remaining, ' + errs + ' mistakes';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			$('#q')[0].innerText = qs[idx];
+			$('#in')[0].value = '';
+			$('#resp')[0].innerText = '';
+			$('#a')[0].innerText = as[idx];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+			appealed = false;
+		}
+		</script>
+	</body>
+</html>
