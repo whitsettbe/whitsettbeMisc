@@ -26,7 +26,10 @@ const DAT = `
 3: Distant double-slit (d apart) constructive interference rays theta[nc]	asin(n*lambda/d)
 3: Very distant double-slit constructive distance step approximation for small theta	s/D = lambda/d
 3: Rayleigh criterion for distinct point sources given aperture diameter a yields theta >	asin(1.22*lambda/a)
-4: h in Js, h in eVs, and hc in eVnm	6.63e-34, 4.15e-15, 1240
+4: h in Js, h in eVs, and h*c in eVnm	6.63e-34, 4.15e-15, 1240
+5: DeBroglie hypothesis	lambda = h/abs(p)
+5: Wavelength lambda emitted by nonrelativistic electron gun granting K	h*c/sqrt(2*K*m*c^2)
+5: m*c^2 for an electon	511 keV
 `;
 		
 		var ops = DAT.split('\n');
