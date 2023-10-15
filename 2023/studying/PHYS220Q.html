@@ -35,6 +35,17 @@ const DAT = `
 6: Fundamental boson spin magnitude	hBar
 6: Ratio of electrons aligned along a new axis theta away from the previous alignment	cos(theta/2)^2
 6: Ratio of electrons antialigned along a new axis theta away from the previous alignment	sin(theta/2)^2
+7: Quantum vectors u,w are orthogonal if	<u|w> = 0
+7: Quantum vector psi is normalized if	<psi|psi> = 1
+7: Rule 1 - Quanton state is _ and has _ components if it has n values for the observable in question	normalized, n
+7: Rule 2 - Each possible observable is _ associated with _, and those must be _	eigenvalue, eigenvector, orthogonal
+7: Spin eigenvectors |+z>, |-z>, |+x>, |-x>, |+theta>, |-theta>	[[1][0]], [[0][1]], [[1/sqrt(2)][1/sqrt(2)]], [[1/sqrt(2)][-1/sqrt(2)]], [[cos(theta/2)][sin(theta/2)]], [[-sin(theta/2)][cos(theta/2)]]
+7: Rule 3 - When we make a measurement, the quantum state undergoes _ to just one _	collapse, eigenvector
+7: Rule 4 - Outcome a[n] has quantum amplitude _, probability _	<a[n]|psi>, <a[n]|psi>^2
+7: Rule 5 - Observing psi as a[n] then b[j] gives quantum amplitude	<b[j]|a[n]><a[n]|psi>
+7: Rule 6 - Given indistinguishable paths, quantons have _ summed from the respective paths	quantum amplitude
+7: Rule 7 - _ eigenvectors remain constant between _, others don't	energy, measurements
+7: Using probabilities to determine state vector will fail to reveal the _	sign
 `;
 		
 		var ops = DAT.split('\n');
