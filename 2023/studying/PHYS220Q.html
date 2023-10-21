@@ -46,6 +46,10 @@ const DAT = `
 7: Rule 6 - Given indistinguishable paths, quantons have _ summed from the respective paths	quantum amplitude
 7: Rule 7 - _ eigenvectors remain constant between _, others don't	energy, measurements
 7: Using probabilities to determine state vector will fail to reveal the _	sign
+9: 1d position-basis wavefunction psi normalized if	int[abs(psi(x))^2*dx, -inf, inf] = 1
+9: 1d position-basis normalized wavefunctions give <u|psi>=	int[uBar(x)*psi(x)*dx, -inf, inf]
+9: 1d position-basis wavefunction-given probability of x∈[x1,x2]	int[abs(psi(x))^2*dx, x1, x2]/int[abs(psi(x))^2*dx, -inf, inf]
+9: Heisenberg uncertainty principle says that the _ of x and px over many quantons multiply to _	standard deviations, >= hBar/2
 `;
 		
 		var ops = DAT.split('\n');
