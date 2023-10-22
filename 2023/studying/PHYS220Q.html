@@ -50,6 +50,11 @@ const DAT = `
 9: 1d position-basis normalized wavefunctions give <u|psi>=	int[uBar(x)*psi(x)*dx, -inf, inf]
 9: 1d position-basis wavefunction-given probability of x∈[x1,x2]	int[abs(psi(x))^2*dx, x1, x2]/int[abs(psi(x))^2*dx, -inf, inf]
 9: Heisenberg uncertainty principle says that the _ of x and px over many quantons multiply to _	standard deviations, >= hBar/2
+10: Box psi[E[n]](x) (internal), E[n], n[min]	A*sin(n*pi*x/L), h^2*n^2/(8*m*L^2), 1
+10: Bohr E[n], n[min], E[n[min]]	-e^2/(8*pi*epsilon0*a0)/n^2, 1, -13.6eV
+10: SHM E[n], n[min]	hBar*omega*(n+1/2), 0
+10: SHM b, c[k+2]	sqrt(m*omega/hBar), c[k]*2*(k-n)/((k+2)*(k+1))
+10: SHM psi[E[n]](x)	e^(-(b*x)^2/2)*sum[c[k]*(b*x)^k, k>=0, k==n mod 2]
 `;
 		
 		var ops = DAT.split('\n');
