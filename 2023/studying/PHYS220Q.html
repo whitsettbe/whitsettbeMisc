@@ -29,10 +29,8 @@ const DAT = `
 4: h in Js, h in eVs, and h*c in eVnm	6.63e-34, 4.15e-15, 1240
 5: DeBroglie hypothesis	lambda = h/abs(p)
 5: Wavelength lambda emitted by nonrelativistic electron gun granting K	h*c/sqrt(2*K*m*c^2)
-5: m*c^2 for an electon	511 keV
+5: m*c^2 for an electon	511keV
 6: hBar formula	h/(2*pi)
-6: Fundamental fermion spin magnitude	hBar/2
-6: Fundamental boson spin magnitude	hBar
 6: Ratio of electrons aligned along a new axis theta away from the previous alignment	cos(theta/2)^2
 6: Ratio of electrons antialigned along a new axis theta away from the previous alignment	sin(theta/2)^2
 7: Quantum vectors u,w are orthogonal if	<u|w> = 0
@@ -56,6 +54,11 @@ const DAT = `
 10: SHM E[n], n[min]	hBar*omega*(n+1/2), 0
 10: SHM b, c[k+2]	sqrt(m*omega/hBar), c[k]*2*(k-n)/((k+2)*(k+1))
 10: SHM psi[E[n]](x)	e^(-(b*x)^2/2)*sum[c[k]*(b*x)^k, k>=0, k==n mod 2]
+11: Fermion spin magnitude n*_, n _	hBar/2, odd
+11: Boson spin magnitude n*_, n _	hBar, integer
+11: Thermal probability of gaining >deltaE	e^(-deltaE/(2*kB*T))
+11: Minimum band gap of an insulator	5eV
+11: Typical depletion layer is _ wide and potential gap _	30nm, 1eV
 `;
 		
 		var ops = DAT.split('\n');
