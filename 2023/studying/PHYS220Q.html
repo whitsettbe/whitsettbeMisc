@@ -31,8 +31,7 @@ const DAT = `
 5: Wavelength lambda emitted by nonrelativistic electron gun granting K	h*c/sqrt(2*K*m*c^2)
 5: m*c^2 for an electon	511keV
 6: hBar formula	h/(2*pi)
-6: Ratio of electrons aligned along a new axis theta away from the previous alignment	cos(theta/2)^2
-6: Ratio of electrons antialigned along a new axis theta away from the previous alignment	sin(theta/2)^2
+6: Ratio of electrons aligned/antialigned along a new axis theta away from the previous alignment	cos(theta/2)^2,  sin(theta/2)^2
 7: Quantum vectors u,w are orthogonal if	<u|w> = 0
 7: Quantum vector psi is normalized if	<psi|psi> = 1
 7: Rule 1 - Quanton state is _ and has _ components if it has n values for the observable in question	normalized, n
@@ -59,6 +58,10 @@ const DAT = `
 11: Thermal probability of gaining >deltaE	e^(-deltaE/(2*kB*T))
 11: Minimum band gap of an insulator	5eV
 11: Typical depletion layer is _ wide and potential gap _	30nm, 1eV
+12: Local wavelength formula for f(x)	lambda^2 = -4*pi^2*f(x)/(d^2/dx^2[f])
+12: Schrödinger equation	-hBar^2/(2*m)*d^2/dx^2[psi[E]]+V(x)*psi[E] = E*psi[E]
+12: Euler's method Schrödinger approximation	psi[E](x[i+1]) = 2*psi[E](x[i])-psi[E](x[i-1])-2*m*dx^2/hBar^2*(E-V(x[i]))*psi[E](x[i])
+12: Psi curves towards/away from 0 in classically _/_ regions with curvature in proportion to abs(_)	allowed, forbidden, E-V(x)
 `;
 		
 		var ops = DAT.split('\n');
