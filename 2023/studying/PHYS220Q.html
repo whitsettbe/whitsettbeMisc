@@ -55,7 +55,7 @@ const DAT = `
 11: Thermal probability of gaining >deltaE	e^(-deltaE/(2*kB*T))
 11: Minimum band gap of an insulator	5eV
 11: Typical depletion layer is _ wide and potential gap _	30nm, 1eV
-12: Local wavelength formula for f(x)	lambda^2 = -4*pi^2*f(x)/(d^2/dx^2[f])
+12: Local wavelength equation for f(x)	lambda^2 = -4*pi^2*f(x)/(d^2/dx^2[f])
 12: Schrödinger equation	-hBar^2/(2*m)*d^2/dx^2[psi[E]]+V(x)*psi[E] = E*psi[E]
 12: Euler's method Schrödinger approximation	psi[E](x[i+1]) = 2*psi[E](x[i])-psi[E](x[i-1])-2*m*dx^2/hBar^2*(E-V(x[i]))*psi[E](x[i])
 12: Psi curves towards/away from 0 in classically _/_ regions with curvature growing with abs(_)	allowed, forbidden, E-V(x)
@@ -64,6 +64,11 @@ const DAT = `
 13: Nuclear mass unit u in kg, u*c^2 in eV	1.66e-27, 931e6
 13: Binding energy E[b]=_, mass deficit Δm=_	E[parts]-E[sys], E[b]/c^2
 13: Mass deficit approximation	Z*m[H]+N*m[n]-m[atom]
+14: Beta decay "extras" as RHS beta-, beta+, EC	e-+nuBar, e++nu, -e-+nu
+14: m[i] is stable against beta-, beta+, EC, alpha when <	m[f], m[f]+2*m[e], m[f], m[f]+m[He]
+14: Decay by nuclear ejection of X is stable when	dE[b]/dA > e[b](X)
+14: e[b](He-4), # of unique decay series	7.074MeV, 4
+
 `;
 		
 		var ops = DAT.split('\n');
