@@ -68,7 +68,10 @@ const DAT = `
 14: m[i] is stable against beta-, beta+, EC, alpha when <	m[f], m[f]+2*m[e], m[f], m[f]+m[He]
 14: Decay by nuclear ejection of X is stable when	dE[b]/dA > e[b](X)
 14: e[b](He-4), # of unique decay series	7.074MeV, 4
-
+15: Radiation ionizing 3e-10C in m^3 air ~= depositing 1e-2J/kg	roentgen, rad
+15: rem=_, Gy=_, Sv=_, Bq=_	rad*RBE, 100rad, 100rem, decay/s
+15: ~1 cancer per _	0.1Sv
+15: e_b(X) is maximal at A=_; Sun gains thermal _ per fusion	60, 6.6MeV
 `;
 		
 		var ops = DAT.split('\n');
