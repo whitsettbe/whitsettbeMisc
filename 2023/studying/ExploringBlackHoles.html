@@ -18,16 +18,24 @@
 		<div id="a" style="display:none"></div>
 		<script>
 const DAT = `
-3: Schwarzschild metric	dtau^2 = (1-2M/r)*dt^2-(1-2M/r)^(-1)*dr^2-r^2*dphi^2
+3: Schwarzschild metric	dtau^2 = (1-2M/r)*dt^2-1/(1-2M/r)*dr^2-r^2*dphi^2
 4: Redshift factor between rH and rL	sqrt((1-2M/rH)/(1-2M/rL))
-5: deltat[shell]=_, deltay[shell]=_, deltax[shell]=_	sqrt(1-2M/r)*deltat, -1/sqrt(1-2M/r)*deltar, r*deltaphi
+5: Local Schwarzschild deltat[shell]=_, deltay[shell]=_, deltax[shell]=_	sqrt(1-2M/r)*deltat, 1/sqrt(1-2M/r)*deltar, r*deltaphi
 6: Conserved map energy E/m=	(1-2M/r)*dt/dtau
-6: Shell measurement for map energy E/m=	(1-2M/r)^(1/2)*(1-v[shell]^2)^(-1/2)
+6: Shell measurement for map energy E/m=	sqrt(1-2M/r)/sqrt(1-v[shell]^2)
 6: Raindrop v[shell]=	-sqrt(2M/r)
 6: Raindrop relation dr/dt in v[shell]	dr/dt = (1-2M/r)*v[shell]
+6: Raindrop dr/dtau=	-sqrt(2M/r)
 6: Birkhoff mass increase dropping bubble into BH	E
 6: Black hole Hawking temperature hc/(16*pi^2*kB*M)
-6: Effective abs(g[shell])	(1-2M/r)^(-1/2)*M/r^2
+6: Effective abs(g[shell])	1/sqrt(1-2M/r)*M/r^2
+7: tau[raindrop][rA to r]	4M/3*((rA/2M)^(3/2)-(r/2M)^(3/2))
+7: tau[raindrop][2M to 0]	4M/3
+7: dt[rain]=_, dy[rain]=_, dx[rain]=_	dt+sqrt(2M/r)/(1-2M/r)*dr, 1/(1-2M/r)*dr+sqrt(2M/r)*dt, r*dphi
+7: Global raindrop time from Sch. coords T=	t+4M*sqrt(r/2M)-2M*ln((1+sqrt(2M/r))/(1-sqrt(2M/r)))
+7: Global rain metric	dtau^2 = (1-2M/r)*dT^2-2*sqrt(2M/r)*dT*dr-dr^2-r^2*dphi^2
+7: Rain expression for global metric energy E/m=	(1-2M/r)*dT/dtau-sqrt(2M/r)*dr/dtau
+7: Local rain deltat[rain]=_, deltay[rain]=_, deltax[rain]=_	deltaT, deltar+sqrt(2M/r)*deltaT, r*deltaphi
 `;
 		
 		var ops = DAT.split('\n');
@@ -58,7 +66,7 @@ const DAT = `
 				event.preventDefault();
 				if(!showing)
 				{
-					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerText.toLowerCase())
+					if($('#in')[0].value === $('#a')[0].innerText)
 					{
 						$('#resp')[0].innerText = "Correct! The answer is:";
 						qs.splice(idx, 1);
