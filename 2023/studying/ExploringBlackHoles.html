@@ -36,6 +36,15 @@ const DAT = `
 7: Global rain metric	dtau^2 = (1-2M/r)*dT^2-2*sqrt(2M/r)*dT*dr-dr^2-r^2*dphi^2
 7: Rain expression for global metric energy E/m=	(1-2M/r)*dT/dtau-sqrt(2M/r)*dr/dtau
 7: Local rain deltat[rain]=_, deltay[rain]=_, deltax[rain]=_	deltaT, deltar+sqrt(2M/r)*deltaT, r*deltaphi
+7: E[rain]/m	1/(1-2M/r)*(E/m+sqrt(2M/r)*dr/dtau)
+8: Map angular momentum L/m=	r^2*dphi/dtau
+8: General rain orbit dphi/dtau	L/(m*r^2)
+8: General rain orbit dr/dtau	+-sqrt((E/m)^2-(1-2M/r)*(1+L^2/(m^2*r^2)))
+8: General rain orbit dT/dtau	1/(1-2M/r)*(E/m+-sqrt(2M/r)*sqrt((E/m)^2-(1-2M/r)*(1+L^2/(m^2*r^2))))
+8: Circular orbit map angular momentum equation	(L/m)^2 = M*r^2/(r-3M)
+8: Circular orbit radius equation is _ (stable orbits are the _ option)	r = L^2/(2*m^2*M)*(1+-sqrt(1-12*M^2*m^2/L^2)), positive
+8: ISCO L/m/M, r/M; Innermost circular orbit L/m/M, r/M	sqrt(12), 6, inf, 3
+8: Circular orbit map energy equation	E/m = (r-2M)/sqrt(r*(r-3M))
 `;
 		
 		var ops = DAT.split('\n');
