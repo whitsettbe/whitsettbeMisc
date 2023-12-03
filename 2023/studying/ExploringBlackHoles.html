@@ -38,9 +38,10 @@ const DAT = `
 7: Local rain deltat[rain]=_, deltay[rain]=_, deltax[rain]=_	deltaT, deltar+sqrt(2M/r)*deltaT, r*deltaphi
 7: E[rain]/m	1/(1-2M/r)*(E/m+sqrt(2M/r)*dr/dtau)
 8: Map angular momentum L/m=	r^2*dphi/dtau
+8: Orbit effective potential equation	(V[L](r)/m)^2 = (1-2M/r)*(1+L^2/(m^2*r^2))
 8: General (rain) orbit dphi/dtau	L/(m*r^2)
-8: General (rain) orbit dr/dtau	+-sqrt((E/m)^2-(1-2M/r)*(1+L^2/(m^2*r^2)))
-8: General (rain) orbit dT/dtau	1/(1-2M/r)*(E/m+-sqrt(2M/r)*sqrt((E/m)^2-(1-2M/r)*(1+L^2/(m^2*r^2))))
+8: General (rain) orbit dr/dtau	+-sqrt((E/m)^2-V[L](r)/m)^2)
+8: General (rain) orbit dT/dtau	1/(1-2M/r)*(E/m+-sqrt(2M/r)*sqrt((E/m)^2-V[L](r)/m)^2))
 8: Circular orbit map angular momentum equation	(L/m)^2 = M*r^2/(r-3M)
 8: Circular orbit radius equation is _ (stable orbits are the _ option)	r = L^2/(2*m^2*M)*(1+-sqrt(1-12*M^2*m^2/L^2)), positive
 8: ISCO L/m/M, r/M; Innermost circular orbit L/m/M, r/M	sqrt(12), 6, inf, 3
@@ -48,9 +49,9 @@ const DAT = `
 8: Circular orbit shell energy equation	E[shell]/m = sqrt((r-2M)/(r-3M))
 8: Circular orbit shell velocity equation	v[shell]^2 = M/(r-2M)
 9: Tangential motion map angular momentum equation	L/m = +-r*sqrt((E/m)^2/(1-2M/r)-1)
-9: Orbit v[y,shell], v[x,shell]	+-sqrt(1-(E/m)^-2*(1-2M/r)*(1+L^2/(m^2*r^2))), sqrt(1-2M/r)*L/(E*r)
+9: Orbit v[y,shell], v[x,shell]	+-sqrt(1-(E/m)^-2*(V[L](r)/m)^2), sqrt(1-2M/r)*L/(E*r)
 9: Radial motion deltag[local][y,x,z]/d[y,x,z]	2M/r^3, -M/r^3, -M/r^3
-9: Tangential x motion deltag[local][y,x,z]/d[y,x,z]	(1+v[x,shell]^2/2)/(1-v[x,shell]^2)*2M/r^3, -M/r^3, -(1+2*v[x,shell]^2)/(1-v[x,shell])^2*M/r^3
+9: Tangential x motion deltag[local][y,x,z]/d[y,x,z]	(1+v[x,shell]^2/2)/(1-v[x,shell]^2)*2M/r^3, -M/r^3, -(1+2*v[x,shell]^2)/(1-v[x,shell]^2)*M/r^3
 `;
 		
 		var ops = DAT.split('\n');
