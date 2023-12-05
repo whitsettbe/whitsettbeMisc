@@ -27,7 +27,7 @@ const DAT = `
 6: Raindrop relation dr/dt in v[shell]	dr/dt = (1-2M/r)*v[shell]
 6: Raindrop dr/dtau=	-sqrt(2M/r)
 6: Birkhoff mass increase dropping bubble into BH	E
-6: Black hole Hawking temperature hc/(16*pi^2*kB*M)
+6: Black hole Hawking temperature	hc/(16*pi^2*kB*M)
 6: Effective abs(g[shell])	1/sqrt(1-2M/r)*M/r^2
 7: tau[raindrop][rA to r]	4M/3*((rA/2M)^(3/2)-(r/2M)^(3/2))
 7: tau[raindrop][2M to 0]	4M/3
@@ -40,8 +40,8 @@ const DAT = `
 8: Map angular momentum L/m=	r^2*dphi/dtau
 8: Orbit effective potential equation	(V[L](r)/m)^2 = (1-2M/r)*(1+L^2/(m^2*r^2))
 8: General (rain) orbit dphi/dtau	L/(m*r^2)
-8: General (rain) orbit dr/dtau	+-sqrt((E/m)^2-V[L](r)/m)^2)
-8: General (rain) orbit dT/dtau	1/(1-2M/r)*(E/m+-sqrt(2M/r)*sqrt((E/m)^2-V[L](r)/m)^2))
+8: General (rain) orbit dr/dtau	+-sqrt((E/m)^2-(V[L](r)/m)^2)
+8: General (rain) orbit dT/dtau	1/(1-2M/r)*(E/m+-sqrt(2M/r)*sqrt((E/m)^2-(V[L](r)/m)^2))
 8: Circular orbit map angular momentum equation	(L/m)^2 = M*r^2/(r-3M)
 8: Circular orbit radius equation is _ (stable orbits are the _ option)	r = L^2/(2*m^2*M)*(1+-sqrt(1-12*M^2*m^2/L^2)), positive
 8: ISCO L/m/M, r/M; Innermost circular orbit L/m/M, r/M	sqrt(12), 6, inf, 3
@@ -52,6 +52,15 @@ const DAT = `
 9: Orbit v[y,shell], v[x,shell]	+-sqrt(1-(E/m)^-2*(V[L](r)/m)^2), sqrt(1-2M/r)*L/(E*r)
 9: Radial motion deltag[local][y,x,z]/d[y,x,z]	2M/r^3, -M/r^3, -M/r^3
 9: Tangential x motion deltag[local][y,x,z]/d[y,x,z]	(1+v[x,shell]^2/2)/(1-v[x,shell]^2)*2M/r^3, -M/r^3, -(1+2*v[x,shell]^2)/(1-v[x,shell]^2)*M/r^3
+11: Light definition of impact parameter b	L/E
+11: Light definition of F(b,r)=	sqrt(1-b^2/r^2*(1-2M/r))
+11: Light dr/dT=	+-(1-2M/r)*F(b,r)/(1+-sqrt(2M/r)*F(b,r))
+11: Light dphi/dT=	b/r^2*(1-2M/r)/(1+-sqrt(2M/r)*F(b,r))
+11: Light dr/dphi=	+-r^2/b*F(b,r)
+11: Light definition of A(b,r)=	(M/b)/(1-2M/r)*(1+-sqrt(2M/r)*F(b,r))
+11: Light effective potential equation	(V(r)/M)^2 = M^2/r^2*(1-2M/r)
+11: Light dr/dT expression using potential	A(b,r)^2*(dr/dT)^2 = (M/b)^2-(V(r)/M)^2
+11: Light b[crit]=	M*sqrt(27)
 `;
 		
 		var ops = DAT.split('\n');
