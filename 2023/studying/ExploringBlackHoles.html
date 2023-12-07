@@ -61,10 +61,14 @@ const DAT = `
 11: Light effective potential equation	(V(r)/M)^2 = M^2/r^2*(1-2M/r)
 11: Light dr/dT expression using potential	A(b,r)^2*(dr/dT)^2 = (M/b)^2-(V(r)/M)^2
 11: Light b[crit]=	M*sqrt(27)
-11: Relation between b and r[tp]	r[tp]^3-b^2*r[tp]+2M*b^2 = 0
+11: Light M/b equation using turning points	(M/b)^2 = (M/r[tp])^2*(1-2M/r[tp])
 12: Starlight viewing cos(theta[rain])	(b^2/r^2*sqrt(2M/r)+-F(b,r))/(1+b^2/r^2*2M/r)
 12: Starlight viewing cos(theta[shell])	(cos(theta[rain])-sqrt(2M/r))/(1-sqrt(2M/r)*cos(theta[rain]))
-12: Light E[rain]/E	(1+-sqrt(2M/r)*F(b,r))/(1-2M/r)
+12: Light E[rain]/E	(b/M)*A(b,r)
+13: Gravitational distant deflection approximation	theta[defl] = 4M/r[tp]
+13: Einstein ring angle formula	theta[E]^2 = 4M*r[src]/(r[obs]*(r[src]+r[obs]))
+13: Gravitational lens equation	theta[src] = theta[obs]-theta[E]^2/theta[obs]
+13: Gravitational total microlensing magnification (and q formula)	Mag[total] = (q^2+2)/(q*sqrt(q^2+4)), q = theta[src]/theta[E]
 `;
 		
 		var ops = DAT.split('\n');
