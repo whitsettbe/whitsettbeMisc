@@ -69,6 +69,10 @@ const DAT = `
 13: Einstein ring angle formula	theta[E]^2 = 4M*r[src]/(r[obs]*(r[src]+r[obs]))
 13: Gravitational lens equation	theta[src] = theta[obs]-theta[E]^2/theta[obs]
 13: Gravitational total microlensing magnification (and q formula)	Mag[total] = (q^2+2)/(q*sqrt(q^2+4)), q = theta[src]/theta[E]
+14: Robertson-Walker metric, S(chi)=_,_,_ for K<,=,>0	dtau^2 = dt^2-R(t)^2*(dchi^2+S(chi)^2*dphi^2), sin(chi), chi, sinh(chi)
+14: Redshift formula using scale factor	1+z = R(t[0])/R(t[emit])
+14: Q[r] and Q[phi] constants of motion in RW metric	R*p[r], R*S*p[phi]
+14: Hubble parameter formula	H(t) = R'(t)/R(t)
 `;
 		
 		var ops = DAT.split('\n');
@@ -114,7 +118,7 @@ const DAT = `
 					$('#a')[0].style.display = "inline";
 					$('#nxt')[0].style.display = "block";
 					showing = true;
-					$('#toStudy')[0].innerText = qs.length + ' remaining, ' + errs + ' mistakes';
+					$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
 				}
 				else
 				{
@@ -137,7 +141,7 @@ const DAT = `
 
 		function next()
 		{
-			$('#toStudy')[0].innerText = qs.length + ' remaining, ' + errs + ' mistakes';
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
 			if(qs.length == 0) return;
 			idx = Math.floor(Math.random() * qs.length);
 			$('#q')[0].innerText = qs[idx];
