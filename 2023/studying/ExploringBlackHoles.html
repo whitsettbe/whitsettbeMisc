@@ -77,7 +77,10 @@ const DAT = `
 15: rho[crit,0]=_, omega[x,0]=_	3/(8*pi)*H[0]^2, rho[x,0]/rho[crit,0]
 15: Universe effective potential function	V[eff](a) = -H[0]^2*(omega[mat,0]/a+omega[rad,0]/a^2+omega[lambda,0]*a^2)
 15: Curvature-potential equation	a'^2+V[eff](a) = -K
-15: Acceleration of the scale factor	a''/a = -4*pi/3*(rho[tot]+3*P[tot])
+15: Scale factor acceleration equation	a''/a = -4*pi/3*(rho[tot]+3*P[tot])
+16: Approximate GW metric (z propagation, x orientation)	dtau^2 = dt^2-(1+h)*dx^2-(1-h)*dy^2-dz^2
+16: GW local earth coords deltat[earth]=_, deltax[earth]=_, deltay[earth]=_, deltaz[earth]=_	deltat, (1+h/2)*deltax, (1-h/2)*deltay, deltaz
+16: GW map x-direction light speed magnitude abs(dx/dt)	1-h/2
 `;
 		
 		var ops = DAT.split('\n');
