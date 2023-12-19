@@ -81,6 +81,7 @@ const DAT = `
 16: Approximate GW metric (z propagation, x orientation)	dtau^2 = dt^2-(1+h)*dx^2-(1-h)*dy^2-dz^2
 16: GW local earth coords deltat[earth]=_, deltax[earth]=_, deltay[earth]=_, deltaz[earth]=_	deltat, (1+h/2)*deltax, (1-h/2)*deltay, deltaz
 16: GW map x-direction light speed magnitude abs(dx/dt)	1-h/2
+17: Spinning black hole def. of a	J/M
 17: Static limit def., reduced circumference def.	r[S] = 2M, R^2 = r^2+(1+2M/r)*a^2
 17: Event/Cauchy horizon equation	r = 1+-sqrt(1-a^2/M^2)
 17: Horizon function forms	H = (r^2-2M*r+a^2)/r^2 = (r-r[EH])*(r-r[CH])/r^2
@@ -88,8 +89,8 @@ const DAT = `
 17: Horizon function - ring omega equation	(r*H/R)^2 = 1-2M/r+R^2*omega^2
 17: Static frame alpha=_, ring frame beta=_	asin(sqrt(2M/r)*a/(r*H)), sqrt(2M/r)*sqrt((r^2+a^2)/R^2)
 17: Doran metric	dtau^2 = dT^2-(sqrt(r^2/(r^2+a^2))*dr+sqrt(2M/r)*(dT-a*dPhi))^2-(r^2+a^2)*dPhi^2
-17: Doran energy	(1-2M/r)*dT/dtau-sqrt(2M*r/(r^2+a^2))*dr/dtau+2M*a/r*dPhi/dtau
-17: Doran angular momentum	R^2*dPhi/dtau-2M*a/r*dT/dtau-a*sqrt(2M*r/(r^2+a^2))*dr/dtau
+17: Doran map energy	(1-2M/r)*dT/dtau-sqrt(2M*r/(r^2+a^2))*dr/dtau+2M*a/r*dPhi/dtau
+17: Doran map angular momentum	R^2*dPhi/dtau-2M*a/r*dT/dtau-a*sqrt(2M*r/(r^2+a^2))*dr/dtau
 `;
 		
 		var ops = DAT.split('\n');
