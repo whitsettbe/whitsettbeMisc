@@ -91,6 +91,9 @@ const DAT = `
 17: Doran metric	dtau^2 = dT^2-(sqrt(r^2/(r^2+a^2))*dr+sqrt(2M/r)*(dT-a*dPhi))^2-(r^2+a^2)*dPhi^2
 17: Doran map energy	(1-2M/r)*dT/dtau-sqrt(2M*r/(r^2+a^2))*dr/dtau+2M*a/r*dPhi/dtau
 17: Doran map angular momentum	R^2*dPhi/dtau-2M*a/r*dT/dtau-a*sqrt(2M*r/(r^2+a^2))*dr/dtau
+18: Spinning BH V[L+-]/m	omega*L/m+-r*H/R*sqrt(1+L^2/(m^2*R^2))
+18: Spinning BH dr/dtau using potential	+-R/r*sqrt((E-V[L+])/m)*sqrt((E-V[L-])/m)
+18: Prograde/retrograde r[ISCO]/M, Z1, Z2	3+Z2-+sqrt((3-Z1)*(3+Z1+2*Z2)), 1+(1-a^2/M^2)^(1/3)*((1+a/M)^(1/3)+(1-a/M)^(1/3)), sqrt(3*a^2/M^2+Z1^2)
 `;
 		
 		var ops = DAT.split('\n');
