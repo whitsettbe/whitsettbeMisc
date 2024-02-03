@@ -14,13 +14,13 @@
 		<input type="button" id="starter" style="display: inline" onclick="setup()" value="Start">
 		<div id="main" style="display:none">
 			<label>Progress: </label><p id="toStudy"></p>
-			<input type="button" onclick="play()" value="Play">
 			<table>
 				<tr>
 					<td><form id="form"></form></td>
 					<td style="width: 50px"></td>
 					<td style="vertical-align:top">
-						<input type="button" onclick="guess()" value="Submit">
+						<input type="button" onclick="play()" value="Play Again"><br><br>
+						<input type="button" onclick="guess()" value="Submit"><br><br>
 						<div id="nxt">
 							<input type="button" value="Next" onclick="next()">
 						</div>
@@ -89,7 +89,6 @@ https://whitsettbe.github.io/whitsettbeMisc/2024/studying/aud.mp3	Totota Countin
 		var theSound = null;
 		var playStart = 0;
 		var cancelEvent = -1;
-		var isFirst = true;
 
 		function guess()
 		{
@@ -119,11 +118,6 @@ https://whitsettbe.github.io/whitsettbeMisc/2024/studying/aud.mp3	Totota Countin
 
 		function play()
 		{
-			if(isFirst)
-			{
-				next();
-				return;
-			}
 			clearTimeout(cancelEvent);
 			theSound.stop();
 			theSound.seek(playStart);
@@ -144,6 +138,7 @@ https://whitsettbe.github.io/whitsettbeMisc/2024/studying/aud.mp3	Totota Countin
 			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
 			if(qs.length == 0) return;
 			idx = Math.floor(Math.random() * qs.length);
+			theSound.stop();
 			theSound = new Howl({src: [qs[idx]], volume: 0.5, onload: ()=>{playStart = Math.random() * (theSound.duration() - PLAY_DUR); isFirst = false; play();}});
 			$('#resp')[0].innerText = '';
 			$('#a')[0].innerText = as[aIdx[idx]];
@@ -157,6 +152,7 @@ https://whitsettbe.github.io/whitsettbeMisc/2024/studying/aud.mp3	Totota Countin
 			theSound = new Howl({src: ['https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3']});
 			$('#starter')[0].style.display = "none";
 			$('#main')[0].style.display = "inline";
+			next();
 		}
 		</script>
 	</body>
