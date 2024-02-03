@@ -1,0 +1,183 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>MUSC160: Vocab</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+	</head>
+	<body onload="next()">
+		<label>Progress: </label><p id="toStudy"></p>
+		<p id="q"></p>
+		<input type="text" id="in" autocomplete="off" style="width:80%"><br>
+		<div id="nxt">
+			<input type="button" value="Appeal" onclick="appeal()"><br>
+			<input type="button" value="Next" onclick="next()"><br>
+		</div>
+		<p id="resp"></p>
+		<div id="a" style="display:none"></div>
+		<footer style="position: fixed; left: 0; bottom: 0">
+			<a href="MUSC160.html">Back</a>
+		</footer>
+		<script>
+const DAT = `
+The "highness" or "lowness" of a sound	pitch
+Vibrations per unit of time	frequency
+Lowest frequency in a note	fundamental
+All the integer multiples of a fundamental frequency	harmonic series
+Map of frequency amplitudes over time	spectrogram
+A specific higher multiple of a fundamental frequency	overtone
+Generally, a range of pitches in which the pitch classes may be realized	register
+The distance between two pitches	interval
+Texture with instruments playing the same part	unison
+Interval with a frequency factor of 2	octave
+A pitch set played in ascending or descending order	scale
+A collection of pitches for use in melody, e.g. a "rotation" of a scale	mode
+Scale with all 12 Western pitches in the octave	chromatic scale
+Intervals smaller than a Western half-step, like the half-flat in Arab music	quarter tone
+Chords which are stable and free of tension (in medieval European thought)	consonant
+Chords which are tense and unstable (in medieval European thought)	dissonant
+Pitches heard together	harmony
+Rules for how many pitches are used and which frequencies they have	tuning system
+Pitches in some succession	melody
+*MISSING: contour range	contour range
+*MISSING: melisma	melisma
+*MISSING: melismatic	melismatic
+Music with one syllable per note	syllabic
+A sustained note held below the other parts	drone
+A song where the meaning of words is not essential to the experience	vocable
+Sound volume	dynamics
+*MISSING: setting	setting
+A particular Mongolian musical genre using the technique of throad-singing	khoomi
+Manipulating the harmonic series in one's voice to create self-harmonies	throat-singing
+Structure of notes in time	rhythm
+Groupings of pulse	meter
+Steady fixed-length durations	pulse
+The frequency associated with the pulse	tempo
+Stressing between beats, or where stress would not be expected	syncopation
+Texture with multiple forms of pulse grouping	polymeter
+Texture with multiple forms of pulse subdivision	polyrhythm
+Time unit box system for notating drums	TUBS
+Recording music through some form of notation	transcription
+The structural design of a selection of pieces	form
+How multiple parts interact	texture
+When parts play one melody	monophony
+When parts play parallel/similar melodies	homophony
+When parts play multiple melodies	polyphony
+When parts follow different variations over a melody	heterophony
+Notation that prescribes technique	tablature
+India's rhythmic systems	tala
+India's melodic modes	raga
+Western solfege	do re mi fa sol la ti
+Indian solfege	sa re ga ma pa dha ni
+*Structure converting past experience into future behavior patterns	habitus
+*Social space in which interactions take place	field
+*Well-formed-ness of one's habitus	cultural capital
+*Value from proclaimed intrinsic worth	symbolic capital
+*Altruism	social capital
+*Value from primarily self-interested exchanges	economic capital
+The study of instruments	organology
+Instrument producing sound through a vibrating body	idiophone
+Instrument producing sound through a vibrating string	chordophone
+Instrument producing sound through a vibrating membrane	membranophone
+Instrument producing sound through a vibrating column of air	aerophone
+Song built around the role of the text	logogenic
+Transition into the end of a phrase	cadence
+Changing text over a constant melody	strophic
+Melody never repeats itself	through-composed
+*MISSING: emic	emic
+*MISSING: etic	etic
+When musicians exercise great (possibly unique) flexibility with material	improvisation
+*MISSING: performative utterances	performative utterances
+*MISSING: felicity conditions	felicity conditions
+*MISSING: poetics	poetics
+*MISSING: axis of selection	axis of selection
+*MISSING: axis of combination	axis of combination
+Study of differences in cultures' aural arts	comparative musicology
+*MISSING: alan lomax	alan lomax
+*MISSING: cantometrics	cantometrics
+North Indian instrumental form	alap-jor-jhala-gat
+*MISSING: syncretism	syncretism
+`;
+		
+		var ops = DAT.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var as = [];
+		for(var i = 0; i < ops.length; i++)
+		{
+			qs.push(ops[i].split('\t')[0]);
+			as.push(ops[i].split('\t')[1]);
+		}
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var appealed = false;
+
+		$('#in').keypress(function(event)
+		{
+			if (event.keyCode == 13 || event.which == 13)
+			{
+				event.preventDefault();
+				if(!showing)
+				{
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerText.toLowerCase())
+					{
+						$('#resp')[0].innerText = "Correct! The answer is:";
+						qs.splice(idx, 1);
+						as.splice(idx, 1);
+						appealed = true;
+					}
+					else
+					{
+						$('#resp')[0].innerText = "Incorrect. The answer is:";
+						errs++;
+					}
+					$('#a')[0].style.display = "inline";
+					$('#nxt')[0].style.display = "block";
+					showing = true;
+					$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+				}
+				else
+				{
+					next();
+				}
+			}
+		});
+
+		function appeal()
+		{
+			if(!appealed)
+			{
+				$('#resp')[0].innerText = "(Appealed)";
+				qs.splice(idx, 1);
+				as.splice(idx, 1);
+				errs--;
+				appealed = true;
+			}
+		}
+
+		function next()
+		{
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			$('#q')[0].innerText = qs[idx];
+			$('#in')[0].value = '';
+			$('#resp')[0].innerText = '';
+			$('#a')[0].innerText = as[idx];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+			appealed = false;
+		}
+		</script>
+	</body>
+</html>
