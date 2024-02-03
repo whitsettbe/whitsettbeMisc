@@ -1,0 +1,148 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>MUSC160: Audio > Title</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"
+			integrity="sha512-xi/RZRIF/S0hJ+yJJYuZ5yk6/8pCiRlEXZzoguSMl+vk2i3m6UjUO/WcZ11blRL/O+rnj94JRGwt/CHbc9+6EA=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"></script>
+	</head>
+	<body onload="next()">
+		<label>Progress: </label><p id="toStudy"></p>
+		<input type="button" onclick="play()" value="Play">
+		<table>
+			<tr>
+				<td><form id="form"></form></td>
+				<td style="width: 50px"></td>
+				<td style="vertical-align:top">
+					<input type="button" onclick="guess()" value="Submit">
+					<div id="nxt">
+						<input type="button" value="Next" onclick="next()">
+					</div>
+					<p id="resp"></p>
+					<div id="a" style="display:none"></div>
+				</td>
+			</tr>
+		</table>
+		<script>
+const PLAY_DUR = 10;
+
+const DAT = `
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/01-Second-Sura-Quran-1.mp3	Sura al-Baqara
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/02-Zhonghua-liuban-1.mp3	Zhonghua liuban
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/03-Tar-Road-to-Sligo.mp3	Tar Road to Sligo
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/05-The-Ballad-of-Cesar-Chavez.mp3	Ballad of Cesar Chavez
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/08-Blue-Horse-Special.mp3	Blue Horse Special
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/09-Hyojo-Netori.mp3	Hyojo Netori
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/10-Liushui.mp3	Liushui
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/11-Raga-Job-Excerpts.mp3	Alap-jor-jhala
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/17-Conch-call.mp3	Conch Call
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/18-Hifumi-no-Shirabe.mp3	Hifumi no Shirabe Hachigaeshi
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/19-Unnai-Nambinen.mp3	Unnai Nambinen
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/20-Festival-Music.mp3	Festival Music
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/24-Travelling-in-Soochow.mp3	Travelling in Soochow
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/26-Kiembra-xylophone-orchestra.mp3	Kiembara
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/28-LAmour-est-un-oiseau-rebelle.mp3	L'amour est un oiseau rebelle
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/31-Ma-Ram-Dancing-Horse.mp3	Ma Ram (Dancing Horse)
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/01-Aruh-li-Min.mp3	Aruh li min
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/06-West-End-Blues.mp3	West End Blues
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/33-Yaegoromo.mp3	Yaegoromo
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/35-Artii-Sayir.mp3	Artii-Sayir
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/37-Iaora-I-Te-Farerei.mp3	Iaora I Te Farerei
+https://whitsettbe.github.io/whitsettbeMisc/2024/studying/aud.mp3	Totota Counting Song
+`;
+		
+		var ops = DAT.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var as = [];
+		var aIdx = [];
+		for(var i = 0; i < ops.length; i++)
+		{
+			qs.push(ops[i].split('\t')[0]);
+			as.push(ops[i].split('\t')[1]);
+			aIdx.push(qs.length - 1);
+		}
+
+		var aOrder = [];
+		for(var i = 0; i < as.length; i++) aOrder.push(i);
+		aOrder = aOrder.map(value => ({ value, sort: Math.random() }))
+						.sort((a, b) => a.sort - b.sort)
+						.map(({ value }) => value)
+
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var theSound = null;
+		var playStart = 0;
+		var cancelEvent = -1;
+
+		function guess()
+		{
+			if(document.querySelector('input[name="options"]:checked') == null)
+				return;
+			if(showing)
+				return;
+			guessVal = document.querySelector('input[name="options"]:checked').value;
+
+			if(guessVal === $('#a')[0].innerText)
+			{
+				$('#resp')[0].innerText = "Correct! The answer is:";
+				qs.splice(idx, 1);
+				aIdx.splice(idx, 1);
+			}
+			else
+			{
+				$('#resp')[0].innerText = "Incorrect. The answer is:";
+				play();
+				errs++;
+			}
+			$('#a')[0].style.display = "inline";
+			$('#nxt')[0].style.display = "block";
+			showing = true;
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+		};
+
+		function play()
+		{
+			clearTimeout(cancelEvent);
+			theSound.seek(playStart);
+			theSound.play();
+			cancelEvent = setTimeout(()=>{theSound.stop()}, 1000*PLAY_DUR);
+			
+		}
+
+		function next()
+		{
+			//rebuild answers (opportunity to reorder)
+			$('#form')[0].innerHTML = "";
+			for(var i = 0; i < aOrder.length; i++)
+			{
+				$('#form')[0].innerHTML += `<input type="radio" id="${i}" name="options" value="${as[aOrder[i]]}"><label for="${i}">${as[aOrder[i]]}</label><br>`
+			}
+
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			theSound = new Howl({src: qs[idx], volume: 0.5});
+			playStart = Math.random() * (theSound.duration() - PLAY_DUR);
+			$('#resp')[0].innerText = '';
+			$('#a')[0].innerText = as[aIdx[idx]];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+			play();
+		}
+		</script>
+	</body>
+</html>
