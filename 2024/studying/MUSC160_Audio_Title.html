@@ -10,23 +10,26 @@
 			crossorigin="anonymous"
 			referrerpolicy="no-referrer"></script>
 	</head>
-	<body onload="next()">
-		<label>Progress: </label><p id="toStudy"></p>
-		<input type="button" onclick="play()" value="Play">
-		<table>
-			<tr>
-				<td><form id="form"></form></td>
-				<td style="width: 50px"></td>
-				<td style="vertical-align:top">
-					<input type="button" onclick="guess()" value="Submit">
-					<div id="nxt">
-						<input type="button" value="Next" onclick="next()">
-					</div>
-					<p id="resp"></p>
-					<div id="a" style="display:none"></div>
-				</td>
-			</tr>
-		</table>
+	<body>
+		<input type="button" id="starter" style="display: inline" onclick="setup()" value="Start">
+		<div id="main" style="display:none">
+			<label>Progress: </label><p id="toStudy"></p>
+			<input type="button" onclick="play()" value="Play">
+			<table>
+				<tr>
+					<td><form id="form"></form></td>
+					<td style="width: 50px"></td>
+					<td style="vertical-align:top">
+						<input type="button" onclick="guess()" value="Submit">
+						<div id="nxt">
+							<input type="button" value="Next" onclick="next()">
+						</div>
+						<p id="resp"></p>
+						<div id="a" style="display:none"></div>
+					</td>
+				</tr>
+			</table>
+		</div>
 		<script>
 const PLAY_DUR = 10;
 
@@ -119,7 +122,7 @@ https://whitsettbe.github.io/whitsettbeMisc/2024/studying/aud.mp3	Totota Countin
 			if(isFirst)
 			{
 				next();
-				isFirst = false;
+				return;
 			}
 			clearTimeout(cancelEvent);
 			theSound.stop();
@@ -131,7 +134,6 @@ https://whitsettbe.github.io/whitsettbeMisc/2024/studying/aud.mp3	Totota Countin
 
 		function next()
 		{
-
 			//rebuild answers (opportunity to reorder)
 			$('#form')[0].innerHTML = "";
 			for(var i = 0; i < aOrder.length; i++)
@@ -142,18 +144,19 @@ https://whitsettbe.github.io/whitsettbeMisc/2024/studying/aud.mp3	Totota Countin
 			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
 			if(qs.length == 0) return;
 			idx = Math.floor(Math.random() * qs.length);
-			theSound = new Howl({src: qs[idx], volume: 0.5});
-			playStart = Math.random() * (theSound.duration() - PLAY_DUR);
+			theSound = new Howl({src: [qs[idx]], volume: 0.5, onload: ()=>{playStart = Math.random() * (theSound.duration() - PLAY_DUR); isFirst = false; play();}});
 			$('#resp')[0].innerText = '';
 			$('#a')[0].innerText = as[aIdx[idx]];
 			$('#a')[0].style.display = "none";
 			$('#nxt')[0].style.display = "none";
 			showing = false;
+		}
 
-			if(!isFirst)
-			{
-				play();
-			}
+		function setup()
+		{
+			theSound = new Howl({src: ['https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3']});
+			$('#starter')[0].style.display = "none";
+			$('#main')[0].style.display = "inline";
 		}
 		</script>
 	</body>
