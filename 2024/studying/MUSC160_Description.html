@@ -81,6 +81,7 @@ const TEXTS = [
 		'nonmetrical > duple (maqsum)',
 		'nonmetrical with fast tempo',
 		'nonmetrical, accelerating',
+		'polyrhythm',
 		'some instruments stay just ahead of the beat, some stay just behind it',
 		'triple meter'
 		],
@@ -174,6 +175,7 @@ const TEXTLIST = [
 'nonmetrical > duple (maqsum)',
 'nonmetrical with fast tempo',
 'nonmetrical, accelerating',
+'polymeter',
 'some instruments stay just ahead of the beat, some stay just behind it',
 'triple meter',
 'french',
@@ -226,31 +228,31 @@ const TEXTLIST = [
 'rich control of changing timbre in distinct vocal registers'
 ]
 
-const PLAY_DUR = 10;
+const PLAY_DUR = 20;
 
 const DAT = `
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/01-Second-Sura-Quran-1.mp3	Sura al-Baqara	1	34	73	24	36
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/02-Zhonghua-liuban-1.mp3	Zhonghua liuban	48	77	6	26	66
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/03-Tar-Road-to-Sligo.mp3	Tar Road to Sligo	46	22	74	4	66
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/05-The-Ballad-of-Cesar-Chavez.mp3	Ballad of Cesar Chavez	60	3	39	31	56
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/08-Blue-Horse-Special.mp3	Blue Horse Special	2	24	13	79	37
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/09-Hyojo-Netori.mp3	Hyojo Netori	49	77	69	24	18
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/10-Liushui.mp3	Liushui	50	70	25	11	17
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/11-Raga-Job-Excerpts.mp3	Alap-jor-jhala	72	5	62	29	53
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/17-Conch-call.mp3	Conch Call	51	71	64	9	24
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/18-Hifumi-no-Shirabe.mp3	Hifumi no Shirabe Hachigaeshi	41	63	73	24	15
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/19-Unnai-Nambinen.mp3	Unnai Nambinen	20	76	67	38	58
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/20-Festival-Music.mp3	Festival Music	0	44	59	77	70
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/24-Travelling-in-Soochow.mp3	Travelling in Soochow	45	77	70	24	10
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/26-Kiembra-xylophone-orchestra.mp3	Kiembara	23	77	78	12	30
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/28-LAmour-est-un-oiseau-rebelle.mp3	L'amour est un oiseau rebelle	23	32	70	52	7
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/31-Ma-Ram-Dancing-Horse.mp3	Ma Ram (Dancing Horse)	44	75	69	28	16
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/01-Aruh-li-Min.mp3	Aruh li min	42	77	69	27	19
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/06-West-End-Blues.mp3	West End Blues	69	26	14	55	40
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/33-Yaegoromo.mp3	Yaegoromo	47	1	69	24	65
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/35-Artii-Sayir.mp3	Artii-Sayir	3	23	70	61	57
-https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/37-Iaora-I-Te-Farerei.mp3	Iaora I Te Farerei	21	43	23	35	68
-http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/22-Totota-1976.mp3	Totota Counting Song	23	33	34	8	54
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/01-Second-Sura-Quran-1.mp3	Sura al-Baqara	2	35	74	24	37
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/02-Zhonghua-liuban-1.mp3	Zhonghua liuban	49	78	6	26	67
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/03-Tar-Road-to-Sligo.mp3	Tar Road to Sligo	47	22	75	4	67
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/05-The-Ballad-of-Cesar-Chavez.mp3	Ballad of Cesar Chavez	61	3	40	32	57
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/08-Blue-Horse-Special.mp3	Blue Horse Special	2	24	13	80	38
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/09-Hyojo-Netori.mp3	Hyojo Netori	50	78	70	24	18
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/10-Liushui.mp3	Liushui	51	71	25	11	17
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/11-Raga-Job-Excerpts.mp3	Alap-jor-jhala	73	5	63	29	54
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/17-Conch-call.mp3	Conch Call	52	72	65	9	24
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/18-Hifumi-no-Shirabe.mp3	Hifumi no Shirabe Hachigaeshi	42	64	74	24	15
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/19-Unnai-Nambinen.mp3	Unnai Nambinen	20	77	68	39	59
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/20-Festival-Music.mp3	Festival Music	0	45	60	78	70
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/24-Travelling-in-Soochow.mp3	Travelling in Soochow	46	78	71	24	10
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/26-Kiembra-xylophone-orchestra.mp3	Kiembara	23	78	79	12	31
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/28-LAmour-est-un-oiseau-rebelle.mp3	L'amour est un oiseau rebelle	23	33	71	53	7
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/31-Ma-Ram-Dancing-Horse.mp3	Ma Ram (Dancing Horse)	45	76	70	30	16
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/01-Aruh-li-Min.mp3	Aruh li min	43	78	70	27	19
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/06-West-End-Blues.mp3	West End Blues	70	26	14	56	41
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/33-Yaegoromo.mp3	Yaegoromo	48	1	70	24	66
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/35-Artii-Sayir.mp3	Artii-Sayir	3	23	71	62	58
+https://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/37-Iaora-I-Te-Farerei.mp3	Iaora I Te Farerei	21	44	23	36	69
+http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04/22-Totota-1976.mp3	Totota Counting Song	23	34	35	8	55
 `;
 		
 		var ops = DAT.split('\n');
@@ -341,7 +343,7 @@ http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04
 			$('#a')[0].innerText = '';
 			for(var i = 0; i < gridNums.length; i++)
 			{
-				$('#a')[0].innerHTML += (i>0?'<br>':'') + $(`#${gridNums[i]}`)[0].value;
+				$('#a')[0].innerHTML += (i>0?'<br>':'') + decodeURI($(`#${gridNums[i]}`)[0].value);
 			}
 			$('#a')[0].style.display = "inline";
 			$('#nxt')[0].style.display = "block";
@@ -354,7 +356,7 @@ http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04
 			if(!appealed)
 			{
 				$('#resp')[0].innerText = "(Appealed)";
-				wasSolved[idx] = 0;
+				wasSolved[idx] = true;
 				solved++;
 				errs--;
 				appealed = true;
@@ -431,7 +433,7 @@ http://studyingsound.com/musicofworldcultures/wp-content/uploads/sites/5/2017/04
 						toShow[i][j] = toShow[i][j].substr(1);
 					}
 					tr += `<td><input type="checkbox" id="${i*toShow[0].length+j
-							}" name="options" value="${toShow[i][j]}"><label for="${i*toShow[0].length+j}">${toShow[i][j]}</label></td>`;
+							}" name="options" value="${encodeURI(toShow[i][j])}"><label for="${i*toShow[0].length+j}">${toShow[i][j]}</label></td>`;
 				}
 				$('#choices')[0].innerHTML += '<tr>'+tr+'</tr>';
 			}
