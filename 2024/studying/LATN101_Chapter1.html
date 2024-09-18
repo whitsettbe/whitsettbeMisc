@@ -1,0 +1,148 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>LATN-101 Ch1</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+	</head>
+	<body onload="next()">
+		<label>Progress: </label><p id="toStudy"></p>
+		<p id="q"></p>
+		<input type="text" id="in" autocomplete="off" style="width:80%"><br>
+		<div id="nxt">
+			<input type="button" value="Appeal" onclick="appeal()"><br>
+			<input type="button" value="Next" onclick="next()"><br>
+		</div>
+		<p id="resp"></p>
+		<div id="a" style="display:none"></div>
+		<footer style="position: fixed; left: 0; bottom: 0">
+			<a href="LATN101.html">Back</a>
+		</footer>
+		<script>
+const DAT = `
+I sleep	dormio\u0304
+I	ego
+brother	frAter
+hour	hOra
+in/on	in
+apartment building	Insula
+I work	labOrO
+I read	legO
+my	meus
+not	nOn
+father	pater
+I laugh/smile	rIdeO
+slave (male)	servus
+you (singular)	tU
+crowd	turba
+where?	ubi?
+street/road/way	via
+I am	sum
+you (singular) are	es
+he/she/it is	est
+`;
+		
+		var ops = DAT.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var as = [];
+		for(var i = ops.length - 1; i >= 0; i--)
+		{
+			first = ops[i].split('\t')[0];
+			temp = ops[i].split('\t')[1];
+			second = "";
+			for(var j = 0; j < temp.length; j++)
+			{
+				c = temp.charAt(j);
+				if("AEIOU".includes(c))
+					second += "aeiou".charAt("AEIOU".indexOf(c)) + "\u0304";
+				else
+					second += c;
+			}
+			
+			qs.push(first);
+			as.push(second);
+			qs.push(second);
+			as.push(first);
+			
+			// for accurate counting
+			ops.push(second + "\t" + first);
+		}
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var appealed = false;
+
+		$('#in').keypress(function(event)
+		{
+			if (event.keyCode == 13 || event.which == 13)
+			{
+				event.preventDefault();
+				if(!showing)
+				{
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerText.toLowerCase())
+					{
+						$('#resp')[0].innerText = "Correct! The answer is:";
+						qs.splice(idx, 1);
+						as.splice(idx, 1);
+						appealed = true;
+					}
+					else
+					{
+						$('#resp')[0].innerText = "Incorrect. The answer is:";
+						errs++;
+					}
+					$('#a')[0].style.display = "inline";
+					$('#nxt')[0].style.display = "block";
+					showing = true;
+					$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+				}
+				else
+				{
+					next();
+				}
+			}
+			else if (event.key == "\\")
+			{
+				event.preventDefault();
+				$('#in')[0].value += "\u0304";
+			}
+		});
+
+		function appeal()
+		{
+			if(!appealed)
+			{
+				$('#resp')[0].innerText = "(Appealed)";
+				qs.splice(idx, 1);
+				as.splice(idx, 1);
+				errs--;
+				appealed = true;
+			}
+		}
+
+		function next()
+		{
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			$('#q')[0].innerText = qs[idx];
+			$('#in')[0].value = '';
+			$('#resp')[0].innerText = '';
+			$('#a')[0].innerText = as[idx];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+			appealed = false;
+		}
+		</script>
+	</body>
+</html>
