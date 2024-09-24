@@ -35,7 +35,9 @@
 			return "";
 		}
 
-		function loadBehaviors()
+		// handle cookie interface
+
+		function doLoad()
 		{
 			document.getElementById('email').value = getCookie('email');
 			time = getCookie('time');
@@ -44,27 +46,146 @@
 				time = 'never';
 			}
 			document.getElementById('timeLog').innerHTML = 'Last sign-in: ' + time;
+			makeCheckboxes();
+
+			courses = getCookie('courses').split(', ');
+			for (var i = 0; i < courses.length; i++)
+			{
+				document.querySelector('input[value="' + courses[i] + '"]').checked = true;
+			}
 		}
 
-		function submitBehaviors()
+		override = false;
+		function doSubmit()
 		{
-			setCookie('email', document.getElementById('email').value, 365);
+			email = document.getElementById('email').value;
+			courses = document.getElementById('courseString').value;
 			time = new Date().toLocaleString();
+			if(courses == 'none' || email == '')
+			{
+				alert('Please provide your email and MATH/PHYS course list.');
+				override = true;
+				return;
+			}
+			else if(!override && (getCookie('time') == '' || (time - new Date(getCookie('time'))) / 1000 / 60 / 60 / 24 > 10))
+			{
+				alert('Hmm, it looks like you haven\'t been to the MPC in a while. Make sure you\'re still enrolled in the courses you selected, then try again.');
+				override = true;
+				return;
+			}
+
+			setCookie('courses', courses, 365);
+			setCookie('email', email, 365);
 			setCookie('time', time, 365);
+
 			document.getElementById('timeLog').innerHTML = 'Last sign-in: ' + time;
+			document.getElementById('submit').click();
 			alert('Thanks for signing in!');
+			override = false;
 		}
+
+		// ensure emails are in lowercase
+		setInterval(function(){document.getElementById('email').value = document.getElementById('email').value.toLowerCase()}, 100);
+
+		// handle course selection
+		var coursesExpanded = false;
+		var COURSES = [
+			["MATH 105",		"Quantitative Reasoning"],
+			["MATH 110/111",	"Calc I w/ Review"],
+			["MATH 112",		"Calc I"],
+			["MATH 113",		"Calc II"],
+			["MATH 214",		"Calc III"],
+			["MATH 240",		"Linear Algebra"],
+			["MATH 250",		"Discrete Math"],
+			["MATH 260/360",	"Applied Stats"],
+			["MATH 261",		"Biostats"],
+			["MATH 265",		"Data Science"],
+			["MATH 280",		"Differential Equations"],
+			["MATH 300",		"Automata & Languages"],
+			["MATH 310",		"Complex & Vector Vars"],
+			["MATH 316",		"Number Theory"],
+			["MATH 318",		"Topology"],
+			["MATH 320/420",	"Real Analysis"],
+			["MATH 330/430",	"Abstract Algebra"],
+			["MATH 362/365",	"Prob / Math Stats"],
+			["MATH/PHYS 270",	"Nonlinear Dynamics"],
+			["PHYS 102",		"Astronomy"],
+			["PHYS 105",		"Sustainable Energy"],
+			["PHYS 150/152",	"Intro Physics"],
+			["PHYS 210",		"Nuclear & Medical"],
+			["PHYS 215",		"Complex Systems"],
+			["PHYS 220",		"Intro to Relativity/Quantum"],
+			["PHYS 340",		"Classical Dynamics"],
+			["PHYS 360",		"Thermal Physics"],
+			["PHYS 370/410",	"Elect. & Electromag."],
+			["PHYS 380",		"Semiconductors"],
+			["PHYS 415",		"Computational Neurosci."],
+			["PHYS 420",		"Quantum Mechanics"]
+		]
+
+		function makeCheckboxes()
+		{
+			for (var i = 0; i < COURSES.length; i++)
+			{
+				document.getElementById('courseCheckboxes').innerHTML += '<input type="checkbox" name="courseSelect" value="'
+						+ COURSES[i][0] + '"> ' + COURSES[i][0] + ' - ' + COURSES[i][1] + '<br>';
+			}
+		}
+
+		function toggleCourses()
+		{
+			courseString = document.getElementById('courseString').value;
+			if(courseString == '')
+				courseString = 'none';
+
+			if (coursesExpanded) // then close them
+			{
+				document.getElementById('dropdownIcon').innerHTML = '▼';
+				document.getElementById('courseCheckboxes').style.display = 'none';
+				coursesExpanded = false;
+			}
+			else // open the courses
+			{
+				document.getElementById('dropdownIcon').innerHTML = '▲';
+				document.getElementById('courseCheckboxes').style.display = 'block';
+				coursesExpanded = true;
+			}
+		}
+
+		// live-update the form data for course selection
+		setInterval(function(){
+			checkedInputs = document.querySelectorAll('input[name="courseSelect"]:checked');
+			courseString = '';
+			if(checkedInputs.length  > 0)
+				courseString += checkedInputs[0].value;
+			for (var i = 1; i < checkedInputs.length; i++)
+			{
+				courseString += ', ' + checkedInputs[i].value;
+			}
+
+			if (courseString == '')
+				courseString = 'none';
+
+			document.getElementById('courseString').value = courseString;
+			document.getElementById('courseStringVis').innerHTML = courseString;
+		})
+
 	</script>
 </head>
-<body onload="loadBehaviors()">
+<body onload="doLoad()">
 	<h1>MPC Sign In</h1>
 	<iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
 	<form action="https://docs.google.com/forms/d/e/1FAIpQLSeB-7HrhLZ3aPJWRNSky3K5caHqCuPTsZPrzR33bXAvzfXtQQ/formResponse" method="POST" target="dummyframe">
 		<p>Type your K email below:</p>
-		<input type="text" id="email" name="entry.1333753580" required style="width: 90%">
+		<input type="text" id="email" name="entry.1333753580" style="width: 90%">
+		<input type="text" id="courseString" name="entry.1398365022" style="display: none">
 		<br>
-		<input type="submit" value="Submit" onclick="submitBehaviors()">
+		<input type="button" value="Submit" onclick="doSubmit()">
+		<input type="submit" id="submit" style="display: none;">
+		<br>
+		<p id="timeLog"></p>
+		<p onclick="toggleCourses()"><span id="dropdownIcon">▼</span> Enrolled courses: <span id="courseStringVis">none</span></p>
+		<div id="courseCheckboxes" style="display: none"></div>
 	</form>
-	<p id="timeLog"></p>
 </body>
 </html>
