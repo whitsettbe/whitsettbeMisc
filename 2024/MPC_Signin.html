@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sign In</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script>
+		// cookie getter/setter from https://www.w3schools.com/js/js_cookies.asp
+
+		function setCookie(cname, cvalue, exdays)
+		{
+			const d = new Date();
+			d.setTime(d.getTime() + (exdays*24*60*60*1000));
+			let expires = "expires="+ d.toUTCString();
+			document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+		  }
+			
+		function getCookie(cname)
+		{
+			let name = cname + "=";
+			let decodedCookie = decodeURIComponent(document.cookie);
+			let ca = decodedCookie.split(';');
+			for(let i = 0; i <ca.length; i++)
+			{
+				let c = ca[i];
+				while (c.charAt(0) == ' ')
+				{
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0)
+				{
+					return c.substring(name.length, c.length);
+				}
+			}
+			return "";
+		}
+
+		// interface with external google form
+		var FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeB-7HrhLZ3aPJWRNSky3K5caHqCuPTsZPrzR33bXAvzfXtQQ/viewform?usp=pp_url&entry.1333753580="
+
+		function load()
+		{
+			let email = getCookie('email');
+			document.getElementById('email').value = email;
+		}
+		
+		async function submit()
+		{
+			// save cookie and submit to google form
+			let email = document.getElementById('email').value;
+			//setCookie('email', email, 365);
+			let response = await fetch(FORM_URL + email, {mode: 'no-cors'});
+			if(response.ok)
+			{
+				alert('Form submitted!');
+			}
+			else
+			{
+				alert('Form submission failed!');
+			}
+		}
+
+		//https://stackoverflow.com/questions/51995070/post-data-to-a-google-form-with-ajax
+
+		var dat={ "entry.1333753580" :"data1"};
+postToGoogle("1FAIpQLSeB-7HrhLZ3aPJWRNSky3K5caHqCuPTsZPrzR33bXAvzfXtQQ",dat);
+
+function postToGoogle(id, dat) {
+    $.ajax({
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Access-Control-Allow-Origin', 'chrome-extension://EXTENSION_ID');
+            xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT');
+            },
+        url: "https://docs.google.com/forms/d/e/"+id+"/formResponse",
+        data: dat, 
+        type: "POST",  
+        dataType: "xml",
+        xhrFields: {  withCredentials: true },
+        statusCode: {
+            0:   function() {  console.log("OK") },
+            200: function() {  console.log("error") },
+            }
+        });
+    }
+	</script>
+</head>
+<body>
+	<h1>Sign In</h1>
+	<label for="email">K Email:</label>
+	<input type="text" id="email" name="email" required>
+	<button onclick="submit()">Submit</button>
+</body>
+</html>
