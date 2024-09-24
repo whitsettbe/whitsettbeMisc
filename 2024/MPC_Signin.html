@@ -3,8 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Sign In</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<title>MPC Sign In</title>
 	<script>
 		// cookie getter/setter from https://www.w3schools.com/js/js_cookies.asp
 
@@ -36,59 +35,27 @@
 			return "";
 		}
 
-		// interface with external google form
-		var FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeB-7HrhLZ3aPJWRNSky3K5caHqCuPTsZPrzR33bXAvzfXtQQ/viewform?usp=pp_url&entry.1333753580="
-
-		function load()
+		function loadBehaviors()
 		{
-			let email = getCookie('email');
-			document.getElementById('email').value = email;
-		}
-		
-		async function submit()
-		{
-			// save cookie and submit to google form
-			let email = document.getElementById('email').value;
-			//setCookie('email', email, 365);
-			let response = await fetch(FORM_URL + email, {mode: 'no-cors'});
-			if(response.ok)
-			{
-				alert('Form submitted!');
-			}
-			else
-			{
-				alert('Form submission failed!');
-			}
+			document.getElementById('email').value = getCookie('email');
 		}
 
-		//https://stackoverflow.com/questions/51995070/post-data-to-a-google-form-with-ajax
-
-		var dat={ "entry.1333753580" :"data1"};
-postToGoogle("1FAIpQLSeB-7HrhLZ3aPJWRNSky3K5caHqCuPTsZPrzR33bXAvzfXtQQ",dat);
-
-function postToGoogle(id, dat) {
-    $.ajax({
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader('Access-Control-Allow-Origin', 'chrome-extension://EXTENSION_ID');
-            xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT');
-            },
-        url: "https://docs.google.com/forms/d/e/"+id+"/formResponse",
-        data: dat, 
-        type: "POST",  
-        dataType: "xml",
-        xhrFields: {  withCredentials: true },
-        statusCode: {
-            0:   function() {  console.log("OK") },
-            200: function() {  console.log("error") },
-            }
-        });
-    }
+		function submitBehaviors()
+		{
+			setCookie('email', document.getElementById('email').value, 365);
+			document.getElementById('timeLog').innerHTML = 'Last sign-in: ' + new Date().toLocaleString();
+			alert('Thanks for signing in!');
+		}
 	</script>
 </head>
-<body>
+<body onload="loadBehaviors()">
 	<h1>Sign In</h1>
-	<label for="email">K Email:</label>
-	<input type="text" id="email" name="email" required>
-	<button onclick="submit()">Submit</button>
+	<iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+	<form action="https://docs.google.com/forms/d/e/1FAIpQLSeB-7HrhLZ3aPJWRNSky3K5caHqCuPTsZPrzR33bXAvzfXtQQ/formResponse" method="POST" target="dummyframe">
+		<label for="email">K Email:</label>
+		<input type="text" id="email" name="entry.1333753580" required>
+		<input type="submit" value="Submit" onclick="submitBehaviors()">
+	</form>
+	<p id="timeLog"></p>
 </body>
 </html>
