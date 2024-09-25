@@ -51,7 +51,8 @@
 			courses = getCookie('courses').split(', ');
 			for (var i = 0; i < courses.length; i++)
 			{
-				document.querySelector('input[value="' + courses[i] + '"]').checked = true;
+				if(courses.length > 0) // catch empty string
+					document.querySelector('input[value="' + courses[i] + '"]').checked = true;
 			}
 		}
 
