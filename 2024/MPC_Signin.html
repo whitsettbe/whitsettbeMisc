@@ -74,6 +74,12 @@
 				override = true;
 				return;
 			}
+			else if(!override && (getCookie('time') == '' || (time - new Date(getCookie('time'))) / 1000 / 60 / 60 < 5))
+			{
+				alert('Hmm, it looks like you\'ve already signed in today. If this is a mistake, please try again.');
+				override = true;
+				return;
+			}
 
 			setCookie('courses', courses, 365);
 			setCookie('email', email, 365);
