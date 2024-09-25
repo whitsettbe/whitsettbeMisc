@@ -59,7 +59,7 @@
 		function doSubmit()
 		{
 			email = document.getElementById('email').value;
-			courses = document.getElementById('courseStringVis').value;
+			courses = document.getElementById('courseStringVis').innerText;
 			time = new Date().toLocaleString();
 			if(courses == 'none' || email == '')
 			{
