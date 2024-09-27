@@ -65,19 +65,20 @@
 			if(courses == 'none' || email == '')
 			{
 				alert('Please provide your email and MATH/PHYS course list.');
-				override = true;
 				return;
 			}
-			else if(!override && (getCookie('time') == '' || (time - new Date(getCookie('time'))) / 1000 / 60 / 60 / 24 > 10))
+			else if(!override && (getCookie('time') != '' && (new Date(time) - new Date(getCookie('time'))) / 1000 / 60 / 60 / 24 > 10))
 			{
 				alert('Hmm, it looks like you haven\'t been to the MPC in a while. Make sure you\'re still enrolled in the courses you selected, then try again.');
 				override = true;
+				setTimeout(function(){override=false;}, 30*1000);
 				return;
 			}
-			else if(!override && (getCookie('time') == '' || (time - new Date(getCookie('time'))) / 1000 / 60 / 60 < 5))
+			else if(!override && (getCookie('time') != '' && (new Date(time) - new Date(getCookie('time'))) / 1000 / 60 / 60 < 5))
 			{
 				alert('Hmm, it looks like you\'ve already signed in today. If this is a mistake, please try again.');
 				override = true;
+				setTimeout(function(){override=false;}, 30*1000);
 				return;
 			}
 
@@ -184,8 +185,8 @@
 	<h1>MPC Sign In</h1>
 	<iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
 	<form action="https://docs.google.com/forms/d/e/1FAIpQLSeB-7HrhLZ3aPJWRNSky3K5caHqCuPTsZPrzR33bXAvzfXtQQ/formResponse" method="POST" target="dummyframe">
-		<p>Type your K email below:</p>
-		<input type="text" id="email" name="entry.1333753580" style="width: 90%">
+		<p>Type your K email (first.last##@kzoo.edu) below:</p>
+		<input type="text" id="email" name="entry.1333753580" style="width: 90%" onkeydown="return event.key != 'Enter';">
 		<input type="text" id="courseString" name="entry.1398365022" style="display: none">
 		<br>
 		<input type="button" value="Submit" onclick="doSubmit()">
