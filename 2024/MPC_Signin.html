@@ -7,6 +7,7 @@
 	<script>
 		var SIGNIN_SUCCESS_HOURS = 5;
 		var TERM_GAP_DAYS = 10;
+		var OVERRIDE_TIMEOUT_SECS = 3;
 
 		
 		// cookie getter/setter from https://www.w3schools.com/js/js_cookies.asp
@@ -75,14 +76,14 @@
 			{
 				alert('Hmm, it looks like you haven\'t been to the MPC in a while. Make sure you\'re still enrolled in the courses you selected, then try again.');
 				override = true;
-				setTimeout(function(){override=false;}, 30*1000);
+				setTimeout(function(){override=false;}, OVERRIDE_TIMEOUT_SECS*1000);
 				return;
 			}
 			else if(!override && (getCookie('time') != '' && (new Date(time) - new Date(getCookie('time'))) / 1000 / 60 / 60 < SIGNIN_SUCCESS_HOURS))
 			{
 				alert('Hmm, it looks like you\'ve already signed in today. If this is a mistake, please try again.');
 				override = true;
-				setTimeout(function(){override=false;}, 30*1000);
+				setTimeout(function(){override=false;}, OVERRIDE_TIMEOUT_SECS*1000);
 				return;
 			}
 
