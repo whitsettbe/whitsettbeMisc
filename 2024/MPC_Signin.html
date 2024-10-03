@@ -121,16 +121,18 @@
 				return;
 			}
 
-			setCookie('courses', courses, 365);
-			setCookie('email', email, 365);
-			setCookie('time', time, 365);
-
-			document.getElementById('timeLog').innerHTML = 'Last sign-in: ' + time;
 			document.getElementById('submit').click();
-			document.getElementById('loader').style.display = 'block';
-			override = false;
 			setTimeout(function()
 			{
+				setCookie('courses', courses, 365);
+				setCookie('email', email, 365);
+				setCookie('time', time, 365);
+	
+				document.getElementById('timeLog').innerHTML = 'Last sign-in: ' + time;
+				document.getElementById('loader').style.display = 'block';
+
+				override = false;
+				
 				document.getElementById('loader').style.display = 'none';
 				setTimeout(function(){alert('Thanks for signing in!');},200);
 			}, 2000);
