@@ -4,6 +4,40 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>MPC Sign In</title>
+	<style>
+	/* see https://www.w3schools.com/howto/howto_css_loader.asp */
+	#loader
+	{
+		border: 1em solid #f3f3f3; /* Light grey */
+		border-top: 1em solid #3498db; /* Blue */
+		border-radius: 50%;
+		width: 5em;
+		height: 5em;
+		-webkit-animation: spin 1.5s linear infinite; /* Safari */
+		animation: spin 1.5s linear infinite;
+	  
+	  
+		position: absolute;
+		top:0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		margin: auto;
+	}
+	
+	/* Safari */
+	@-webkit-keyframes spin
+	{
+		0% { -webkit-transform: rotate(0deg); }
+		100% { -webkit-transform: rotate(360deg); }
+	}
+	
+	@keyframes spin
+	{
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
+	</style>
 	<script>
 		var SIGNIN_SUCCESS_HOURS = 5;
 		var TERM_GAP_DAYS = 10;
@@ -93,8 +127,13 @@
 
 			document.getElementById('timeLog').innerHTML = 'Last sign-in: ' + time;
 			document.getElementById('submit').click();
-			alert('Thanks for signing in!');
+			document.getElementById('loader').style.display = 'block';
 			override = false;
+			setTimeout(function()
+			{
+				document.getElementById('loader').style.display = 'none';
+				alert('Thanks for signing in!');
+			}, 2000);
 		}
 
 		// ensure emails are in lowercase and set background color for success
