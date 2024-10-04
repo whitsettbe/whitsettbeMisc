@@ -42,7 +42,9 @@
 		var SIGNIN_SUCCESS_HOURS = 5;
 		var TERM_GAP_DAYS = 10;
 		var OVERRIDE_TIMEOUT_SECS = 1;
-		var DATE_FORMATTER = Intl.DateTimeFormat('en-US', {timeZone: 'America/Detroit'});
+		var DATE_FORMATTER = Intl.DateTimeFormat('en-US', {timeZone: 'America/Detroit',
+								   dateStyle: 'short',
+								   timeStyle: 'medium'});
 		
 		// cookie getter/setter from https://www.w3schools.com/js/js_cookies.asp
 
