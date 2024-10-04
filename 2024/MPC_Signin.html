@@ -125,6 +125,12 @@
 			// prevent Dr. Barth from filling out the form :)
 			if(email=='eric.barth@kzoo.edu')
 			{
+				setCookie('courses', courses, 365);
+				setCookie('email', email, 365);
+				setCookie('time', time, 365);
+				document.getElementById('timeLog').innerHTML = 'Last sign-in: ' + time;
+				override = false;
+				
 				window.location.href = "https://mathematics.kzoo.edu/wp-content/uploads/sites/52/2024/08/Eric-Barth-2024-300x300.jpg";
 				return;
 			}
