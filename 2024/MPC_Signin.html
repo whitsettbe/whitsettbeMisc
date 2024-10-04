@@ -101,6 +101,7 @@
 			email = document.getElementById('email').value;
 			courses = document.getElementById('courseStringVis').innerText;
 			time = new Date().toLocaleString();
+			
 			if(courses == 'none' || email == '')
 			{
 				alert('ERROR!\n\nPlease enter your email AND courses.');
@@ -118,6 +119,13 @@
 				alert('WARNING:\n\nHmm, it looks like you\'ve already signed in today. If this is a mistake, please try again.');
 				override = true;
 				setTimeout(function(){override=false;}, OVERRIDE_TIMEOUT_SECS*1000);
+				return;
+			}
+
+			// prevent Dr. Barth from filling out the form :)
+			if(email=='eric.barth@kzoo.edu')
+			{
+				window.location.href = "https://mathematics.kzoo.edu/wp-content/uploads/sites/52/2024/08/Eric-Barth-2024-300x300.jpg";
 				return;
 			}
 
