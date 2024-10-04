@@ -42,7 +42,7 @@
 		var SIGNIN_SUCCESS_HOURS = 5;
 		var TERM_GAP_DAYS = 10;
 		var OVERRIDE_TIMEOUT_SECS = 1;
-
+		var DATE_FORMATTER = Intl.DateTimeFormat('en-US', {timeZone: 'America/Detroit'});
 		
 		// cookie getter/setter from https://www.w3schools.com/js/js_cookies.asp
 
@@ -100,7 +100,7 @@
 		{
 			email = document.getElementById('email').value;
 			courses = document.getElementById('courseStringVis').innerText;
-			time = new Date().toLocaleString();
+			time = DATE_FORMATTER.format(new Date());
 			
 			if(courses == 'none' || email == '')
 			{
