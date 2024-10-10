@@ -243,7 +243,7 @@
 <body onload="doLoad()">
 	<h1>MPC Sign In</h1>
 	<iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
-	<form action="https://docs.google.com/forms/d/e/1FAIpQLSeB-7HrhLZ3aPJWRNSky3K5caHqCuPTsZPrzR33bXAvzfXtQQ/formResponse" method="POST" target="dummyframe">
+	<form target="dummyframe">
 		<p>Type your K email (first.last##@kzoo.edu) below:</p>
 		<input type="text" id="email" name="entry.1333753580" style="width: 90%" onkeydown="return event.key != 'Enter';">
 		<input type="text" id="courseString" name="entry.1398365022" style="display: none">
@@ -263,15 +263,12 @@
 			event.preventDefault(); 
 			
 			// Submit the form using JavaScript
-			fetch(document.querySelector('form').action, {
+			fetch("https://docs.google.com/forms/d/e/1FAIpQLSeB-7HrhLZ3aPJWRNSky3K5caHqCuPTsZPrzR33bXAvzfXtQQ/formResponse", {
 			method: 'POST',
-			body: new FormData(document.querySelector('form'))
+			body: new FormData(document.querySelector('form')),
+			
 			})
 			.then(response => {
-			if (response.ok) {
-			  // Form submitted successfully
-			  //console.log('Form submitted successfully');
-			  // set cookies
 				setCookie('courses', courses, 365);
 				setCookie('email', email, 365);
 				setCookie('time', time, 365);
@@ -280,12 +277,6 @@
 				// thank the user
 				document.getElementById('loader').style.display = 'none';
 				setTimeout(function(){alert('Thanks for signing in!');},200);
-			  // Do something after successful submission
-			} else {
-			  // error message to user
-				document.getElementById('loader').style.display = 'none';
-				setTimeout(function(){alert('ERROR!\n\nSubmission failed. Please reload and try again.');},200);
-			}
 			})
 			.catch(error => {
 			  // network error message to user
