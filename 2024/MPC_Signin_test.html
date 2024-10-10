@@ -141,44 +141,44 @@
 			document.getElementById('submit').click();
 		}
 
-    // handle submission inside the form
-    document.querySelector('form').addEventListener('submit', (event) => {
-      // Prevent default form submission behavior
-      event.preventDefault(); 
-      
-      // Submit the form using JavaScript
-      fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form)
-      })
-      .then(response => {
-        if (response.ok) {
-          // Form submitted successfully
-          //console.log('Form submitted successfully');
-          // set cookies
-  				setCookie('courses', courses, 365);
-  				setCookie('email', email, 365);
-  				setCookie('time', time, 365);
-  				document.getElementById('timeLog').innerHTML = 'Last sign-in: ' + time;
-  				override = false;
-  				// thank the user
-  				document.getElementById('loader').style.display = 'none';
-  				setTimeout(function(){alert('Thanks for signing in!');},200);
-          // Do something after successful submission
-        } else {
-          // error message to user
-  				document.getElementById('loader').style.display = 'none';
-  				setTimeout(function(){alert('ERROR!\n\nSubmission failed. Please reload and try again.');},200);
-        }
-      })
-      .catch(error => {
-          // network error message to user
-  				document.getElementById('loader').style.display = 'none';
-  				setTimeout(function(){alert('ERROR!\n\nSubmission failed. Check your network connection and try again.');},200);
-        // Handle network errors
-        //console.error('Network error:', error);
-      });
-    });
+		// handle submission inside the form (ASSUMPTION: only one `form` tag on the page)
+		document.querySelector('form').addEventListener('submit', (event) => {
+			// Prevent default form submission behavior
+			event.preventDefault(); 
+			
+			// Submit the form using JavaScript
+			fetch(document.querySelector('form').action, {
+			method: 'POST',
+			body: new FormData(document.querySelector('form'))
+			})
+			.then(response => {
+			if (response.ok) {
+			  // Form submitted successfully
+			  //console.log('Form submitted successfully');
+			  // set cookies
+				setCookie('courses', courses, 365);
+				setCookie('email', email, 365);
+				setCookie('time', time, 365);
+				document.getElementById('timeLog').innerHTML = 'Last sign-in: ' + time;
+				override = false;
+				// thank the user
+				document.getElementById('loader').style.display = 'none';
+				setTimeout(function(){alert('Thanks for signing in!');},200);
+			  // Do something after successful submission
+			} else {
+			  // error message to user
+				document.getElementById('loader').style.display = 'none';
+				setTimeout(function(){alert('ERROR!\n\nSubmission failed. Please reload and try again.');},200);
+			}
+			})
+			.catch(error => {
+			  // network error message to user
+				document.getElementById('loader').style.display = 'none';
+				setTimeout(function(){alert('ERROR!\n\nSubmission failed. Check your network connection and try again.');},200);
+			// Handle network errors
+			//console.error('Network error:', error);
+			});
+		});
 
 		// ensure emails are in lowercase and set background color for success
 		setInterval(function(){
