@@ -43,6 +43,7 @@
 		var TERM_GAP_DAYS = 10;
 		var OVERRIDE_TIMEOUT_SECS_S = 1;
 		var OVERRIDE_TIMEOUT_SECS_L = 20;
+		var REFRESH_MINUTES = 1;
 		var DATE_FORMATTER = Intl.DateTimeFormat('en-US', {timeZone: 'America/Detroit',
 								   dateStyle: 'short',
 								   timeStyle: 'medium'});
@@ -162,6 +163,21 @@
 			else
 				document.body.style.backgroundColor = '#fff';
 			
+		}, 100);
+
+		// enforce reload if page is "old" (1 minute) (aka will help ensure email connection)
+		loadTime = new Date();
+		setInterval(function(){
+			if((new Date() - loadTime) / 1000 / 60 > REFRESH_MINUTES)
+			{
+				email = document.getElementById('email').value;
+				courses = document.getElementById('courseStringVis').innerText;
+
+				setCookie('courses', courses, 365);
+				setCookie('email', email, 365);
+				
+				window.location.reload();
+			}
 		}, 100);
 
 		// handle course selection
