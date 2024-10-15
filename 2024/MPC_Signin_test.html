@@ -268,7 +268,7 @@
 			body: new FormData(document.querySelector('form')),
 			
 			})
-			.then(response => {
+			/*.then(response => {
 				setCookie('courses', courses, 365);
 				setCookie('email', email, 365);
 				setCookie('time', time, 365);
@@ -277,7 +277,7 @@
 				// thank the user
 				document.getElementById('loader').style.display = 'none';
 				setTimeout(function(){alert('Thanks for signing in!');},200);
-			})
+			})*/
 			.catch(error => {
 			  // network error message to user
 				document.getElementById('loader').style.display = 'none';
