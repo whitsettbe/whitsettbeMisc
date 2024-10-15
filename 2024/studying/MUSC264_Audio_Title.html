@@ -1,0 +1,199 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>MUSC264: Audio > Title</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"
+			integrity="sha512-xi/RZRIF/S0hJ+yJJYuZ5yk6/8pCiRlEXZzoguSMl+vk2i3m6UjUO/WcZ11blRL/O+rnj94JRGwt/CHbc9+6EA=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"></script>
+	</head>
+	<body>
+		<input type="button" id="starter" style="display: inline" onclick="setup()" value="Start">
+		<div id="main" style="display:none">
+			<label>Progress: </label><p id="toStudy"></p>
+			<table>
+				<tr>
+					<td style="vertical-align:top"><form id="form"></form></td>
+					<td style="width: 50px"></td>
+					<td style="vertical-align:top">
+						<div id="player" style="overflow: hidden; position: relative; width:33px; height:33px; background-color: #888" onmousedown="reloadAudio()">
+							<iframe style="position: absolute; left: -259px; top: -40px;" src="https://open.spotify.com/embed/track/7prL6X0XOYZuXH3fyGNZHY"
+									width="300px" height="100px" frameBorder="0" allow="encrypted-media" loading="lazy"
+									onmouseover="startTimer()"></iframe>
+						</div>
+						<br>
+						<input type="button" onclick="guess()" value="Submit"><br><br>
+						<div id="nxt">
+							<input type="button" value="Next" onclick="next()">
+						</div>
+						<p id="resp"></p>
+						<div id="a" style="display:none"></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<footer style="position: fixed; left: 0; bottom: 0; height:150px">
+			<a href="MUSC264.html" style="position:absolute; bottom:0">Back</a>
+		</footer>
+		<script>
+const PLAY_DUR = 30;
+const START_DUR = 2;
+
+const DAT = `
+https://open.spotify.com/embed/track/7prL6X0XOYZuXH3fyGNZHY?theme=0	Chevy Chase (Anonymous)
+https://open.spotify.com/embed/track/7c7XCUwgRDYsuAkcibAdse?theme=0	The Bay Book of Psalmes: Psalm 100 (Henry Ainsworth)
+https://open.spotify.com/embed/track/2Nmng31BRLGELdEKrVGuKq?theme=0	¡O Que Suave!
+https://open.spotify.com/embed/track/5RzHxrOtgePplKRRyUwRqo?theme=0	The Beggar's Opera: What Shall I Do... (John Gay)
+https://open.spotify.com/embed/track/4isYTvp6ztvpoglMl3Mza9?theme=0	Heart of Oak (William Boyce)
+https://open.spotify.com/embed/track/1WyGKTHoS8It8Dq5M47D5y?theme=0	Am I a Soldier of the Cross? (Isaac Watts / Thomas Arne)
+https://open.spotify.com/embed/track/6SJFk7LilJXZwp8rvzGc1T?theme=0	Liberty Song (John Dickenson / William Boyce)
+https://open.spotify.com/embed/track/6NG7pePoSLs6bmr4VVX5cO?theme=0	Come Shake Your Dull Noodles (Anonymous Boston)
+https://open.spotify.com/embed/track/4bvvHiEjtMQ5OuQpyfCumD?theme=0	Emanuel: The Psalm Singer's Amusement (William Billings)
+https://open.spotify.com/embed/track/4sxSwUvcZxcT6J3DKFF9Fs?theme=0	Chester [Let tyrants shake their iron rod] (William Billings)
+https://open.spotify.com/embed/track/3OT13zeiHsMpzjhzRxVbJD?theme=0	Amazing Grace (John Newton)
+https://open.spotify.com/embed/track/3osmVdIWurmW2kHA6lwwLX?theme=0	Le nozze di Figaro Voi, che sapete che cosa amo (Wolfgang Amadeus Mozart)
+https://open.spotify.com/embed/track/2LNhvzURYGCEN8Maa2cDBZ?theme=0	Sonata No. 1 in D Major: I. Allegro con brio (Alexander Reinagle)
+https://open.spotify.com/embed/track/2XKyJPTL3Th88OCfsMvUIZ?theme=0	America, Commerce, And Freedom (Alexander Reinagle)
+https://open.spotify.com/embed/track/0FKiEf8IBh9jC5ZJOmFBTx?theme=0	The President's March [Hail, Columbia] (Philip Phile)
+https://open.spotify.com/embed/track/2EtZ4hjZH2my8I0lLqNnmH?theme=0	Roll Jordan Roll (Anonymous (After Isaac Watts))
+https://open.spotify.com/embed/track/54aXJ3x5rKMPxXdJ2Ldl20?theme=0	Wade in the Water (Anonymous)
+https://open.spotify.com/embed/track/35y4yhRzEtMBi4XhOVIGlZ?theme=0	Sometimes I Feel Like a Motherless Child (Anonymous)
+https://open.spotify.com/embed/track/0TsA4rqJmgUC1g3bZV8LO2?theme=0	Jubilee (William H. Johnson)
+https://open.spotify.com/embed/track/5GqtaefBDU5qQossf2v0qe?theme=0	Jefferson and Liberty [The Gobby O] (Jefferson Campaign / Anon. Trad. Irish)
+https://open.spotify.com/embed/track/34mhiJVuAy6VhdESJLsvNA?theme=0	Idumea (Ananias Davisson)
+https://open.spotify.com/embed/track/41PYCImeUGmv0oUPZBbEc4?theme=0	The Barber of Seville: Largo al factotum (Gioachino Rossini)
+https://open.spotify.com/embed/track/5bCJnszhSLfXmpCbRku22K?theme=0	Home Sweet Home (Henry Bishop)
+https://open.spotify.com/embed/track/1eKSXAYfQWATcDewLqUChH?theme=0	Old Folks at Home [Swanee River] (Stephen Foster)
+https://open.spotify.com/embed/track/6hSOY0WJYvcxVmp5ZiNjw5?theme=0	Camptown Races (Stephen Foster)
+https://open.spotify.com/embed/track/7IvUQIQpP2xM93Ym6w7s5d?theme=0	Dixie (Daniel Decatur Emmett)
+https://open.spotify.com/embed/track/4OoFzIC80FaRVXGepLBmcx?theme=0	Gottschalk: Le Banjo Op. 15 (Louis Moreau Gottschalk)
+https://open.spotify.com/embed/track/0vZy2pO9OZL20f4vmsU0jQ?theme=0	Battle Hymn of the Republic (Julia Ward Howe)
+https://open.spotify.com/embed/track/5Iguf6lYfs174TI7vUzFA1?theme=0	The Battle Cry of Freedom (George F. Root)
+https://open.spotify.com/embed/track/0FJbyybRjxOyalg9M9q6IJ?theme=0	Union Dixie (Anonymous)
+https://open.spotify.com/embed/track/3xdjNlUkBfhw3DngJEMST8?theme=0	Weeping, Sad and Lonely [When this Cruel War is Over] (Charles Sawyer / Henry Tucker)
+https://open.spotify.com/embed/track/5Mts3p3SXHSWPaX9dA6Lmz?theme=0	Shi Naasha' (Navajo - Unknown)
+https://open.spotify.com/embed/track/4KxBnBP6cMTlkyaCAyl53D?theme=0	After the Ball (Charles Harris)
+https://open.spotify.com/embed/track/51mXEQIsErrBPKyWiEpWqn?theme=0	Symphony No. 9 in E Minor, From the New World: II. Largo (Antonin Dvorak)
+https://open.spotify.com/embed/track/2hHQb8EIlBNwALIVV3UUez?theme=0	Romance for Violin and Piano, Op. 23 (Amy Beach)
+https://open.spotify.com/embed/track/54j1IfGIbGI2VLiVprVwNs?theme=0	Symphonic Sketches: I. Jubilee (George Whitefield Chadwick)
+https://open.spotify.com/embed/track/0Pcks7WegMQRazrETNl6Yd?theme=0	Maple Leaf Rag (Scott Joplin)
+https://open.spotify.com/embed/track/2VjaQYoRdWP7vhLt1wakQ6?theme=0	Helene Schottisch (Cora Fuller Straw)
+https://open.spotify.com/embed/track/0p6NOOOm3SiEzgzO09z0lh?theme=0	St. Louis Blues (W. C. Handy)
+https://open.spotify.com/embed/track/4cMxAxtiStYLXlLqMC4w9s?theme=0	St. Louis Blues (W. C. Handy / Bessie Smith)
+https://open.spotify.com/embed/track/0ARoborzrtiYaTFUge7f9H?theme=0	Ol' Man River [from Show Boat] (Jerome Kern, Oscar Hammerstein II)
+https://open.spotify.com/embed/track/2OlXX1cpJ7nh2lXieAtzwE?theme=0	Can't Help Lovin Dat Man of Mine [Show Boat] (Jerome Kern, Oscar Hammerstein II)
+https://open.spotify.com/embed/track/5OLqWztNfPpLYXyt2Pg2sy?theme=0	Make Believe [Show Boat] (Jerome Kern, Oscar Hammerstein II)
+https://open.spotify.com/embed/track/7dOz8RrPWP9UgJ8X8p1vU7?theme=0	West End Blues (Louis Armstrong & His Hot Five)
+https://open.spotify.com/embed/track/4scvylI3GR9z1yB0DE2uKM?theme=0	Avalon Blues (Mississippi John Hurt)
+https://open.spotify.com/embed/track/7D68AfUlnRY8RbRWmUErmK?theme=0	Anything Goes (Cole Porter)
+https://open.spotify.com/embed/track/62Xj6x2LSWv47PtRAXrg5Z?theme=0	Summertime (George Gershwin)
+https://open.spotify.com/embed/track/5L8ta4ECl5zeA6bGqY7G38?theme=0	Sing, Sing, Sing (Benny Goodman)
+https://open.spotify.com/embed/track/568SEFtDjKr7N2PytpA6D5?theme=0	Over The Rainbow (Harold Arlen)
+https://open.spotify.com/embed/track/3y7FkwPXCccAhSPqmx5tx6?theme=0	Billy the Kid - Ballet Suite (Aaron Copland)
+`;
+// "Anything goes" other link:5cvSRam9sSyorCYSn5VOrm
+		
+		var ops = DAT.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var as = [];
+		var aIdx = [];
+		for(var i = 0; i < ops.length; i++)
+		{
+			qs.push(ops[i].split('\t')[0]);
+			as.push(ops[i].split('\t')[1]);
+			aIdx.push(qs.length - 1);
+		}
+
+		var aOrder = [];
+		for(var i = 0; i < as.length; i++) aOrder.push(i);
+		//aOrder = aOrder.map(value => ({ value, sort: Math.random() }))
+		//				.sort((a, b) => a.sort - b.sort)
+		//				.map(({ value }) => value)
+
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var theSounder = document.querySelector('iframe');
+		var cancelEvent = -1;
+
+		function guess()
+		{
+			if(document.querySelector('input[name="options"]:checked') == null)
+				return;
+			if(showing)
+				return;
+			guessVal = document.querySelector('input[name="options"]:checked').value;
+
+			if(guessVal === $('#a')[0].innerText)
+			{
+				$('#resp')[0].innerText = "Correct! The answer is:";
+				qs.splice(idx, 1);
+				aIdx.splice(idx, 1);
+			}
+			else
+			{
+				$('#resp')[0].innerText = "Incorrect. The answer is:";
+				errs++;
+			}
+			$('#a')[0].style.display = "inline";
+			$('#nxt')[0].style.display = "block";
+			showing = true;
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+		};
+
+		function reloadAudio(url='')
+		{
+			if(url == '')
+				theSounder.src += "";
+			else
+				theSounder.src = url;
+			theSounder.width='300px';
+		}
+
+		function startTimer()
+		{
+			clearTimeout(cancelEvent);
+			cancelEvent = setTimeout(reloadAudio, 1000*PLAY_DUR);
+			setTimeout(()=>{theSounder.width='0px'}, 1000*START_DUR);
+		}
+
+		function next()
+		{
+			//rebuild answers (opportunity to reorder)
+			$('#form')[0].innerHTML = "";
+			for(var i = 0; i < aOrder.length; i++)
+			{
+				$('#form')[0].innerHTML += `<input type="radio" id="${i}" name="options" value="${as[aOrder[i]]}"><label for="${i}">${as[aOrder[i]]}</label><br>`
+			}
+
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			reloadAudio(qs[idx]);
+			$('#resp')[0].innerText = '';
+			$('#a')[0].innerText = as[aIdx[idx]];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+		}
+
+		function setup()
+		{
+			$('#starter')[0].style.display = "none";
+			$('#main')[0].style.display = "inline";
+			next();
+		}
+		</script>
+	</body>
+</html>
