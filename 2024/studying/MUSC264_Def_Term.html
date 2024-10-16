@@ -1,0 +1,198 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>MUSC264: Vocab</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+	</head>
+	<body onload="next()">
+		<label>Progress: </label><p id="toStudy"></p>
+		<p id="q"></p>
+		<input type="text" id="in" autocomplete="off" style="width:80%"><br>
+		<div id="nxt">
+			<input type="button" value="Appeal" onclick="appeal()"><br>
+			<input type="button" value="Next" onclick="next()"><br>
+		</div>
+		<p id="resp"></p>
+		<div id="a" style="display:none"></div>
+		<footer style="position: fixed; left: 0; bottom: 0">
+			<a href="MUSC160.html">Back</a>
+		</footer>
+		<script>
+const DAT = `
+Recording music through some form of notation	Transcription
+1640 MA psalter w/ simple melodies and accurate texts	Bay Psalm Book
+Roman Catholic liturgical song	Plainchant (Gregorian Chant)
+Annual cycle of Catholicism	Liturgical Calendar
+Broad collection of Christian songs of praise	Hymn/Hymnody
+Spiritual poems, often from the Old Testament	Psalm/Psalmody
+1700s return to spiritual singing books	Regular Singing
+Process of "lining out" hymns	Old Way
+Providing cues through heavily ornamented hymnody	Lining Out
+Composer of "The New-England Psalm-Singer," mid 1700s	William Billings
+Offshoot of Catholicism under the English crown	Anglican
+American offshoot of Anglican church	Episcopalian
+Non-Catholic sect which avoided grandeur in music	Calvinism
+Non-Catholic sect which maintained grandeur in music	Lutheran
+1700s educational groups promoting "regular singing"	Singing Schools
+1700s lyric sheets written to popular tunes	Broadside Ballads
+Folk dances, often not focused on individual couples	Country Dances
+Skilled wind music popular in British military	Harmoniemusik
+Portable marches used by British military	Field Music
+Concerts organized by individual performers	Benefit Concerts
+Concerts offered to the public before being (hopefully) organized	Subscription Concerts
+Idea that different races were different species	Polygenesis
+Popular mid-1800s American singing troupe (teetotallers)	Hutchinson Family Singers
+Style focusing on romance and creating emotion	Sentimentalism
+Music group type which emerged from the military	Wind Band
+Device for reproducing pre-recorded waveforms stored on physical media	Phonograph
+Variety entertainment shows, esp. in early 1900s	Vaudeville
+NYC music publishing district, started in 1890s	Tin Pan Alley
+Extremely popular Tin Pan Alley tune	After the Ball
+Payment for reuse of a physical object storing music	Mechanical Royalties
+Pre-jazz syncopated style of playing existing music	Ragtime
+Tin Pan Alley employees promoting new music	Song Pluggers
+Participatory choral practice using shape-notes	Sacred Harp
+English style of comic opera	Ballad Opera
+"Lighter" offshoot of traditional opera, often with happy ends	Comic Opera
+1800s spiritual and classical edification group in Boston	Handel and Haydn Society
+Musical reformer / teacher / composer from 1820s	Lowell Mason
+Promotion of increased religious fervor, as in Great Awakening	Revivalism
+African practice preserved in the Americas linking leader and congregation	Call and Response
+Textural aspect with multiple forms of arrangement in time	Polyrhythm
+Traditional African rhythmic practice linking music and dance	Juba
+African regligious music style, adapted for enslaved life	Negro Spirituals / Sorrow Songs
+Western-style compositions inspired by Black religious song	Concert Spiritual
+African musical event format, echoed throughout Black American music	Ring Shout
+Preference for music with diverse, unblended timbres	Heterogeneous Sound Ideal
+Public space in New Orleans where Black music was preserved	Congo Square
+Songs of enslaved Africans while they labored	Work Songs
+The blending of religions into mixed forms of practice	Syncretism
+Fundamental scale for much of African musical culture	Pentatonic Scale
+Ex-slave who compiled the first Black spirital hymnal	Richard Allen
+First Black branch of American Protestantism	African Methodist Episcopal Church
+Paper form of music with notation for melodies, not just lyrics	Sheet Music
+Famous band director from early 1900s	John Philip Sousa
+Diverse ensemble often mixing strings, winds, etc.	Symphony Orchestra
+3-part musical form: opening, contrast, return	ABA Form
+Collection of many formats for blues expression	Blues Form
+"Standard" format for blues expression	12 Bar Blues
+4-part musical form: opening, modification, contrast, return	AABA Form
+Spirituals-singing troupe from Fisk University	Fisk Jubilee Singers
+Piano articulated by detection of holes in a roll of music	Player Piano
+Musical storage medium used to control player pianos	Piano Rolls
+Opera-inspired "comic" genre without recitatives	Operetta
+Stage music/story genre from early 1900s	Musical Comedy
+Franciscan missionary who brought liturgical chant to California	Junipero Serra
+Mid-1800s black dancer and tambourine player	William Henry (Juba) Lane
+Large gathering where Revivalist music was shared	Camp Meeting
+Music meant to be match the composer's interpretations	Composer's Music
+Music leaving interpretational choices to performers	Performer's Music
+Belief that music can achieve permanent artistic stature	Transcendence
+First composer in the American music publication industry	Alexander Reinagle
+1800s percussive additions to the wind band	Janissary Instruments
+Creation of music in homes and small settings	Domestic music-making
+Religious music form stemming from opera	Oratorio
+Sourcing and printing music before distribution	Music Publishing
+Main decrepit minstrel character of TD Rice	Jim Crow
+First blackface minstrelsy character of TD Rice	Sambo
+Rich urban blackface minstrelsy stock character	Zip Coon
+Hypersexualized female blackface minstrelsy stock character	Lucy Long
+White-based stage attempted mimicry of black dance	Blackface minstrelsy
+White-based stage attempted mimicry of black music	Blacksound (Morrison)
+Exceptionally popular songwriter, mid-1800s	Stephen Foster
+Creator of blackface minstrelsy	TD Rice
+Popular blackface minstrelsy song written by Daniel Emmett	Old Dan Tucker
+Theatrical music heavily tied to plot	Book Musical
+Theatrical music without strong ties to plot	Revue
+The text of an opera	Libretto
+Records of Black performers made for a Black audience	Race Records
+Music genre stemming from secular Black practices in late 1800s	Blues
+Flattened diatonic notes, approximating a pentatonic scale	Blue Notes
+Improvization-heavy genre from New Orleans in early 1900s	Jazz
+Red-light district in New Orleans	Storyville
+Term for Afro-Carribbean rhythmic influence on jazz	Spanish Tinge
+`;
+		
+		var ops = DAT.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var as = [];
+		for(var i = 0; i < ops.length; i++)
+		{
+			qs.push(ops[i].split('\t')[0]);
+			as.push(ops[i].split('\t')[1]);
+		}
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var appealed = false;
+
+		$('#in').keypress(function(event)
+		{
+			if (event.keyCode == 13 || event.which == 13)
+			{
+				event.preventDefault();
+				if(!showing)
+				{
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerText.toLowerCase())
+					{
+						$('#resp')[0].innerText = "Correct! The answer is:";
+						qs.splice(idx, 1);
+						as.splice(idx, 1);
+						appealed = true;
+					}
+					else
+					{
+						$('#resp')[0].innerText = "Incorrect. The answer is:";
+						errs++;
+					}
+					$('#a')[0].style.display = "inline";
+					$('#nxt')[0].style.display = "block";
+					showing = true;
+					$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+				}
+				else
+				{
+					next();
+				}
+			}
+		});
+
+		function appeal()
+		{
+			if(!appealed)
+			{
+				$('#resp')[0].innerText = "(Appealed)";
+				qs.splice(idx, 1);
+				as.splice(idx, 1);
+				errs--;
+				appealed = true;
+			}
+		}
+
+		function next()
+		{
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			$('#q')[0].innerText = qs[idx];
+			$('#in')[0].value = '';
+			$('#resp')[0].innerText = '';
+			$('#a')[0].innerText = as[idx];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+			appealed = false;
+		}
+		</script>
+	</body>
+</html>

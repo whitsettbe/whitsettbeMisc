@@ -1,0 +1,156 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>MUSC264: Title > Type</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+	</head>
+	<body onload="next()">
+		<label>Progress: </label><p id="toStudy"></p>
+		<p id="q"></p>
+		<input type="text" id="in" autocomplete="off" style="width:80%"><br>
+		<div id="nxt">
+			<input type="button" value="Appeal" onclick="appeal()"><br>
+			<input type="button" value="Next" onclick="next()"><br>
+		</div>
+		<p id="resp"></p>
+		<div id="a" style="display:none"></div>
+		<footer style="position: fixed; left: 0; bottom: 0">
+			<a href="MUSC264.html">Back</a>
+		</footer>
+		<script>
+const DAT = `
+Chevy Chase (Anonymous)	English Ballad
+The Bay Book of Psalmes: Psalm 100 (Henry Ainsworth)	Psalm Setting
+O Que Suave!	Catholic Missionary Hymn
+The Beggar's Opera: What Shall I Do... (John Gay)	Ballad Opera
+Heart of Oak (William Boyce)	English Ballad
+Am I a Soldier of the Cross? (Isaac Watts / Thomas Arne)	Lined-Out Hymnody
+Liberty Song (John Dickenson / William Boyce)	Patriotic Song
+Come Shake Your Dull Noodles (Anonymous Boston)	Broadsheet Ballad
+Emanuel: The Psalm Singer's Amusement (William Billings)	Regular Singing
+Chester [Let tyrants shake their iron rod] (William Billings)	Revolutionary Anthem
+Amazing Grace (John Newton)	Lined-Out Hymnody
+Le nozze di Figaro Voi, che sapete che cosa amo (Wolfgang Amadeus Mozart)	Opera Aria
+Sonata No. 1 in D Major: I. Allegro con brio (Alexander Reinagle)	Piano Sonata
+America, Commerce, And Freedom (Alexander Reinagle)	Patriotic Song
+The President's March [Hail, Columbia] (Philip Phile)	March
+Roll Jordan Roll (Anonymous (After Isaac Watts))	Spiritual - The Fisk Jubilee Singers
+Wade in the Water (Anonymous)	Spiritual - The Fisk Jubilee Singers
+Sometimes I Feel Like a Motherless Child (Anonymous)	Concert Spiritual
+Jubilee (William H. Johnson)	Shout
+Jefferson and Liberty [The Gobby O] (Jefferson Campaign / Anon. Trad. Irish)	Irish Tune / Campaign Song
+Idumea (Ananias Davisson)	Sacred Harp Hymn
+The Barber of Seville: Largo al factotum (Gioachino Rossini)	Opera Aria
+Home Sweet Home (Henry Bishop)	Popular song
+Old Folks at Home [Swanee River] (Stephen Foster)	Minstrel / Parlor
+Camptown Races (Stephen Foster)	Minstrel / Parlor
+Dixie (Daniel Decatur Emmett)	Minstrel-Derived Anthem
+Gottschalk: Le Banjo Op. 15 (Louis Moreau Gottschalk)	Piano Sonata
+Battle Hymn of the Republic (Julia Ward Howe)	March
+The Battle Cry of Freedom (George F. Root)	March
+Union Dixie (Anonymous)	Parody Anthem
+Weeping, Sad and Lonely [When this Cruel War is Over] (Charles Sawyer / Henry Tucker)	Sentimental Song
+Shi Naasha' (Navajo - Unknown)	Navajo Song
+After the Ball (Charles Harris)	Tin Pan Alley Song
+Symphony No. 9 in E Minor, From the New World: II. Largo (Antonin Dvorak)	Symphony
+Romance for Violin and Piano, Op. 23 (Amy Beach)	Chamber Music
+Symphonic Sketches: I. Jubilee (George Whitefield Chadwick)	Symphonic Suite
+Maple Leaf Rag (Scott Joplin)	Ragtime Piano
+Helene Schottisch (Cora Fuller Straw)	Brass Band
+St. Louis Blues (W. C. Handy)	Blues
+St. Louis Blues (W. C. Handy / Bessie Smith)	Blues
+Ol' Man River [from Show Boat] (Jerome Kern, Oscar Hammerstein II)	Musical Theater
+Can't Help Lovin Dat Man of Mine [Show Boat] (Jerome Kern, Oscar Hammerstein II)	Musical Theater
+Make Believe [Show Boat] (Jerome Kern, Oscar Hammerstein II)	Musical Theater
+West End Blues (Louis Armstrong & His Hot Five)	New Orleans / Small Group Jazz
+Avalon Blues (Mississippi John Hurt)	Blues
+Anything Goes (Cole Porter)	Musical Theater
+Summertime (George Gershwin)	Stage Aria
+Sing, Sing, Sing (Benny Goodman)	Big Band
+Over The Rainbow (Harold Arlen)	Movie Musical
+Billy the Kid - Ballet Suite (Aaron Copland)	Ballet / Orchestral
+`;
+		
+		var ops = DAT.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var as = [];
+		for(var i = 0; i < ops.length; i++)
+		{
+			qs.push(ops[i].split('\t')[0]);
+			as.push(ops[i].split('\t')[1]);
+		}
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var appealed = false;
+
+		$('#in').keypress(function(event)
+		{
+			if (event.keyCode == 13 || event.which == 13)
+			{
+				event.preventDefault();
+				if(!showing)
+				{
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerText.toLowerCase())
+					{
+						$('#resp')[0].innerText = "Correct! The answer is:";
+						qs.splice(idx, 1);
+						as.splice(idx, 1);
+						appealed = true;
+					}
+					else
+					{
+						$('#resp')[0].innerText = "Incorrect. The answer is:";
+						errs++;
+					}
+					$('#a')[0].style.display = "inline";
+					$('#nxt')[0].style.display = "block";
+					showing = true;
+					$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+				}
+				else
+				{
+					next();
+				}
+			}
+		});
+
+		function appeal()
+		{
+			if(!appealed)
+			{
+				$('#resp')[0].innerText = "(Appealed)";
+				qs.splice(idx, 1);
+				as.splice(idx, 1);
+				errs--;
+				appealed = true;
+			}
+		}
+
+		function next()
+		{
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			$('#q')[0].innerText = qs[idx];
+			$('#in')[0].value = '';
+			$('#resp')[0].innerText = '';
+			$('#a')[0].innerText = as[idx];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+			appealed = false;
+		}
+		</script>
+	</body>
+</html>

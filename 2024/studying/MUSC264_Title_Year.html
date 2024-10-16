@@ -1,0 +1,156 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>MUSC264: Title > Year</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+	</head>
+	<body onload="next()">
+		<label>Progress: </label><p id="toStudy"></p>
+		<p id="q"></p>
+		<input type="text" id="in" autocomplete="off" style="width:80%"><br>
+		<div id="nxt">
+			<input type="button" value="Appeal" onclick="appeal()"><br>
+			<input type="button" value="Next" onclick="next()"><br>
+		</div>
+		<p id="resp"></p>
+		<div id="a" style="display:none"></div>
+		<footer style="position: fixed; left: 0; bottom: 0">
+			<a href="MUSC264.html">Back</a>
+		</footer>
+		<script>
+const DAT = `
+Chevy Chase (Anonymous)	1500
+The Bay Book of Psalmes: Psalm 100 (Henry Ainsworth)	1612
+O Que Suave!	1750
+The Beggar's Opera: What Shall I Do... (John Gay)	1728
+Heart of Oak (William Boyce)	1759
+Am I a Soldier of the Cross? (Isaac Watts / Thomas Arne)	1762
+Liberty Song (John Dickenson / William Boyce)	1768
+Come Shake Your Dull Noodles (Anonymous Boston)	1768
+Emanuel: The Psalm Singer's Amusement (William Billings)	1770
+Chester [Let tyrants shake their iron rod] (William Billings)	1778
+Amazing Grace (John Newton)	1779
+Le nozze di Figaro Voi, che sapete che cosa amo (Wolfgang Amadeus Mozart)	1786
+Sonata No. 1 in D Major: I. Allegro con brio (Alexander Reinagle)	1790
+America, Commerce, And Freedom (Alexander Reinagle)	1794
+The President's March [Hail, Columbia] (Philip Phile)	1798
+Roll Jordan Roll (Anonymous (After Isaac Watts))	1800
+Wade in the Water (Anonymous)	1800
+Sometimes I Feel Like a Motherless Child (Anonymous)	1800
+Jubilee (William H. Johnson)	1850
+Jefferson and Liberty [The Gobby O] (Jefferson Campaign / Anon. Trad. Irish)	1800
+Idumea (Ananias Davisson)	1816
+The Barber of Seville: Largo al factotum (Gioachino Rossini)	1816
+Home Sweet Home (Henry Bishop)	1823
+Old Folks at Home [Swanee River] (Stephen Foster)	1850
+Camptown Races (Stephen Foster)	1850
+Dixie (Daniel Decatur Emmett)	1850
+Gottschalk: Le Banjo Op. 15 (Louis Moreau Gottschalk)	1855
+Battle Hymn of the Republic (Julia Ward Howe)	1861
+The Battle Cry of Freedom (George F. Root)	1862
+Union Dixie (Anonymous)	1863
+Weeping, Sad and Lonely [When this Cruel War is Over] (Charles Sawyer / Henry Tucker)	1863
+Shi Naasha' (Navajo - Unknown)	1868
+After the Ball (Charles Harris)	1891
+Symphony No. 9 in E Minor, From the New World: II. Largo (Antonin Dvorak)	1893
+Romance for Violin and Piano, Op. 23 (Amy Beach)	1893
+Symphonic Sketches: I. Jubilee (George Whitefield Chadwick)	1895
+Maple Leaf Rag (Scott Joplin)	1900
+Helene Schottisch (Cora Fuller Straw)	1904
+St. Louis Blues (W. C. Handy)	1912
+St. Louis Blues (W. C. Handy / Bessie Smith)	1912
+Ol' Man River [from Show Boat] (Jerome Kern, Oscar Hammerstein II)	1927
+Can't Help Lovin Dat Man of Mine [Show Boat] (Jerome Kern, Oscar Hammerstein II)	1927
+Make Believe [Show Boat] (Jerome Kern, Oscar Hammerstein II)	1927
+West End Blues (Louis Armstrong & His Hot Five)	1928
+Avalon Blues (Mississippi John Hurt)	1928
+Anything Goes (Cole Porter)	1934
+Summertime (George Gershwin)	1934
+Sing, Sing, Sing (Benny Goodman)	1936
+Over The Rainbow (Harold Arlen)	1938
+Billy the Kid - Ballet Suite (Aaron Copland)	1938
+`;
+		
+		var ops = DAT.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var as = [];
+		for(var i = 0; i < ops.length; i++)
+		{
+			qs.push(ops[i].split('\t')[0]);
+			as.push(ops[i].split('\t')[1]);
+		}
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var appealed = false;
+
+		$('#in').keypress(function(event)
+		{
+			if (event.keyCode == 13 || event.which == 13)
+			{
+				event.preventDefault();
+				if(!showing)
+				{
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerText.toLowerCase())
+					{
+						$('#resp')[0].innerText = "Correct! The answer is:";
+						qs.splice(idx, 1);
+						as.splice(idx, 1);
+						appealed = true;
+					}
+					else
+					{
+						$('#resp')[0].innerText = "Incorrect. The answer is:";
+						errs++;
+					}
+					$('#a')[0].style.display = "inline";
+					$('#nxt')[0].style.display = "block";
+					showing = true;
+					$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+				}
+				else
+				{
+					next();
+				}
+			}
+		});
+
+		function appeal()
+		{
+			if(!appealed)
+			{
+				$('#resp')[0].innerText = "(Appealed)";
+				qs.splice(idx, 1);
+				as.splice(idx, 1);
+				errs--;
+				appealed = true;
+			}
+		}
+
+		function next()
+		{
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			$('#q')[0].innerText = qs[idx];
+			$('#in')[0].value = '';
+			$('#resp')[0].innerText = '';
+			$('#a')[0].innerText = as[idx];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+			appealed = false;
+		}
+		</script>
+	</body>
+</html>
