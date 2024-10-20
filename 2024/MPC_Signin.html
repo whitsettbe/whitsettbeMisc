@@ -111,6 +111,13 @@
 				alert('ERROR!\n\nPlease enter your email AND courses.');
 				return;
 			}
+			if(!override && !email.match(RegExp('\\w+\\.\\w+\\d+@kzoo\\.edu'))
+			{
+				alert('WARNING:\n\nPlease enter your email as first.last##@kzoo.edu.');
+				override = true;
+				setTimeout(function(){override=false;}, OVERRIDE_TIMEOUT_SECS_S*1000);
+				return;
+			}
 			else if(!override && (getCookie('time') != '' && (new Date(time) - new Date(getCookie('time'))) / 1000 / 60 / 60 / 24 > TERM_GAP_DAYS))
 			{
 				alert('WARNING:\n\nHmm, it looks like you haven\'t been to the MPC in a while. Make sure you\'re still enrolled in the courses you selected, then try again.');
