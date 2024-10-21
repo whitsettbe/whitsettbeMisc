@@ -111,7 +111,7 @@
 				alert('ERROR!\n\nPlease enter your email AND courses.');
 				return;
 			}
-			/*if(!override && !email.match(RegExp('\\w+\\.\\w+\\d+@kzoo\\.edu'))
+			/*else if(!override && !email.match(/^\w+\.\w+\d+@kzoo\.edu$/))
 			{
 				alert('WARNING:\n\nPlease enter your email as first.last##@kzoo.edu.');
 				override = true;
