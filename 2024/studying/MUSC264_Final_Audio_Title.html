@@ -1,0 +1,227 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>MUSC264: Audio > Title</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"
+			integrity="sha512-xi/RZRIF/S0hJ+yJJYuZ5yk6/8pCiRlEXZzoguSMl+vk2i3m6UjUO/WcZ11blRL/O+rnj94JRGwt/CHbc9+6EA=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"></script>
+	</head>
+	<body>
+		<input type="button" id="starter" style="display: inline" onclick="setup()" value="Start">
+		<div id="main" style="display:none">
+			<label>Progress: </label><p id="toStudy"></p>
+			<table>
+				<tr>
+					<td style="vertical-align:top"><form id="form"></form></td>
+					<td style="width: 50px"></td>
+					<td style="vertical-align:top">
+						<div id="player" style="overflow: hidden; position: relative; width:33px; height:33px; background-color: #888" onmousedown="reloadAudio()">
+							<iframe style="position: absolute; left: -259px; top: -40px;" src="https://open.spotify.com/embed/track/7prL6X0XOYZuXH3fyGNZHY"
+									width="300px" height="100px" frameBorder="0" allow="encrypted-media" loading="lazy"
+									onmouseenter="startTimer()"></iframe>
+						</div>
+						<br>
+						<input type="button" onclick="guess()" value="Submit"><br><br>
+						<div id="nxt">
+							<input type="button" value="Next" onclick="next()">
+						</div>
+						<p id="resp"></p>
+						<div id="a" style="display:none"></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<footer style="position: fixed; left: 0; bottom: 0; height:150px">
+			<a href="MUSC264.html" style="position:absolute; bottom:0">Back</a>
+		</footer>
+		<script>
+const PLAY_DUR = 20;
+const START_DUR = 2;
+
+const DAT = `
+Rhapsody in Blue (George Gershwin)	7oB0QBEnGRIJjvlDc8YnM6
+The Banshee (Henry Cowell)	630Pgqs1kJM6OueaWFRe5z
+Wildwood Flower (The Carter Family)	6LXh42hEpcVLKtUgVkiKZi
+Keep On the Sunny Side (The Carter Family)	7ibI58MUAAiaqYkVDV6fef
+Pinetop's Boogie Woogie (Pinetop Smith)	00GabLiHIrUjDR9tWcGURL
+Blue Yodel No. 9 (Standin' on the Corner) (Jimmie Rodgers)	1bLzYrWnIExOv4DQdohxm6
+Afro-American Symphony: I. Moderato assai (William Grant Still)	1fwrnEWqRcN5o7NqfrGV8X
+I Ain't Got No Home In This World Anymore (Woody Guthrie)	692fNTjelmyqyES5vQCmDQ
+Hobo's Lullaby (Woody Guthrie)	66m0kQWmVd0XBBymWOlyDm
+Blue Moon Of Kentucky (Bill Monroe)	6XHbYnwTB7YoSV4TLeycuB
+Choo Choo Ch'Boogie (Louis Jordan)	0F18rDmCyWFBuwbbHxQdZs
+Move It On Over (Hank Williams)	4WThTuQ9hOeJWolUtHwkQy
+Didn't It Rain (Sister Rosetta Tharpe)	6AVz6mVR10yvYuKRlYX8cV
+I Can't Be Satisfied (Muddy Waters)	0Q4qVBG7jAF3Ar4sheUidp
+Oh, My Lord (Mahalia Jackson)	1g0Egv9H4i5wETNJQlbfkT
+Bo Diddley (Bo Diddley)	2R7uUQ0Dehu80gsOcydQC9
+Tutti Frutti (Little Richard)	2iXcvnD3d1gfLBum0cE5Eg
+How Can I Keep from Singing (Pete Seeger)	5pbBM5UmW2d01Ya2pqoxBR
+In The Still of the Night (The Five Satins)	0GVvRmCoiLkhxJvlZy9bLk
+Roll Over Beethoven (Chuck Berry)	6C7aTTCUWRK7dD379yUT3W
+Boys (The Shirelles)	433tmwMXnqvqAhe4euAXMc
+Crazy (Patsy Cline)	3zpj9dvJABiyMrmLCPw6i8
+Blue Moon (The Marcels)	75ewj77lCHHLKOlyx5KvGw
+I Want To Hold Your Hand (The Beatles)	4pbG9SUmWIvsROVLF0zF9s
+Blowin' in the Wind (Bob Dylan)	18GiV1BaXzPVYpp9rmOg0E
+Needle In A Haystack (The Velvelettes)	26fSgIa539TCK3KV76chHU
+You Really Got Me (The Kinks)	6tZdL3Zp8JgrfDbsSeSV1S
+House Of The Rising Sun (The Animals)	7BY005dacJkbO6EPiOh2wb
+A Change Is Gonna Come (Sam Cooke)	0YfOnJWqmAKaUvEL1QcNop
+(I Can't Get No) Satisfaction (The Rolling Stones)	2PzU4IB8Dr6mxV3lHuaG34
+My Generation (The Who)	2EMmHEhCZSMMEM85HTFJvj
+Yesterday (The Beatles)	4E5rL7YL0hVUPqeMSpjEF2
+We Can Work It Out (The Beatles)	1hTUFqJuQAMjXVGwUPWDqi
+You Can't Hurry Love (The Supremes)	2mTjtdoxpffwa5rXVyZZaS
+White Rabbit (Jefferson Airplane)	4vpeKl0vMGdAXpZiQB2Dtd
+Sgt. Pepper's Lonely Hearts Club Band (The Beatles)	4fUKE8EULjQdHF4zb0M8FO
+Respect (Aretha Franklin)	7s25THrKz86DM225dOYwnr
+Ain't No Mountain High Enough (Marvin Gaye, Tammi Terrell)	4fZJG8y70r2hyw3Kb4sU4N
+All Along the Watchtower (Jimi Hendrix)	2aoo2jlRnM3A0NyLQqMN2f
+Dark Star - Live at the Fillmore West San Francisco (Grateful Dead)	07CwWCJetytT1cSnQOgRMU
+Fortunate Son (Creedence Clearwater Revival)	4BP3uh0hFLFRb5cjsgLqDh
+Give It Up Or Turnit A Loose (James Brown)	2XgOrUSylCh7Pk2Wc04QQK
+Coal Miner's Daughter (Loretta Lynn)	30m1G9YyiwQzFG7QvAZzHE
+Ohio (Neil Young)	1Zr1MGqG4zvoEGsrfsMpaJ
+Superstar (Andrew Lloyd Webber)	1D1p0w1Hcpjoi8rf75tnpe
+Respect Yourself (The Staple Singers)	5DExjY9AqfznGsZ90kT2Ja
+A Case of You (Joni Mitchell)	7shVwhUdVbHpykOfbzvDc1
+Superstition (Stevie Wonder)	4dwrL3Z5U2RZ6MZiKE2PgL
+Small Axe (The Wailers)	1WdjhpptMbaldV9A18LGz7
+Apache (Incredible Bongo Band)	51ml2bJs9zDLv1PbzNQzPP
+Sweet Home Alabama (Lynyrd Skynyrd)	7e89621JPkKaeDSTQ3avtg
+Born to Run (Bruce Springsteen)	6hTcuIQa0sxrrByu9wTD7s
+Police & Thieves (Junior Murvin)	2XsW8N3mMRD5blv4KGNHq6
+Blitzkrieg Bop (Ramones)	22ea9e9wspXjaR7qfqfsdS
+Hotel California (The Eagles)	40riOy7x9W7GXjyGp4pjAv
+Y.M.C.A. (Village People)	4YOJFyjqh8eAcbKFfv88mV
+Rapper's Delight (The Sugarhill Gang)	7sZDbHZiuHEzS00vzCuhqS
+Good Times (CHIC)	0PQFPcSK1gnBGlbV4CZCG0
+The Message (Grandmaster Flash, The Furious Five)	32X0tTPXoWYNld9y1RRbFI
+Billie Jean (Michael Jackson)	7J1uxwnxfQLu4APicE5Rnj
+Highwayman (Willie Nelson, Johnny Cash, Waylon Jennings, Kris Kristofferson)	7jWbXvrgdbkajU8L28ahn5
+Take on Me (a-ha)	2WfaOiMkCvy7F5fcp2zZ8L
+Master of Puppets (Metallica)	54bm2e3tk8cliUz3VSdCPZ
+Bring The Noise (Public Enemy)	1i3xxWMwdPKDqrTEA9VgRc
+Your Love (Frankie Knuckles)	0vryyKyxCFXT0gg670yNEw
+Strings of Life (Derrick May)	7N3FfUFMud1rjI6Vgw71mm
+Fuck Tha Police (N.W.A.)	5n8Aro6j1bEGIy7Tpo7FV7
+Friends In Low Places (Garth Brooks)	2rWyz3Zav1m26q2WgXbAQt
+Alma Enamorada (Chalino Sanchez)	1YsTvffZ63Yo1eHkajbeQF
+Smells Like Teen Spirit (Nirvana)	5ghIJDpPoe3CfHMGu71E6T
+Si Una Vez (Selena)	4oM7ClXSB9DNmq83thDmXj
+We Found Love (Rihanna, Calvin Harris)	6qn9YLKt13AGvpq9jfO8py
+`;
+		
+		var ops = DAT.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var durs = [];
+		var as = [];
+		var aIdx = [];
+		for(var i = 0; i < ops.length; i++)
+		{
+			qs.push("https://open.spotify.com/embed/track/" + ops[i].split('\t')[0] + "?theme=0");
+			durs.push(117);// length of shortest song   //parseFloat(ops[i].split('\t')[1]));
+			as.push(ops[i].split('\t')[1]);// [2]
+			aIdx.push(qs.length - 1);
+		}
+
+		var aOrder = [];
+		for(var i = 0; i < as.length; i++) aOrder.push(i);
+		//aOrder = aOrder.map(value => ({ value, sort: Math.random() }))
+		//				.sort((a, b) => a.sort - b.sort)
+		//				.map(({ value }) => value)
+
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var theSounder = document.querySelector('iframe');
+		var playStart = 0;
+		var cancelEvent = -1;
+		var hideEvent = -1;
+
+		function guess()
+		{
+			if(document.querySelector('input[name="options"]:checked') == null)
+				return;
+			if(showing)
+				return;
+			guessVal = document.querySelector('input[name="options"]:checked').value;
+
+			if(guessVal === $('#a')[0].innerText)
+			{
+				$('#resp')[0].innerText = "Correct! The answer is:";
+				qs.splice(idx, 1);
+				aIdx.splice(idx, 1);
+			}
+			else
+			{
+				$('#resp')[0].innerText = "Incorrect. The answer is:";
+				errs++;
+			}
+			$('#a')[0].style.display = "inline";
+			$('#nxt')[0].style.display = "block";
+			showing = true;
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+		};
+
+		function reloadAudio(url='')
+		{
+			if(url == '')
+				theSounder.src += "";
+			else
+				theSounder.src = url;
+			theSounder.width='300px';
+		}
+
+		function startTimer()
+		{
+			clearTimeout(cancelEvent);
+			clearTimeout(hideEvent);
+			cancelEvent = setTimeout(reloadAudio, 1000*PLAY_DUR);
+			hideEvent = setTimeout(()=>{theSounder.width='0px'}, 1000*START_DUR);
+		}
+
+		function next()
+		{
+			//rebuild answers (opportunity to reorder)
+			$('#form')[0].innerHTML = "";
+			for(var i = 0; i < aOrder.length; i++)
+			{
+				$('#form')[0].innerHTML += `<input type="radio" id="${i}" name="options" value="${as[aOrder[i]]}"><label for="${i}">${as[aOrder[i]]}</label><br>`
+			}
+
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			playStart = Math.random() * (durs[idx] - PLAY_DUR);
+			playStart = playStart < 0 ? 0 : playStart;
+			reloadAudio(qs[idx] + "&t=" + playStart);
+			$('#resp')[0].innerText = '';
+			$('#a')[0].innerText = as[aIdx[idx]];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+		}
+
+		function setup()
+		{
+			$('#starter')[0].style.display = "none";
+			$('#main')[0].style.display = "inline";
+			next();
+		}
+		</script>
+	</body>
+</html>

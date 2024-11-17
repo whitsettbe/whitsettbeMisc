@@ -1,0 +1,183 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>MUSC264: Final Title > Type</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+	</head>
+	<body onload="next()">
+		<label>Progress: </label><p id="toStudy"></p>
+		<p id="q"></p>
+		<input type="text" id="in" autocomplete="off" style="width:80%"><br>
+		<div id="nxt">
+			<input type="button" value="Appeal" onclick="appeal()"><br>
+			<input type="button" value="Next" onclick="next()"><br>
+		</div>
+		<p id="resp"></p>
+		<div id="a" style="display:none"></div>
+		<footer style="position: fixed; left: 0; bottom: 0">
+			<a href="MUSC264.html">Back</a>
+		</footer>
+		<script>
+const DAT = `
+Rhapsody in Blue (George Gershwin)	American Concerto
+The Banshee (Henry Cowell)	Modernism
+Wildwood Flower (The Carter Family)	Old time Music
+Keep On the Sunny Side (The Carter Family)	Old time Music
+Pinetop's Boogie Woogie (Pinetop Smith)	Boogie Woogie
+Blue Yodel No. 9 (Standin' on the Corner) (Jimmie Rodgers)	Country
+Afro-American Symphony: I. Moderato assai (William Grant Still)	Symphony
+I Ain't Got No Home In This World Anymore (Woody Guthrie)	Folk
+Hobo's Lullaby (Woody Guthrie)	Folk
+Blue Moon Of Kentucky (Bill Monroe)	Bluegrass
+Choo Choo Ch'Boogie (Louis Jordan)	Jump Blues
+Move It On Over (Hank Williams)	Country
+Didn't It Rain (Sister Rosetta Tharpe)	Early Rock
+I Can't Be Satisfied (Muddy Waters)	Electric Blues
+Oh, My Lord (Mahalia Jackson)	Gospel
+Bo Diddley (Bo Diddley)	Rock n' Roll/R&B
+Tutti Frutti (Little Richard)	Rock n' Roll
+How Can I Keep from Singing (Pete Seeger)	Folk
+In The Still of the Night (The Five Satins)	Doo wop
+Roll Over Beethoven (Chuck Berry)	Rock n' Roll
+Boys (The Shirelles)	Girl Group
+Crazy (Patsy Cline)	Country
+Blue Moon (The Marcels)	Doo wop
+I Want To Hold Your Hand (The Beatles)	British Invasion
+Blowin' in the Wind (Bob Dylan)	Folk
+Needle In A Haystack (The Velvelettes)	Motown
+You Really Got Me (The Kinks)	British Invasion
+House Of The Rising Sun (The Animals)	British Invasion
+A Change Is Gonna Come (Sam Cooke)	Soul
+(I Can't Get No) Satisfaction (The Rolling Stones)	British Invasion
+My Generation (The Who)	British Invasion
+Yesterday (The Beatles)	British Invasion
+We Can Work It Out (The Beatles)	British Invasion
+You Can't Hurry Love (The Supremes)	Motown
+White Rabbit (Jefferson Airplane)	Psychedelic Rock
+Sgt. Pepper's Lonely Hearts Club Band (The Beatles)	Rock (Concept Album)
+Respect (Aretha Franklin)	Soul
+Ain't No Mountain High Enough (Marvin Gaye, Tammi Terrell)	Motown
+All Along the Watchtower (Jimi Hendrix)	Rock
+Dark Star - Live at the Fillmore West San Francisco (Grateful Dead)	Psychedelic/Jam
+Fortunate Son (Creedence Clearwater Revival)	Rock
+Give It Up Or Turnit A Loose (James Brown)	Funk
+Coal Miner's Daughter (Loretta Lynn)	Country
+Ohio (Neil Young)	Singer-Songwriter
+Superstar (Andrew Lloyd Webber)	Rock Opera
+Respect Yourself (The Staple Singers)	Soul
+A Case of You (Joni Mitchell)	Singer-Songwriter
+Superstition (Stevie Wonder)	Motown
+Small Axe (The Wailers)	Reggae
+Apache (Incredible Bongo Band)	Funk
+Sweet Home Alabama (Lynyrd Skynyrd)	Southern Rock
+Born to Run (Bruce Springsteen)	Rock
+Police & Thieves (Junior Murvin)	Reggae
+Blitzkrieg Bop (Ramones)	Punk
+Hotel California (The Eagles)	Rock
+Y.M.C.A. (Village People)	Disco
+Rapper's Delight (The Sugarhill Gang)	Hip Hop
+Good Times (CHIC)	Disco
+The Message (Grandmaster Flash, The Furious Five)	Hip Hop
+Billie Jean (Michael Jackson)	"Pop"
+Highwayman (Willie Nelson, Johnny Cash, Waylon Jennings, Kris Kristofferson)	Country
+Take on Me (a-ha)	synth pop/new wave
+Master of Puppets (Metallica)	Metal
+Bring The Noise (Public Enemy)	Hip Hop
+Your Love (Frankie Knuckles)	Chicago house
+Strings of Life (Derrick May)	Detroit Techno
+Fuck Tha Police (N.W.A.)	Hip Hop/gangsta rap
+Friends In Low Places (Garth Brooks)	Pop Country
+Alma Enamorada (Chalino Sanchez)	norten\u0303o
+Smells Like Teen Spirit (Nirvana)	Grunge
+Si Una Vez (Selena)	cumbia pop
+We Found Love (Rihanna, Calvin Harris)	EDM
+`;
+		
+		var ops = DAT.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var as = [];
+		for(var i = 0; i < ops.length; i++)
+		{
+			qs.push(ops[i].split('\t')[0]);
+			as.push(ops[i].split('\t')[1]);
+		}
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var appealed = false;
+
+		$('#in').keypress(function(event)
+		{
+			if (event.keyCode == 13 || event.which == 13)
+			{
+				event.preventDefault();
+				if(!showing)
+				{
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerText.toLowerCase())
+					{
+						$('#resp')[0].innerText = "Correct! The answer is:";
+						qs.splice(idx, 1);
+						as.splice(idx, 1);
+						appealed = true;
+					}
+					else
+					{
+						$('#resp')[0].innerText = "Incorrect. The answer is:";
+						errs++;
+					}
+					$('#a')[0].style.display = "inline";
+					$('#nxt')[0].style.display = "block";
+					showing = true;
+					$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+				}
+				else
+				{
+					next();
+				}
+			}
+			else if (event.key == "\\")
+			{
+				event.preventDefault();
+				$('#in')[0].value += "\u0303";
+			}
+		});
+
+		function appeal()
+		{
+			if(!appealed)
+			{
+				$('#resp')[0].innerText = "(Appealed)";
+				qs.splice(idx, 1);
+				as.splice(idx, 1);
+				errs--;
+				appealed = true;
+			}
+		}
+
+		function next()
+		{
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			$('#q')[0].innerText = qs[idx];
+			$('#in')[0].value = '';
+			$('#resp')[0].innerText = '';
+			$('#a')[0].innerText = as[idx];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+			appealed = false;
+		}
+		</script>
+	</body>
+</html>
