@@ -1,0 +1,205 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>MUSC264: Final Vocab</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+	</head>
+	<body onload="next()">
+		<label>Progress: </label><p id="toStudy"></p>
+		<p id="q"></p>
+		<input type="text" id="in" autocomplete="off" style="width:80%"><br>
+		<div id="nxt">
+			<input type="button" value="Appeal" onclick="appeal()"><br>
+			<input type="button" value="Next" onclick="next()"><br>
+		</div>
+		<p id="resp"></p>
+		<div id="a" style="display:none"></div>
+		<footer style="position: fixed; left: 0; bottom: 0">
+			<a href="MUSC264.html">Back</a>
+		</footer>
+		<script>
+const DAT = `
+Country Music	American folk-influenced genre blending ballads and blues
+Hillbilly Records	Early country music marketed to rural white audiences in the 1920s-30s
+Carter Family	Pioneering country group, known for folk and gospel influences
+Jimmie Rodgers	Early country star combining blues and yodeling
+Steel Guitar	Unfretted guitar type controlled by sliding a tonebar over the strings
+Chromaticism	Use of notes outside a key for tension or color
+Modernism	Early 1900s focus on experimentation and subjective experience
+Atonality	Musical style treating all diatonic notes equally, with no tonal center
+Collective Improvisation	Jazz technique where multiple musicians improvise at once, creating complex interplay
+Walking Bass	A steady rhythmic/melodic bassline key to jazz and blues
+Theme and Variations	Musical structure presenting a theme, followed by changes
+Harlem Renaissance	1920s-30s cultural explosion of black art, music, and literature
+Serialism	Compositional technique using ordered permutations of pitches
+Boogie Woogie	Piano blues with repetitive bass patterns and energetic rhythms
+Thomas A. Dorsey	“Father of Gospel Music,” blending blues with sacred songs
+Gospel Music	Christian vocal genre pulling from blues, spirituals, and Pentecostalism
+Barbershop	A cappella harmony style with homophonic texture and close vocal arrangements
+Border Blasters	High-power radio stations on U.S.-Mexico border broadcasting widely
+John and Alan Lomax	Musicologists instrumental in recording folk music
+Radio	Broadcast medium transforming music dissemination in the 20th century
+Cue Sheets	List of utilized musical pieces, used by performing rights organizations like ASCAP
+Swing	1920s-30s big band jazz with smooth swung rhythms and occasional syncopation
+Bebop	1940s high-tempo jazz style with complex chord progressions
+45-rpm Single	Smaller vinyl format for individual songs, dominated record industry into 1960s
+33.3-rpm LP	Long-playing vinyl format for albums
+Magnetic Tape	Early digital audio storage medium enabling multitrack recordings
+Overdubbing	Layering multiple tracks to enhance recorded sound
+Jukebox	Coin-operated machine playing selected recorded music
+R&B	Catch-all term for popular black music including jazz and blues
+Alan Freed	DJ credited with popularizing the term "rock and roll"
+Rockabilly	Early rock-and-roll blending country twang and R&B rhythms
+Electric Blues	Amplified blues style featuring electric guitars
+Chicago Blues	Urban blues style with electric instruments, growing out of delta blues
+Western Swing	Dance music bringing swung big-band jazz to a country setting
+Jump Blues	Swing-influenced blues with upbeat rhythms and saxophone solos
+Grand Ole Opry	Long-running country music show from Nashville
+Soul Music	Black genre growing out of gospel and R&B, spread by Motown and Stax
+Motown	Detroit label characterized by polished production (Funk Brothers) and cross-race appeal
+Stax Records	Memphis label tied to the chitlin circuit, white-owned but leaned towards black music
+Psychedelic Rock	Experimental rock emphasizing surreal lyrics and sound effects
+Counterculture	Movements rejecting societal norms, influencing music and art
+Funk	Genre pulling from big-band jazz, R&B, and the American Songbook, exemplified by James Brown
+(Jazz-Rock) Fusion	Genre combining jazz improvisation with rock energy and instrumentation
+Rock Opera	Thematic album or performance combining rock music and storytelling
+Disco	1970s dance-oriented genre with strings over a steady beat
+Punk Rock	1970s genre arising from rock but rejecting cultural and musical establishment
+Postmodernism	Ironic self-referential eclectic artistic approach arising in 1950s-60s
+Performance Art	Multidisciplinary live art combining music, visuals, and theater
+MTV	Channel revolutionizing music video culture in the 1980s
+Compact Disc (CD)	Digital audio format providing durable, high-quality playback
+College Rock/Indie Rock	Alternative music popularized by college radio, focusing on DIY ethos
+Heavy Metal	Loud, aggressive rock emphasizing distorted guitars and powerful vocals
+Roots Music	Broad category encompassing traditional American folk, blues, and country influences
+Pantribalism	Unity across tribes, influencing Native American music
+Powwow	Native American social gatherings with music, dance, and cultural celebration
+Norteño	Mexican folk genre featuring the accordion and bajo sexto
+Conjunto Norteño	Mexican small folk ensemble featuring the accordion and bajo sexto
+Narcocorrido	Mexican ballads depicting drug cartel life
+Slack Key Guitar	Hawaiian alternative guitar tuning method focused on open chords
+Roland 808	Iconic drum machine shaping hip-hop and electronic music
+Sampling	Reusing portions of existing recordings in new compositions
+Remix	Reworked version of a song with altered instrumentation or structure
+Mash-up	Combines elements from multiple songs into one
+Digital Millennium Copyright Act (DMCA)	Law addressing copyright in digital environments
+Peer-to-Peer (P2P) Networks	Systems for sharing files directly between users without central servers
+Public Domain	Works free from copyright, available for public use
+Copyright Infringement	Unauthorized use of copyrighted material
+Sony Bono Act	Law extending the duration of copyright to death+50yrs for many works
+Steve Reich	Minimalist composer using repetitive structures and phasing
+Mix Tape	Personalized compilations of favorite songs, including by artists avoiding licensing fees
+Disco Demolition Night	1979 anti-disco protest leading to chaos at a baseball game
+Steve Dahl	Radio personality behind Disco Demolition Night
+Discophobia	Backlash against disco, associated with rock fans and '70s sociocultural resistance
+Studio 54	Iconic disco club symbolizing 1970s Manhattan nightlife
+Hip Hop	Black cultural movement growing out of Jamaican reggae styles
+The 4 (5) Elements	DJing, MCing, Graffiti, B-boying/B-girling, (+ Knowledge)
+DJ Kool Herc	Hip-hop pioneer, creating the merry-go-round system for breaks
+The Bronx	"Blighted" birthplace of hip-hop in 1970s New York
+Robert Moses	Urban planner who carved the Cross-Bronx Expressway
+Breakbeat	Isolated drum sections looped for dance tracks
+Graffiti	Identity-oriented political visual art form
+DJing	Art of playing and manipulating music using turntables and mixers
+Turntablism	Art of manipulating turntables for creative sound
+B-boys/B-girls	Breakdancers embodying hip-hop culture
+MCing/Rapping	Vocal delivery of rhymes over beats, central to hip-hop
+Block Parties	Community events central to early hip-hop culture
+Chicago House	Early electronic dance music from Chicago’s post-disco club scene
+Detroit Techno	1980s-90s futuristic electronic music rooted in Detroit’s industrial soundscape
+Rockism	Valuing traditional rock ideals, often dismissing pop or modern trends
+Poptimisim	Embracing popular music as intrinsically significant and artistically valid
+Concept Album	Album designed to present a theme, narrative, or conceptual idea
+Grunge	Blend of punk and heavy metal arising in the mid-1980s
+Indie	Music focused on creative freedom over record-label commercialism
+Alternative	Genres blending diverse influences, rejecting mainstream trends
+EDM	Electronic music emphasizing rhythm and synthesizers
+Neo-Soul	1980s-90s R&B revival with soul, hip-hop, and jazz influences
+Woodstock	1969 festival symbolizing 1960s counterculture and music
+Autotune	Technology for pitch correction or vocal effects
+DAW	Software for composing, recording, and editing music
+`;
+		
+		var ops = DAT.split('\n');
+		for(var i = 0; i < ops.length; i++)
+		{
+			if(!ops[i].includes('\t') || ops[i].indexOf('\t')==0)
+			{
+				ops.splice(i, 1);
+				i--;
+			}
+		}
+		var qs = [];
+		var as = [];
+		for(var i = 0; i < ops.length; i++)
+		{
+			qs.push(ops[i].split('\t')[1]);
+			as.push(ops[i].split('\t')[0]);
+		}
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var appealed = false;
+
+		$('#in').keypress(function(event)
+		{
+			if (event.keyCode == 13 || event.which == 13)
+			{
+				event.preventDefault();
+				if(!showing)
+				{
+					if($('#in')[0].value.toLowerCase() === $('#a')[0].innerText.toLowerCase())
+					{
+						$('#resp')[0].innerText = "Correct! The answer is:";
+						qs.splice(idx, 1);
+						as.splice(idx, 1);
+						appealed = true;
+					}
+					else
+					{
+						$('#resp')[0].innerText = "Incorrect. The answer is:";
+						errs++;
+					}
+					$('#a')[0].style.display = "inline";
+					$('#nxt')[0].style.display = "block";
+					showing = true;
+					$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+				}
+				else
+				{
+					next();
+				}
+			}
+		});
+
+		function appeal()
+		{
+			if(!appealed)
+			{
+				$('#resp')[0].innerText = "(Appealed)";
+				qs.splice(idx, 1);
+				as.splice(idx, 1);
+				errs--;
+				appealed = true;
+			}
+		}
+
+		function next()
+		{
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			$('#q')[0].innerText = qs[idx];
+			$('#in')[0].value = '';
+			$('#resp')[0].innerText = '';
+			$('#a')[0].innerText = as[idx];
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+			appealed = false;
+		}
+		</script>
+	</body>
+</html>
