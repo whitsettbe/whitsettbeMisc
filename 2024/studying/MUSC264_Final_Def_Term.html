@@ -37,11 +37,11 @@ Serialism	Compositional technique using ordered permutations of pitches
 Boogie Woogie	Piano blues with repetitive bass patterns and energetic rhythms
 Thomas A. Dorsey	“Father of Gospel Music,” blending blues with sacred songs
 Gospel Music	Christian vocal genre pulling from blues, spirituals, and Pentecostalism
-Barbershop	A cappella harmony style with homophonic texture and close vocal arrangements
+Barbershop	A cappella harmony style with homophonic texture and ~4 close vocals
 Border Blasters	High-power radio stations on U.S.-Mexico border broadcasting widely
 John and Alan Lomax	Musicologists instrumental in recording folk music
 Radio	Broadcast medium transforming music dissemination in the 20th century
-Cue Sheets	List of utilized musical pieces, used by performing rights organizations like ASCAP
+Cue Sheets	Lists of utilized musical pieces, used by performing rights organizations like ASCAP
 Swing	1920s-30s big band jazz with smooth swung rhythms and occasional syncopation
 Bebop	1940s high-tempo jazz style with complex chord progressions
 45-rpm Single	Smaller vinyl format for individual songs, dominated record industry into 1960s
@@ -70,14 +70,14 @@ Punk Rock	1970s genre arising from rock but rejecting cultural and musical estab
 Postmodernism	Ironic self-referential eclectic artistic approach arising in 1950s-60s
 Performance Art	Multidisciplinary live art combining music, visuals, and theater
 MTV	Channel revolutionizing music video culture in the 1980s
-Compact Disc (CD)	Digital audio format providing durable, high-quality playback
+Compact Disc (CD)	Digital audio device providing durable, high-quality playback
 College Rock/Indie Rock	Alternative music popularized by college radio, focusing on DIY ethos
 Heavy Metal	Loud, aggressive rock emphasizing distorted guitars and powerful vocals
 Roots Music	Broad category encompassing traditional American folk, blues, and country influences
 Pantribalism	Unity across tribes, influencing Native American music
-Powwow	Native American social gatherings with music, dance, and cultural celebration
-Norteño	Mexican folk genre featuring the accordion and bajo sexto
-Conjunto Norteño	Mexican small folk ensemble featuring the accordion and bajo sexto
+Powwow	Native American social gathering with music, dance, and cultural celebration
+Norten\u0303o	Mexican folk genre featuring the accordion and bajo sexto
+Conjunto Norten\u0303o	Mexican small folk ensemble featuring the accordion and bajo sexto
 Narcocorrido	Mexican ballads depicting drug cartel life
 Slack Key Guitar	Hawaiian alternative guitar tuning method focused on open chords
 Roland 808	Iconic drum machine shaping hip-hop and electronic music
@@ -90,7 +90,7 @@ Public Domain	Works free from copyright, available for public use
 Copyright Infringement	Unauthorized use of copyrighted material
 Sony Bono Act	Law extending the duration of copyright to death+50yrs for many works
 Steve Reich	Minimalist composer using repetitive structures and phasing
-Mix Tape	Personalized compilations of favorite songs, including by artists avoiding licensing fees
+Mix Tape	Personalized compilation of favorite songs, including by artists avoiding licensing fees
 Disco Demolition Night	1979 anti-disco protest leading to chaos at a baseball game
 Steve Dahl	Radio personality behind Disco Demolition Night
 Discophobia	Backlash against disco, associated with rock fans and '70s sociocultural resistance
@@ -100,7 +100,7 @@ The 4 (5) Elements	DJing, MCing, Graffiti, B-boying/B-girling, (+ Knowledge)
 DJ Kool Herc	Hip-hop pioneer, creating the merry-go-round system for breaks
 The Bronx	"Blighted" birthplace of hip-hop in 1970s New York
 Robert Moses	Urban planner who carved the Cross-Bronx Expressway
-Breakbeat	Isolated drum sections looped for dance tracks
+Breakbeat	Isolated drum section looped for dance tracks
 Graffiti	Identity-oriented political visual art form
 DJing	Art of playing and manipulating music using turntables and mixers
 Turntablism	Art of manipulating turntables for creative sound
@@ -110,7 +110,7 @@ Block Parties	Community events central to early hip-hop culture
 Chicago House	Early electronic dance music from Chicago’s post-disco club scene
 Detroit Techno	1980s-90s futuristic electronic music rooted in Detroit’s industrial soundscape
 Rockism	Valuing traditional rock ideals, often dismissing pop or modern trends
-Poptimisim	Embracing popular music as intrinsically significant and artistically valid
+Poptimism	Embracing popular music as intrinsically significant and artistically valid
 Concept Album	Album designed to present a theme, narrative, or conceptual idea
 Grunge	Blend of punk and heavy metal arising in the mid-1980s
 Indie	Music focused on creative freedom over record-label commercialism
@@ -171,6 +171,11 @@ DAW	Software for composing, recording, and editing music
 				{
 					next();
 				}
+			}
+			else if (event.key == "\\")
+			{
+				event.preventDefault();
+				$('#in')[0].value += "\u0303";
 			}
 		});
 
