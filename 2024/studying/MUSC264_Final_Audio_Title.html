@@ -39,7 +39,7 @@
 			<a href="MUSC264.html" style="position:absolute; bottom:0">Back</a>
 		</footer>
 		<script>
-const PLAY_DUR = 20;
+const PLAY_DUR = 10;
 const START_DUR = 2;
 
 const DAT = `
@@ -132,9 +132,9 @@ We Found Love (Rihanna, Calvin Harris)	6qn9YLKt13AGvpq9jfO8py
 		var aIdx = [];
 		for(var i = 0; i < ops.length; i++)
 		{
-			qs.push("https://open.spotify.com/embed/track/" + ops[i].split('\t')[0] + "?theme=0");
+			qs.push("https://open.spotify.com/embed/track/" + ops[i].split('\t')[1] + "?theme=0");
 			durs.push(117);// length of shortest song   //parseFloat(ops[i].split('\t')[1]));
-			as.push(ops[i].split('\t')[1]);// [2]
+			as.push(ops[i].split('\t')[0]);
 			aIdx.push(qs.length - 1);
 		}
 
