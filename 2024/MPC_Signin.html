@@ -95,7 +95,11 @@
 			for (var i = 0; i < courses.length; i++)
 			{
 				if(courses[i].length > 0) // catch empty string
-					document.querySelector('input[value="' + courses[i] + '"]').checked = true;
+				{
+					x = document.querySelector('input[value="' + courses[i] + '"]');
+					if(x) // catch missing course
+						x.checked = true;
+				}
 			}
 		}
 
@@ -191,7 +195,8 @@
 		var coursesExpanded = false;
 		var COURSES = [
 			["MATH 105",		"Quantitative Reasoning"],
-			["MATH 110/111",	"Calc I w/ Review"],
+			["MATH 110",		"Calc I w/ Review I"],
+			["MATH 111",		"Calc I w/ Review II"],
 			["MATH 112",		"Calc I"],
 			["MATH 113",		"Calc II"],
 			["MATH 214",		"Calc III"],
