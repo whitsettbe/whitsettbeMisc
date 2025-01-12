@@ -1,7 +1,7 @@
 <!doctype HTML>
 <html>
 	<head>
-		<title>LATN-102 Noun Endings</title>
+		<title>LATN-102 Verb Endings</title>
 		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
 			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
 			crossorigin="anonymous"></script>
@@ -32,34 +32,66 @@
 		</footer>
 		<script>
 
-const DECLENSIONS = [
-	'1st declension',
-	'2nd declension',
-	'2nd declension neuter',
-	'3rd declension',
-	'3rd declension neuter'
+const CONJ_TENSE = [
+	'1st conjugation present',
+	'2nd conjugation present',
+	'3rd conjugation present',
+	'4th conjugation present',
+	'1st conjugation imperfect',
+	'2nd conjugation imperfect',
+	'3rd conjugation imperfect',
+	'4th conjugation imperfect',
+	'1st conjugation perfect',
+	'2nd conjugation perfect',
+	'3rd conjugation perfect',
+	'4th conjugation perfect',
+	'1st conjugation present infinitive',
+	'2nd conjugation present infinitive',
+	'3rd conjugation present infinitive',
+	'4th conjugation present infinitive',
+	'1st conjugation imperative',
+	'2nd conjugation imperative',
+	'3rd conjugation imperative',
+	'4th conjugation imperative',
 ];
 
-const CASES = [
-	'singular nominative',
-	'singular genitive',
-	'singular dative',
-	'singular accusative',
-	'singular ablative',
-	'plural nominative',
-	'plural genitive',
-	'plural dative',
-	'plural accusative',
-	'plural ablative'
+const PERSON = [
+	'I',
+	'you (sing.)',
+	'he/she/it',
+	'we',
+	'you (pl.)',
+	'they'
 ]
+
+const CT_TYPES = [PERSON, PERSON, PERSON, PERSON,
+				PERSON, PERSON, PERSON, PERSON,
+				PERSON, PERSON, PERSON, PERSON,
+				['-'], ['-'], ['-'], ['-'],
+				['sing.','pl.'], ['sing.','pl.'], ['sing.','pl.'], ['sing.','pl.']];
 
 // by declension, then by case
 const SUFFIXES = [
-	['a',	'ae',	'ae',	'am',	'A',	'ae',	'Arum',		'Is',	'As',	'Is'],
-	['us',	'I',	'O',	'um',	'O',	'I',	'Orum',		'Is',	'Os',	'Is'],
-	['um',	'I',	'O',	'um',	'O',	'a',	'Orum',		'Is',	'a',	'Is'],
-	['-',	'is',	'I',	'em',	'e',	'Es',	'um/ium',	'ibus',	'Es',	'ibus'],
-	['-',	'is',	'I',	'-',	'e',	'a',	'um',		'ibus',	'a',	'ibus']
+	['O',	'As',	'at',	'Amus',	'Atis',	'ant'],
+	['eO',	'Es',	'et',	'Emus',	'Etis',	'ent'],
+	['O',	'is',	'it',	'imus',	'itis',	'unt'],
+	['iO',	'Is',	'it',	'Imus',	'Itis',	'iunt'],
+	['Abam',	'AbAs',	'Abat',	'AbAmus',	'AbAtis',	'Abant'],
+	['Ebam',	'EbAs',	'Ebat',	'EbAmus',	'EbAtis',	'Ebant'],
+	['Ebam',	'EbAs',	'Ebat',	'EbAmus',	'EbAtis',	'Ebant'],
+	['iEbam',	'iEbAs',	'iEbat',	'iEbAmus',	'iEbAtis',	'iEbant'],
+	['AvI',	'AvistI',	'Avit',	'Avimus',	'Avistis',	'AvErunt'],
+	['uI',	'uistI',	'uit',	'uimus',	'uistis',	'uErunt'],
+	['I',	'istI',	'it',	'imus',	'istis',	'Erunt'],
+	['IvI',	'IvistI',	'Ivit',	'Ivimus',	'Ivistis',	'IvErunt'],
+	['Are'],
+	['Ere'],
+	['ere'],
+	['Ire'],
+	['A', 'Ate'],
+	['E', 'Ete'],
+	['e', 'ite'],
+	['I', 'Ite']
 ]
 
 		// Replace capital vowels with macron-ated lowercase vowels
@@ -79,54 +111,39 @@ const SUFFIXES = [
 			return out;
 		}
 
-		// Build table for responses (two columns for sing/plur)
-		tableDat = "";
-		tableDat += "<th><td>" + CASES[0].split(" ")[0] + "</td><td>" + CASES[CASES.length-1].split(" ")[0] + "</td></th>";
-		numCaseType = CASES.length / 2;
-		for(var i = 0; i < numCaseType; i++)
-		{
-			tableDat += "<tr><td>" + CASES[i].split(" ")[1] + "</td>";
-			tableDat += '<td><input type="text" id="' + i + '" onkeyup="refreshBox(' + i + ')" autocomplete="off"></td>';
-			tableDat += '<td><input type="text" id="' + (i+numCaseType) + '" onkeyup="refreshBox(' + (i+numCaseType) + ')" autocomplete="off"></td>';
-		}
-		$('#entry')[0].innerHTML = tableDat;
 
-		// Build table for answers
-		tableDat = "";
-		tableDat += "<th><td>" + CASES[0].split(" ")[0] + "</td><td>" + CASES[CASES.length-1].split(" ")[0] + "</td></th>";
-		numCaseType = CASES.length / 2;
-		for(var i = 0; i < numCaseType; i++)
-		{
-			tableDat += "<tr><td>" + CASES[i].split(" ")[1] + "</td>";
-			tableDat += '<td id="a' + i + '"></td>';
-			tableDat += '<td id="a' + (i+numCaseType) + '"></td>';
-		}
-		$('#a')[0].innerHTML = tableDat;
-
-
-		// Generate questions
+		// Generate questions (and answers and types)
 		var ops = [];
-		for(var i = 0; i < DECLENSIONS.length; i++)
+		for(var i = 0; i < CONJ_TENSE.length; i++)
 		{
-			op = DECLENSIONS[i] + "\t";
-			for(var j = 0; j < CASES.length; j++)
+			op = CONJ_TENSE[i] + "\t";
+			for(var j = 0; j < SUFFIXES[i].length; j++)
 			{
 				op += (j > 0 ? ", " : "") + toMacron(SUFFIXES[i][j]);
 			}
-			ops.push(op);
+			op += "\t";
+			for(var j = 0; j < CT_TYPES[i].length; j++)
+			{
+				op += (j > 0 ? ", " : "") + CT_TYPES[i][j];
+			}
+			if(CT_TYPES[i].length > 0)
+				ops.push(op);
 		}
 
 
-		// Split questions and answers
+		// Split questions and answers and types
 		var qs = [];
 		var as = [];
+		var ts = [];
 		for(var i = ops.length - 1; i >= 0; i--)
 		{
 			first = ops[i].split('\t')[0];
 			second = ops[i].split('\t')[1];
+			third = ops[i].split('\t')[2];
 			
 			qs.push(first);
 			as.push(second);
+			ts.push(third);
 		}
 		var showing = false;
 		var idx = 0;
@@ -143,13 +160,14 @@ const SUFFIXES = [
 			if(!showing)
 			{
 				givens = [];
-				for(var i = 0; i < CASES.length; i++)
+				for(var i = 0; i < ts[idx].split(', ').length; i++)
 					givens.push($('#'+i)[0].value.toLowerCase());
 				if(givens.join(", ") === as[idx].toLowerCase())
 				{
 					$('#resp')[0].innerText = "Correct! The answer is:";
 					qs.splice(idx, 1);
 					as.splice(idx, 1);
+					ts.splice(idx, 1);
 					appealed = true;
 				}
 				else
@@ -175,6 +193,7 @@ const SUFFIXES = [
 				$('#resp')[0].innerText = "(Appealed)";
 				qs.splice(idx, 1);
 				as.splice(idx, 1);
+				ts.splice(idx, 1);
 				errs--;
 				appealed = true;
 			}
@@ -186,10 +205,31 @@ const SUFFIXES = [
 			if(qs.length == 0) return;
 			idx = Math.floor(Math.random() * qs.length);
 			$('#q')[0].innerText = qs[idx];
-			for(var i = 0; i < CASES.length; i++)
+
+			// Rebuild table for responses
+			tableDat = "";
+			types = ts[idx].split(', ');
+			for(var i = 0; i < types.length; i++)
+			{
+				tableDat += "<tr><td>" + types[i] + "</td>";
+				tableDat += '<td><input type="text" id="' + i + '" onkeyup="refreshBox(' + i + ')" autocomplete="off"></td>';
+			}
+			$('#entry')[0].innerHTML = tableDat;
+
+			// Rebuild table for answers
+			tableDat = "";
+			for(var i = 0; i < types.length; i++)
+			{
+				tableDat += "<tr><td>" + types[i] + "</td>";
+				tableDat += '<td id="a' + i + '"></td>';
+			}
+			$('#a')[0].innerHTML = tableDat;
+
+			// Ensure entry boxes and final answer are set
+			for(var i = 0; i < types.length; i++)
 			{
 				$('#'+i)[0].value = '';
-				$('#a'+i)[0].innerText = as[idx].split(', ')[i];
+				$('#a'+i)[0].innerHTML = as[idx].split(', ')[i];
 			}
 			$('#resp')[0].innerText = '';
 			$('#a')[0].style.display = "none";

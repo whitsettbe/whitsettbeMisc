@@ -1,7 +1,7 @@
 <!doctype HTML>
 <html>
 	<head>
-		<title>LATN-102 Noun Endings</title>
+		<title>LATN-102 Adjective Endings</title>
 		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
 			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
 			crossorigin="anonymous"></script>
@@ -33,10 +33,10 @@
 		<script>
 
 const DECLENSIONS = [
-	'1st declension',
-	'2nd declension',
-	'2nd declension neuter',
-	'3rd declension',
+	'1st/2nd declension masculine',
+	'1st/2nd declension feminine',
+	'1st/2nd declension neuter',
+	'3rd declension masculine/feminine',
 	'3rd declension neuter'
 ];
 
@@ -55,11 +55,11 @@ const CASES = [
 
 // by declension, then by case
 const SUFFIXES = [
-	['a',	'ae',	'ae',	'am',	'A',	'ae',	'Arum',		'Is',	'As',	'Is'],
-	['us',	'I',	'O',	'um',	'O',	'I',	'Orum',		'Is',	'Os',	'Is'],
-	['um',	'I',	'O',	'um',	'O',	'a',	'Orum',		'Is',	'a',	'Is'],
-	['-',	'is',	'I',	'em',	'e',	'Es',	'um/ium',	'ibus',	'Es',	'ibus'],
-	['-',	'is',	'I',	'-',	'e',	'a',	'um',		'ibus',	'a',	'ibus']
+	['us',		'I',	'O',	'um',	'O',	'I',	'Orum',	'Is',	'Os',	'Is'],
+	['a',		'ae',	'ae',	'am',	'A',	'ae',	'Arum',	'Is',	'As',	'Is'],
+	['um',		'I',	'O',	'um',	'O',	'a',	'Orum',	'Is',	'a',	'Is'],
+	['is/-',	'is',	'I',	'em',	'I',	'Es',	'ium',	'ibus',	'Es',	'ibus'],
+	['e/-',		'is',	'I',	'e/-',	'I',	'ia',	'ium',	'ibus',	'ia',	'ibus']
 ]
 
 		// Replace capital vowels with macron-ated lowercase vowels
