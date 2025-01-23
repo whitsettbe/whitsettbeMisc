@@ -46,20 +46,27 @@ const CASES = [
 	'singular dative',
 	'singular accusative',
 	'singular ablative',
+	'singular vocative',
 	'plural nominative',
 	'plural genitive',
 	'plural dative',
 	'plural accusative',
-	'plural ablative'
+	'plural ablative',
+	'plural vocative'
 ]
 
 // by declension, then by case
 const SUFFIXES = [
-	['a',	'ae',	'ae',	'am',	'A',	'ae',	'Arum',		'Is',	'As',	'Is'],
-	['us',	'I',	'O',	'um',	'O',	'I',	'Orum',		'Is',	'Os',	'Is'],
-	['um',	'I',	'O',	'um',	'O',	'a',	'Orum',		'Is',	'a',	'Is'],
-	['-',	'is',	'I',	'em',	'e',	'Es',	'um/ium',	'ibus',	'Es',	'ibus'],
-	['-',	'is',	'I',	'-',	'e',	'a',	'um',		'ibus',	'a',	'ibus']
+	['a',	'ae',	'ae',	'am',	'A',	'a',
+		'ae',	'Arum',		'Is',	'As',	'Is',	'ae'],
+	['us',	'I',	'O',	'um',	'O',	'e/I',
+		'I',	'Orum',		'Is',	'Os',	'Is',	'I'],
+	['um',	'I',	'O',	'um',	'O',	'um',
+		'a',	'Orum',		'Is',	'a',	'Is',	'a'],
+	['-',	'is',	'I',	'em',	'e',	'-',
+		'Es',	'um/ium',	'ibus',	'Es',	'ibus',	'Es'],
+	['-',	'is',	'I',	'-',	'e',	'-',
+		'a',	'um',		'ibus',	'a',	'ibus',	'a']
 ]
 
 		// Replace capital vowels with macron-ated lowercase vowels
