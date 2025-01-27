@@ -63,13 +63,13 @@ const SUFFIXES = [
 ]
 
 		// Replace capital vowels with macron-ated lowercase vowels
-		function toMacron(s)
+		function toMacron(s, handleCaps=true)
 		{
 			out = "";
 			for(var i = 0; i < s.length; i++)
 			{
 				c = s.charAt(i);
-				if("AEIOU".includes(c))
+				if(handleCaps && "AEIOU".includes(c))
 					out += "aeiou".charAt("AEIOU".indexOf(c)) + "\u0304";
 				else if(c == '\\')
 					out += "\u0304";
@@ -135,7 +135,7 @@ const SUFFIXES = [
 
 		function refreshBox(boxNum)
 		{
-			$('#'+boxNum)[0].value = toMacron($('#'+boxNum)[0].value);
+			$('#'+boxNum)[0].value = toMacron($('#'+boxNum)[0].value, false);
 		}
 
 		function guess()

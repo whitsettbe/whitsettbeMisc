@@ -1,7 +1,7 @@
 <!doctype HTML>
 <html>
 	<head>
-		<title>LATN-102 Verb Endings</title>
+		<title>LATN-102 Irregular Verbs</title>
 		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
 			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
 			crossorigin="anonymous"></script>
@@ -32,29 +32,26 @@
 		</footer>
 		<script>
 
-const CONJ_TENSE = [
-	'1st conjugation present',
-	'2nd conjugation present',
-	'3rd conjugation present',
-	'4th conjugation present',
-	'1st conjugation future',
-	'2nd conjugation future',
-	'1st conjugation imperfect',
-	'2nd conjugation imperfect',
-	'3rd conjugation imperfect',
-	'4th conjugation imperfect',
-	'1st conjugation perfect',
-	'2nd conjugation perfect',
-	'3rd conjugation perfect',
-	'4th conjugation perfect',
-	'1st conjugation present infinitive',
-	'2nd conjugation present infinitive',
-	'3rd conjugation present infinitive',
-	'4th conjugation present infinitive',
-	'1st conjugation imperative',
-	'2nd conjugation imperative',
-	'3rd conjugation imperative',
-	'4th conjugation imperative',
+const WORD_TENSE = [
+	'esse present',
+	'posse present',
+	'velle present',
+	'nOlle present',
+	'ferre present',
+	'esse future',
+	'posse future',
+	'esse imperfect',
+	'posse imperfect',
+	'velle imperfect',
+	'nOlle imperfect',
+	'ferre imperfect',
+	'esse perfect',
+	'posse perfect',
+	'velle perfect',
+	'nOlle perfect',
+	'ferre perfect',
+	'nOlle imperative',
+	'ferre imperative'
 ];
 
 const PERSON = [
@@ -66,37 +63,33 @@ const PERSON = [
 	'they'
 ]
 
-const CT_TYPES = [PERSON, PERSON, PERSON, PERSON,
+const CT_TYPES = [PERSON, PERSON, PERSON, PERSON, PERSON,
 				PERSON, PERSON,
-				PERSON, PERSON, PERSON, PERSON,
-				PERSON, PERSON, PERSON, PERSON,
-				['-'], ['-'], ['-'], ['-'],
-				['sing.','pl.'], ['sing.','pl.'], ['sing.','pl.'], ['sing.','pl.']];
+				PERSON, PERSON, PERSON, PERSON, PERSON,
+				PERSON, PERSON, PERSON, PERSON, PERSON,
+				['sing.','pl.'], ['sing.','pl.']];
 
 // by declension, then by case
-const SUFFIXES = [
-	['O',	'As',	'at',	'Amus',	'Atis',	'ant'],
-	['eO',	'Es',	'et',	'Emus',	'Etis',	'ent'],
-	['O',	'is',	'it',	'imus',	'itis',	'unt'],
-	['iO',	'Is',	'it',	'Imus',	'Itis',	'iunt'],
-	['AbO', 'Abis', 'Abit', 'Abimus', 'Abitis', 'Abunt'],
-	['EbO', 'Ebis', 'Ebit', 'Ebimus', 'Ebitis', 'Ebunt'],
-	['Abam',	'AbAs',	'Abat',	'AbAmus',	'AbAtis',	'Abant'],
-	['Ebam',	'EbAs',	'Ebat',	'EbAmus',	'EbAtis',	'Ebant'],
-	['Ebam',	'EbAs',	'Ebat',	'EbAmus',	'EbAtis',	'Ebant'],
-	['iEbam',	'iEbAs',	'iEbat',	'iEbAmus',	'iEbAtis',	'iEbant'],
-	['AvI',	'AvistI',	'Avit',	'Avimus',	'Avistis',	'AvErunt'],
-	['uI',	'uistI',	'uit',	'uimus',	'uistis',	'uErunt'],
-	['I',	'istI',	'it',	'imus',	'istis',	'Erunt'],
-	['IvI',	'IvistI',	'Ivit',	'Ivimus',	'Ivistis',	'IvErunt'],
-	['Are'],
-	['Ere'],
-	['ere'],
-	['Ire'],
-	['A', 'Ate'],
-	['E', 'Ete'],
-	['e', 'ite'],
-	['I', 'Ite']
+const SUFFIXED = [
+	['sum',	'es',	'est',	'sumus',	'estis',	'sunt'],
+	['possum',	'potes',	'potest',	'possumus',	'potestis',	'possunt'],
+	['volO',	'vIs',	'vult',	'volumus',	'vultis',	'volunt'],
+	['nOlO',	'nOn vIs',	'nOn vult',	'nOlumus',	'nOn vultis',	'nOlunt'],
+	['ferO',	'fers',	'fert',	'ferimus',	'fertis',	'ferunt'],
+	['erO',	'eris',	'erit',	'erimus',	'eritis',	'erunt'],
+	['poterO',	'poteris',	'poterit',	'poterimus',	'poteritis',	'poterunt'],
+	['eram',	'erAs',	'erat',	'erAmus',	'erAtis',	'erant'],
+	['poteram',	'poterAs',	'poterat',	'poterAmus',	'poterAtis',	'poterant'],
+	['volEbam',	'volEbAs',	'volEbat',	'volEbAmus',	'volEbAtis',	'volEbant'],
+	['nOlEbam',	'nOlEbAs',	'nOlEbat',	'nOlEbAmus',	'nOlEbAtis',	'nOlEbant'],
+	['ferEbam',	'ferEbAs',	'ferEbat',	'ferEbAmus',	'ferEbAtis',	'ferEbant'],
+	['fuI',	'fuistI',	'fuit',	'fuimus',	'fuistis',	'fuErunt'],
+	['potuI',	'potuistI',	'potuit',	'potuimus',	'potuistis',	'potuErunt'],
+	['voluI',	'voluistI',	'voluit',	'voluimus',	'voluistis',	'voluErunt'],
+	['nOluI',	'nOluistI',	'nOluit',	'nOluimus',	'nOluistis',	'nOluErunt'],
+	['tulI',	'tulistI',	'tulit',	'tulimus',	'tulistis',	'tulErunt'],
+	['nOlI',	'nOlIte'],
+	['fer',	'ferte']
 ]
 
 		// Replace capital vowels with macron-ated lowercase vowels
@@ -119,12 +112,12 @@ const SUFFIXES = [
 
 		// Generate questions (and answers and types)
 		var ops = [];
-		for(var i = 0; i < CONJ_TENSE.length; i++)
+		for(var i = 0; i < WORD_TENSE.length; i++)
 		{
-			op = CONJ_TENSE[i] + "\t";
-			for(var j = 0; j < SUFFIXES[i].length; j++)
+			op = toMacron(WORD_TENSE[i]) + "\t";
+			for(var j = 0; j < SUFFIXED[i].length; j++)
 			{
-				op += (j > 0 ? ", " : "") + toMacron(SUFFIXES[i][j]);
+				op += (j > 0 ? ", " : "") + toMacron(SUFFIXED[i][j]);
 			}
 			op += "\t";
 			for(var j = 0; j < CT_TYPES[i].length; j++)
