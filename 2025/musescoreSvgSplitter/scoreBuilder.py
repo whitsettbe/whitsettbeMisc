@@ -45,6 +45,9 @@ ASSOC_RULE = {
     'StemSlash': 'near Stem',
     'Fermata': 'down',
     'SystemText': 'down',
+    'GlissandoSegment': 'near Note',
+    'Marker': 'down',
+    'Jump': 'down',
     DUMMY: 'near',        # if "down" or "up" fails, replaced with this temporarily
 }
 # all - assoc with every part in the nearest block
