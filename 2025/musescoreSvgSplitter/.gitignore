@@ -1,3 +1,4 @@
 *.pdf
 *.svg
 *.lnk
+__pycache__
