@@ -36,7 +36,7 @@ knownPartNum = None
 def uiPartNumGetter():
     global knownPartNum
     if knownPartNum is None:
-        knownPartNum = int(input('How many parts? '))
+        knownPartNum = int(input('\nHow many parts? '))
     return knownPartNum
 
 # get the padding rule and part managers for a specific page
