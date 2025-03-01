@@ -49,6 +49,7 @@ ASSOC_RULE = {
     'Marker': 'down',
     'Jump': 'down',
     'GradualTempoChangeSegment': 'all',
+    'OttavaSegment': 'down',
     DUMMY: 'near',        # if "down" or "up" fails, replaced with this temporarily
 }
 # all - assoc with every part in the nearest block
