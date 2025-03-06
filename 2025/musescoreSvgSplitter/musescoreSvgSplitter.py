@@ -120,6 +120,11 @@ def buildSvgParts(pagePaths, extras):
                         + '\n' + lineNums[partNum][pageNum]))
     return out
 
+# ensure added score pages are 8.5x11
+def pdfResize(pdf : PdfWriter, widthInch=8.5, heightInch=11):
+    for page in pdf.flattened_pages:
+        page.scale_to(width=widthInch*72/page.user_unit, height=heightInch*72/page.user_unit)
+
 # get music svgs from the given folder, rearrange into parts
 # (sorts on only the numerical digits in the file name)
 # (also accepts list of transpositions to include)
@@ -143,7 +148,8 @@ def toPartPdf(dir, extras):
             merger.append(TMP_PDF)
         if len(pages) % 2 == 1:
             merger.add_blank_page()
-        
+    
+    pdfResize(merger, 8.5, 11)
     merger.write(os.path.join(dir, OUT_NAME))
     merger.close()
 
