@@ -1,13 +1,97 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Musc208 Project: Echoes of Ourselves</title>
+		<style>
+			audio {
+				height: 20px;
+			}
+		</style>
+        <script>
+            // content data: genre, title, tags, link 1, link 2, commentary
+            // (lyrics stored at [title but lowercase without spaces].txt)
+            DAT = [
+                ['Folk', 'Wandering Roads', 'folk, acoustic guitar, warm male vocals, storytelling ballad', 'https://file.aisonggenerator.ai/4b701a6f-63fe-4cd3-8269-885e3b8c5b6a.mp3', 'https://file.aisonggenerator.ai/916ff82f-af2c-4cb8-bccc-6cb24e7593b8.mp3', 'These are my sentences of commentary. These are my sentences of commentary. These are my sentences of commentary. These are my sentences of commentary. These are my sentences of commentary. These are my sentences of commentary.'],
+                ['Gospel', 'Lift Me Up, Lord', 'gospel, soulful choir, uplifting piano, powerful vocals', 'https://file.aisonggenerator.ai/a2b149c8-ba96-42ba-9cf2-fbd846f79000.mp3', 'https://file.aisonggenerator.ai/af15d602-39bc-4b04-b7e1-2ec32fb7bfbe.mp3', 'These are my sentences of commentary. These are my sentences of commentary. These are my sentences of commentary. These are my sentences of commentary. These are my sentences of commentary. These are my sentences of commentary.'],
+                ['Country', 'Whiskey on the Wind', 'country, acoustic guitar, male voice, storytelling lyrics, heartfelt melody', 'https://file.aisonggenerator.ai/14181d6d-9d5c-42da-a9e0-e761c46a4682.mp3', 'https://file.aisonggenerator.ai/309c2871-059c-4c04-b818-d2e0ab1a292a.mp3', 'commentary'],
+                ['Blues', 'Midnight Blues', 'classic blues, slow 12-bar progression, soulful male vocals, wailing guitar solos', 'https://file.aisonggenerator.ai/3c053305-0863-408e-8daa-574a1128a279.mp3', 'https://file.aisonggenerator.ai/2b7f8f1d-bf46-459b-b6d0-c63ca3229c67.mp3', 'commentary'],
+                ['Jazz', 'Midnight Serenade', 'smooth jazz, soulful saxophone, soft piano, warm double bass, velvety vocals', 'https://file.aisonggenerator.ai/829f74f4-c4a9-4558-b656-bcde649d735f.mp3', 'https://file.aisonggenerator.ai/0dddd37e-0569-4c20-8a85-ff3aa3864b56.mp3', 'commentary'],
+                ['RnB', 'Love in the Moonlight', 'smooth r&b, soulful vocals, deep bass, mellow keys, slow groove', 'https://file.aisonggenerator.ai/22ce9587-34ad-4050-9c14-9656c229f099.mp3', 'https://file.aisonggenerator.ai/344e74f6-0fc6-4d41-8d3e-5cd099ffb71c.mp3', 'commentary'],
+                ['Rock and Roll', 'Born to Run Wild', 'high-energy rock and roll, electric guitar riffs, powerful male vocals, driving drum beats', 'https://file.aisonggenerator.ai/066ffce6-ab2f-4b79-a444-4f59f759a560.mp3', 'https://file.aisonggenerator.ai/90a6e134-0173-4292-af11-5aa47bf6e32f.mp3', 'commentary'],
+                ['Soul', 'Lost in Your Love', 'soul, smooth bassline, warm rhodes piano, expressive male vocals, emotional backup harmonies', 'https://file.aisonggenerator.ai/32e14de6-69de-4757-a820-9794a15eb500.mp3', 'https://file.aisonggenerator.ai/b28f1a45-e4b4-4f19-9583-da3dd34feb64.mp3', 'commentary'],
+                ['Disco', 'Dancing Through the Night', 'funky basslines, groovy guitar, four-on-the-floor beats, soulful vocals, retro synths, disco vibes', 'https://file.aisonggenerator.ai/a327f8a2-72b3-4224-8990-85d59a77d5b2.mp3', 'https://file.aisonggenerator.ai/4c7db398-f738-4c6e-8003-d6c3da4da284.mp3', 'commentary'],
+                ['Heavy Metal', 'Shadows of the Abyss', 'heavy metal, aggressive riffs, deep growling vocals, double bass drumming, dark atmosphere', 'https://file.aisonggenerator.ai/664d8c73-79a3-446b-87b2-e3ac214ccac1.mp3', 'https://file.aisonggenerator.ai/e820bf9d-a434-4afc-b209-7bb7cefb3f5f.mp3', 'commentary'],
+                ['Punk Rock', 'Rebel Heart', 'punk rock, fast-paced guitars, aggressive drums, raw male vocals', 'https://file.aisonggenerator.ai/b757a32f-1014-4d7b-914c-934023df6af0.mp3', 'https://file.aisonggenerator.ai/d2fdef9e-322d-4bda-b998-7734efb84d33.mp3', 'commentary'],
+                ['Grunge', 'Fading Echoes', 'grunge, distorted guitars, raw vocals, heavy drums, melancholic yet aggressive toe', 'https://file.aisonggenerator.ai/76a029e1-b755-48bc-9eb7-b6dfe162b71e.mp3', 'https://file.aisonggenerator.ai/2df09e8c-79bc-4a1e-aef1-f5b6541107c7.mp3', 'commentary'],
+                ['Hip Hop', 'Rise to the Top', 'hip hop, boom bap beats, male rap, gritty flow', 'https://file.aisonggenerator.ai/23337f50-bf3a-4b17-bf86-89b1f1b5804c.mp3', 'https://file.aisonggenerator.ai/e8643413-1292-4298-bcbc-b0c6d71357bd.mp3', 'commentary'],
+                ['Contemporary Rock', 'Edge of the Night', 'contemporary rock, electric guitars, driving drums, powerful male vocals', 'https://file.aisonggenerator.ai/3a46f94d-7812-433a-b73b-bee14665da45.mp3', 'https://file.aisonggenerator.ai/2b410637-dff4-46a2-874c-4d44f2c9bba2.mp3', 'commentary'],
+                ['Pop', 'Dancing in the Moonlight', 'bright pop beats, catchy synths, uplifting vocals, radio-friendly hooks', 'https://file.aisonggenerator.ai/7ec63162-a40b-433b-94c6-c12d342b08fc.mp3', 'https://file.aisonggenerator.ai/1dadb717-0eb7-4404-b754-31f29559187a.mp3', 'commentary'],
+            ]
+
+
+            // item opener/closer
+            function toggle(id)
+            {
+                li = document.getElementById(id);
+                isHidden = li.querySelector('div.genreContents').style.display == 'none';
+                if(isHidden)
+                {
+                    li.querySelector('span.genreLabel').querySelector('span.dropIcon').innerHTML = '▲';
+                    li.querySelector('div.genreContents').style.display = 'block';
+                }
+                else
+                {
+                    li.querySelector('span.genreLabel').querySelector('span.dropIcon').innerHTML = '▼';
+                    li.querySelector('div.genreContents').style.display = 'none';
+                }
+            }
+
+            // ensure audio loads properly
+            setInterval(function()
+            {
+                auds = document.getElementsByTagName('audio');
+                for(var i = 0; i < auds.length; i++)
+                    if(auds.readyState == 0)
+                        auds.load();
+            }, 5000);
+        </script>
     </head>
     <body>
         <p>we've created sounds, ai learned about them, they reflect our understanding of the world, etc.</p>
         <p>Prompt of the form "Create a [genre] song." (AiSongGenerator extension "AI Music Maker" for ChatGPT), Song generated by aisonggenerator.ai with all settings chosen by the GPT.</p>
-        <ol>
-            
+        <ol id="genreList">
+            <li class="genre" id="folk"><span class="genreLabel" onclick="toggle('folk')"><span class="dropIcon" onclick=>▼</span> <span class="genreName">Folk</span></span>
+                <div class="genreContents" style="display: none">
+                    <span class="songTitle">Wandering Roads</span><br>
+                    <span class="songTags">folk, acoustic guitar, warm male vocals, storytelling ballad</span><br>
+                    <a href="folk.txt" target="_blank" rel="noopener noreferrer">Lyrics</a><br>
+                    V1<br><audio controls><source src="https://file.aisonggenerator.ai/4b701a6f-63fe-4cd3-8269-885e3b8c5b6a.mp3" type="audio/mpeg">audio unsupported</audio><br>
+                    V2<br><audio controls><source src="https://file.aisonggenerator.ai/916ff82f-af2c-4cb8-bccc-6cb24e7593b8.mp3" type="audio/mpeg">audio unsupported</audio><br>
+                    <span class="commentary">These are my sentences of commentary. These are my sentences of commentary. These are my sentences of commentary. These are my sentences of commentary. These are my sentences of commentary. These are my sentences of commentary.</span>
+                </div>
+            </li>
         </ol>
     </body>
+    <script>
+        // Generate the genre list
+        contents = '';
+        for(var i = 0; i < DAT.length; i++)
+        {
+            contents += `
+            <li class="genre" id="${DAT[i][0].toLowerCase()}"><span class="genreLabel" onclick="toggle('${DAT[i][0].toLowerCase()}')"><span class="dropIcon" onclick=>▼</span> <span class="genreName">${DAT[i][0]}</span></span>
+                <div class="genreContents" style="display: none">
+                    <span class="songTitle">${DAT[i][1]}</span><br>
+                    <span class="songTags">${DAT[i][2]}</span><br>
+                    V1<br><audio controls><source src="${DAT[i][3]}" type="audio/mpeg">audio unsupported</audio><br>
+                    V2<br><audio controls><source src="${DAT[i][4]}" type="audio/mpeg">audio unsupported</audio><br>
+                    <a href="${DAT[i][0].split(' ').join('').toLowerCase()}.txt" target="_blank" rel="noopener noreferrer">Lyrics</a><br>
+                    <span class="commentary">${DAT[i][5]}</span>
+                </div>
+            </li>
+`;
+        }
+        document.getElementById('genreList').innerHTML = contents;
+    </script>
 </html>
