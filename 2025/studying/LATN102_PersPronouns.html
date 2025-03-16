@@ -1,7 +1,7 @@
 <!doctype HTML>
 <html>
 	<head>
-		<title>LATN-102 Adjectives/Pronouns</title>
+		<title>LATN-102 Personal Pronouns</title>
 		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
 			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
 			crossorigin="anonymous"></script>
@@ -33,47 +33,28 @@
 		<script>
 
 const WORD_TENSE = [
-	'hic masculine',
-	'hic feminine',
-	'hic neuter',
-	'ille masculine',
-	'ille feminine',
-	'ille neuter',
-	'is masculine',
-	'is feminine',
-	'is neuter',
-	'quI masculine',
-	'quI feminine',
-	'quI neuter'
+	'i',
+	'we',
+	'you (sing.)',
+	'you (plur.)',
+	'himself/herself/themselves'
 ];
 
 const CASES = [
-	'singular nominative',
-	'singular genitive',
-	'singular dative',
-	'singular accusative',
-	'singular ablative',
-	'plural nominative',
-	'plural genitive',
-	'plural dative',
-	'plural accusative',
-	'plural ablative'
+	'nominative',
+	'genitive',
+	'dative',
+	'accusative',
+	'ablative'
 ]
 
 // by word, then by case
 const SUFFIXED = [
-	['hic',		'huius',	'huic',	'hunc',		'hOc',	'hI',		'hOrum',	'hIs',		'hOs',		'hIs'],
-	['haec',	'huius',	'huic',	'hanc',		'hAc',	'hae',		'hArum',	'hIs',		'hAs',		'hIs'],
-	['hoc',		'huius',	'huic',	'hoc',		'hOc',	'haec',		'hOrum',	'hIs',		'haec',		'hIs'],
-	['ille',	'illius',	'illI',	'illum',	'illO',	'illI',		'illOrum',	'illIs',	'illOs',	'illIs'],
-	['illa',	'illius',	'illI',	'illam',	'illA',	'illae',	'illArum',	'illIs',	'illAs',	'illIs'],
-	['illud',	'illius',	'illI',	'illud',	'illO',	'illa',		'illOrum',	'illIs',	'illa',		'illIs'],
-	['is',		'eius',		'eI',	'eum',		'eO',	'eI',		'eOrum',	'eIs',		'eOs',		'eIs'],
-	['ea',		'eius',		'eI',	'eam',		'eA',	'eae',		'eArum',	'eIs',		'eAs',		'eIs'],
-	['id',		'eius',		'eI',	'id',		'eO',	'ea',		'eOrum',	'eIs',		'ea',		'eIs'],
-	['quI',		'cuius',	'cui',	'quem',		'quO',	'quI',		'quOrum',	'quibus',	'quOs',		'quibus'],
-	['quae',	'cuius',	'cui',	'quam',		'quA',	'quae',		'quArum',	'quibus',	'quAs',		'quibus'],
-	['quod',	'cuius',	'cui',	'quod',		'quO',	'quae',		'quOrum',	'quibus',	'quae',		'quibus']
+	['ego',	'meI',		'mihi',		'mE',	'mE'],
+	['nOs',	'nostrum',	'nObIs',	'nOs',	'nObIs'],
+	['tU',	'tuI',		'tibi',		'tE',	'tE'],
+	['vOs',	'vestrum',	'vObIs',	'vOs',	'vObIs'],
+	['-',	'suI',		'sibi',		'sE',	'sE']
 ]
 
 		// Replace capital vowels with macron-ated lowercase vowels
@@ -95,25 +76,21 @@ const SUFFIXED = [
 
 		// Build table for responses (two columns for sing/plur)
 		tableDat = "";
-		tableDat += "<th><td>" + CASES[0].split(" ")[0] + "</td><td>" + CASES[CASES.length-1].split(" ")[0] + "</td></th>";
-		numCaseType = CASES.length / 2;
-		for(var i = 0; i < numCaseType; i++)
+		tableDat += "<th><td>" + CASES[0].split(" ")[0] + "</td></th>";
+		for(var i = 0; i < CASES.length; i++)
 		{
-			tableDat += "<tr><td>" + CASES[i].split(" ")[1] + "</td>";
+			tableDat += "<tr><td>" + CASES[i] + "</td>";
 			tableDat += '<td><input type="text" id="' + i + '" onkeyup="refreshBox(' + i + ')" autocomplete="off"></td>';
-			tableDat += '<td><input type="text" id="' + (i+numCaseType) + '" onkeyup="refreshBox(' + (i+numCaseType) + ')" autocomplete="off"></td>';
 		}
 		$('#entry')[0].innerHTML = tableDat;
 
 		// Build table for answers
 		tableDat = "";
-		tableDat += "<th><td>" + CASES[0].split(" ")[0] + "</td><td>" + CASES[CASES.length-1].split(" ")[0] + "</td></th>";
-		numCaseType = CASES.length / 2;
-		for(var i = 0; i < numCaseType; i++)
+		tableDat += "<th><td>" + CASES[0].split(" ")[0] + "</td></th>";
+		for(var i = 0; i < CASES.length; i++)
 		{
-			tableDat += "<tr><td>" + CASES[i].split(" ")[1] + "</td>";
+			tableDat += "<tr><td>" + CASES[i] + "</td>";
 			tableDat += '<td id="a' + i + '"></td>';
-			tableDat += '<td id="a' + (i+numCaseType) + '"></td>';
 		}
 		$('#a')[0].innerHTML = tableDat;
 
