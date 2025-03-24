@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Hilbert Audio</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+		<style>
+			/*#start
+			{
+				display: inline;
+				position: absolute;
+				left: 10px;
+				right: 10px;
+				top: 30px;
+				bottom: 30px;
+				background-color: gray;
+				border: 3px solid black;
+				font-size: 30pt;
+				text-align: center;
+			}*/
+		</style>
+	</head>
+	<body>
+	<input type="button" id="start" onclick="start()" value="Start">
+	<video autoplay="true" id="vid" hidden></video>
+	<canvas id="canv" style="border:1px solid black; display: none; position: absolute; left: 5px;"></canvas>
+	<script>
+
+
+		const canvas = $("#canv")[0];
+		setInterval(function()
+		{
+			if(Math.abs(canvas.width / window.innerWidth - .97) > 0.01 || Math.abs(canvas.height / window.innerHeight - .97) > .01)
+			{
+				canvas.width = window.innerWidth * .97;
+				canvas.height = window.innerHeight * .97;
+			}
+		}, 100);
+		const ctx = canvas.getContext("2d");
+		var player;
+		var video;
+		const DROP = 0.9;
+
+		function start()
+		{
+			$('#start')[0].style.display = "none";
+			$('#canv')[0].style.display = "inline";
+
+			if (navigator.mediaDevices.getUserMedia)
+			{
+				navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}}).then(
+					function(stream)
+					{
+						$('#vid')[0].srcObject = stream;
+						setInterval(updateScreen, 10);
+					});
+				
+			}
+		}
+
+		function updateScreen()
+		{
+			if(canvas.height > canvas.width)
+                ctx.drawImage($('#vid')[0], 0, 0, canvas.width, canvas.width * 4 / 3);
+            else
+				ctx.drawImage($('#vid')[0], 0, 0, canvas.height * 4 / 3, canvas.height);
+		}
+
+		
+	</script>
+	</body>
+	<footer style="position: fixed; bottom: 0">
+		3-24-2025 4:18 PM
+	</footer>
+</html>
