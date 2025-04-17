@@ -44,13 +44,15 @@ ASSOC_RULE = {
     'Tremolo': 'near Stem',
     'StemSlash': 'near Stem',
     'Fermata': 'down',
-    'SystemText': 'down',
+    'SystemText': 'all',
     'GlissandoSegment': 'near Note',
     'Marker': 'down',
     'Jump': 'down',
     'GradualTempoChangeSegment': 'all',
     'OttavaSegment': 'down',
     'RehearsalMark': 'all',
+    'Breath': 'down',
+    'VoltaSegment': 'all',
     DUMMY: 'near',        # if "down" or "up" fails, replaced with this temporarily
 }
 # all - assoc with every part in the nearest block
