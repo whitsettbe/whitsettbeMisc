@@ -236,6 +236,7 @@
 				document.getElementById('courseCheckboxes').innerHTML += '<input type="checkbox" name="courseSelect" value="'
 						+ COURSES[i][0] + '"> ' + COURSES[i][0] + ' - ' + COURSES[i][1] + '<br>';
 			}
+			document.getElementById('courseCheckboxes').innerHTML += '<br>';
 		}
 
 		function toggleCourses()
@@ -286,12 +287,11 @@
 		<input type="text" id="email" name="entry.1333753580" style="width: 90%" onkeydown="return event.key != 'Enter';">
 		<input type="text" id="courseString" name="entry.1398365022" style="display: none">
 		<br>
-		<input type="button" value="Submit" onclick="doSubmit()">
-		<input type="submit" id="submit" style="display: none;">
-		<br>
 		<p id="timeLog"></p>
 		<p onclick="toggleCourses()"><span id="dropdownIcon">▼</span> Enrolled courses: <span id="courseStringVis">none</span></p>
 		<div id="courseCheckboxes" style="display: none"></div>
+		<input type="button" value="Submit" onclick="doSubmit()">
+		<input type="submit" id="submit" style="display: none;">
 	</form>
 	<div id="loader" style="display: none"></div>
 </body>
