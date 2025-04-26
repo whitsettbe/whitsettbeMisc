@@ -6,7 +6,7 @@
 	<title>MPC Sign In</title>
 	<style>
 	/* see https://www.w3schools.com/howto/howto_css_loader.asp */
-	#loader
+	#loaderCircle
 	{
 		border: 1em solid #f3f3f3; /* Light grey */
 		border-top: 1em solid #3498db; /* Blue */
@@ -15,14 +15,25 @@
 		height: 5em;
 		-webkit-animation: spin 1.5s linear infinite; /* Safari */
 		animation: spin 1.5s linear infinite;
+		
 	  
-	  
-		position: absolute;
+		position: fixed;
 		top:0;
 		bottom: 0;
 		left: 0;
 		right: 0;
 		margin: auto;
+	}
+
+	#loader
+	{ 
+		position: fixed;
+		top:0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		margin: auto;
+		background-color: #0003;
 	}
 	
 	/* Safari */
@@ -236,6 +247,7 @@
 				document.getElementById('courseCheckboxes').innerHTML += '<input type="checkbox" name="courseSelect" value="'
 						+ COURSES[i][0] + '"> ' + COURSES[i][0] + ' - ' + COURSES[i][1] + '<br>';
 			}
+			document.getElementById('courseCheckboxes').innerHTML += '<br>';
 		}
 
 		function toggleCourses()
@@ -286,13 +298,14 @@
 		<input type="text" id="email" name="entry.1333753580" style="width: 90%" onkeydown="return event.key != 'Enter';">
 		<input type="text" id="courseString" name="entry.1398365022" style="display: none">
 		<br>
-		<input type="button" value="Submit" onclick="doSubmit()">
-		<input type="submit" id="submit" style="display: none;">
-		<br>
 		<p id="timeLog"></p>
 		<p onclick="toggleCourses()"><span id="dropdownIcon">▼</span> Enrolled courses: <span id="courseStringVis">none</span></p>
 		<div id="courseCheckboxes" style="display: none"></div>
+		<input type="button" value="Submit" onclick="doSubmit()">
+		<input type="submit" id="submit" style="display: none;">
 	</form>
-	<div id="loader" style="display: none"></div>
+	<div id="loader" style="display: none">
+		<div id="loaderCircle"></div>
+	</div>
 </body>
 </html>
