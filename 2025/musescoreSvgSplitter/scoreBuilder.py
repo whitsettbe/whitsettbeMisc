@@ -53,11 +53,13 @@ ASSOC_RULE = {
     'RehearsalMark': 'all',
     'Breath': 'down',
     'VoltaSegment': 'all',
+    'Arpeggio': 'near Stem',
+    'Fingering': 'near Note',
     DUMMY: 'near',        # if "down" or "up" fails, replaced with this temporarily
 }
 # all - assoc with every part in the nearest block
 # all_ - assoc with every part in the nearest block AND restrict the copies to staff-height
-# near - the one with min bounding octagon separation from [insert type]
+# near - the one with min bounding octagon separation from [insert type: implied STAFF]
 # up - first one not entirely below it (from the bottom)
 # down - first one not entirely above it (from the top)
 for type in ASSOC_RULE:

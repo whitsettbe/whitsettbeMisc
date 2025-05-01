@@ -14,8 +14,10 @@ SMALL_GAP_FACTOR = 0.5 # space between line and associated external objects
 MED_GAP_FACTOR = 2 # space between music lines
 BIG_GAP_FACTOR = 3 # space at the bottom and top
 
-# Which types to transpose when doing a transposition
+# Which types to transpose when doing a transposition,
+# and which types to skip
 TO_TRANSP = ['StaffLines', 'LedgerLine', 'BarLine', 'TimeSig', 'Rest', 'Bracket']
+SKIP_IN_TRANSP = ['Fingering']
 
 class PartManager:
     
@@ -221,8 +223,8 @@ class PartManager:
     # create a transposed copy of this part manager (move lines up by offset/2 line-gaps)
     def copyTransp(self, offset):
         # perform deep copy of this PM's data
-        newPM = PartManager([[ob.copy() for ob in row] for row in self.internalObjs],
-                [[ob.copy() for ob in row] for row in self.externalObjs],
+        newPM = PartManager([[ob.copy() for ob in row if ob.type not in SKIP_IN_TRANSP] for row in self.internalObjs],
+                [[ob.copy() for ob in row if ob.type not in SKIP_IN_TRANSP] for row in self.externalObjs],
                 self.ymins.copy(), self.ymaxes.copy(), [ob.copy() for ob in self.pageInfo],
                 self.staffLineGap, self.pageHeight, self.pageWidth, doCleanup = False)
         newPM.occupiedTop = self.occupiedTop
