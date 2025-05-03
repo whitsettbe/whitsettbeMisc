@@ -1,0 +1,221 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>LATN-201 Noun Endings</title>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+			crossorigin="anonymous"></script>
+		<style>
+			table, td, tr {
+				border: 1px solid black;
+				border-collapse: collapse;
+			}
+		</style>
+	</head>
+	<body onload="next()">
+		<label>Progress: </label><p id="toStudy"></p>
+		<p id="q"></p>
+		<table id="entry">
+
+		</table>
+		<input type="button" onclick="guess()" value="Submit"><br>
+		<div id="nxt">
+			<input type="button" value="Appeal" onclick="appeal()"><br>
+			<input type="button" value="Next" onclick="next()"><br>
+		</div>
+		<p id="resp"></p>
+		<table>
+			<tbody id="a" style="display:none"></tbody>
+		</table>
+		<footer style="position: fixed; left: 0; bottom: 0">
+			<a href="LATN201.html">Back</a>
+		</footer>
+		<script>
+
+const DECLENSIONS = [
+	'1st declension',
+	'2nd declension',
+	'2nd declension neuter',
+	'3rd declension',
+	'3rd declension neuter',
+	'4th declension',
+	'4th declension neuter',
+	'5th declension feminine',
+	'5th declension masculine'
+];
+
+const CASES = [
+	'singular nominative',
+	'singular genitive',
+	'singular dative',
+	'singular accusative',
+	'singular ablative',
+	'singular vocative',
+	'plural nominative',
+	'plural genitive',
+	'plural dative',
+	'plural accusative',
+	'plural ablative',
+	'plural vocative'
+]
+
+// by declension, then by case
+const SUFFIXES = [
+	['a',	'ae',		'ae',	'am',	'A',	'a',
+	'ae',	'Arum',		'Is',	'As',	'Is',	'ae'],
+	['us',	'I',		'O',	'um',	'O',	'e/I',
+	'I',	'Orum',		'Is',	'Os',	'Is',	'I'],
+	['um',	'I',		'O',	'um',	'O',	'um',
+	'a',	'Orum',		'Is',	'a',	'Is',	'a'],
+	['-',	'is',		'I',	'em',	'e',	'-',
+	'Es',	'um/ium',	'ibus',	'Es',	'ibus',	'Es'],
+	['-',	'is',		'I',	'-',	'e',	'-',
+	'a',	'um',		'ibus',	'a',	'ibus',	'a'],
+	['us',	'Us',		'uI',	'um',	'U',	'us',
+	'Us',	'uum',		'ibus',	'Us',	'ibus',	'Us'],
+	['U',	'Us',		'U',	'U',	'U',	'U',
+	'ua',	'uum',		'ibus',	'ua',	'ibus',	'ua'],
+	['Es',	'eI',		'eI',	'em',	'E',	'Es',
+	'Es',	'Erum',		'Ebus',	'Es',	'Ebus',	'Es'],
+	['Es',	'EI',		'Ei',	'em',	'E',	'Es',
+	'Es',	'Erum',		'Ebus',	'Es',	'Ebus',	'Es']
+]
+
+		// Replace capital vowels with macron-ated lowercase vowels
+		function toMacron(s, handleCaps=true)
+		{
+			out = "";
+			for(var i = 0; i < s.length; i++)
+			{
+				c = s.charAt(i);
+				if(handleCaps && "AEIOU".includes(c))
+					out += "aeiou".charAt("AEIOU".indexOf(c)) + "\u0304";
+				else if(c == '\\')
+					out += "\u0304";
+				else
+					out += c;
+			}
+			return out;
+		}
+
+		// Build table for responses (two columns for sing/plur)
+		tableDat = "";
+		tableDat += "<th><td>" + CASES[0].split(" ")[0] + "</td><td>" + CASES[CASES.length-1].split(" ")[0] + "</td></th>";
+		numCaseType = CASES.length / 2;
+		for(var i = 0; i < numCaseType; i++)
+		{
+			tableDat += "<tr><td>" + CASES[i].split(" ")[1] + "</td>";
+			tableDat += '<td><input type="text" id="' + i + '" onkeyup="refreshBox(' + i + ')" autocomplete="off"></td>';
+			tableDat += '<td><input type="text" id="' + (i+numCaseType) + '" onkeyup="refreshBox(' + (i+numCaseType) + ')" autocomplete="off"></td>';
+		}
+		$('#entry')[0].innerHTML = tableDat;
+
+		// Build table for answers
+		tableDat = "";
+		tableDat += "<th><td>" + CASES[0].split(" ")[0] + "</td><td>" + CASES[CASES.length-1].split(" ")[0] + "</td></th>";
+		numCaseType = CASES.length / 2;
+		for(var i = 0; i < numCaseType; i++)
+		{
+			tableDat += "<tr><td>" + CASES[i].split(" ")[1] + "</td>";
+			tableDat += '<td id="a' + i + '"></td>';
+			tableDat += '<td id="a' + (i+numCaseType) + '"></td>';
+		}
+		$('#a')[0].innerHTML = tableDat;
+
+
+		// Generate questions
+		var ops = [];
+		for(var i = 0; i < DECLENSIONS.length; i++)
+		{
+			op = DECLENSIONS[i] + "\t";
+			for(var j = 0; j < CASES.length; j++)
+			{
+				op += (j > 0 ? ", " : "") + toMacron(SUFFIXES[i][j]);
+			}
+			ops.push(op);
+		}
+
+
+		// Split questions and answers
+		var qs = [];
+		var as = [];
+		for(var i = ops.length - 1; i >= 0; i--)
+		{
+			first = ops[i].split('\t')[0];
+			second = ops[i].split('\t')[1];
+			
+			qs.push(first);
+			as.push(second);
+		}
+		var showing = false;
+		var idx = 0;
+		var errs = 0;
+		var appealed = false;
+
+		function refreshBox(boxNum)
+		{
+			$('#'+boxNum)[0].value = toMacron($('#'+boxNum)[0].value, false);
+		}
+
+		function guess()
+		{
+			if(!showing)
+			{
+				givens = [];
+				for(var i = 0; i < CASES.length; i++)
+					givens.push($('#'+i)[0].value.toLowerCase());
+				if(givens.join(", ") === as[idx].toLowerCase())
+				{
+					$('#resp')[0].innerText = "Correct! The answer is:";
+					qs.splice(idx, 1);
+					as.splice(idx, 1);
+					appealed = true;
+				}
+				else
+				{
+					$('#resp')[0].innerText = "Incorrect. The answer is:";
+					errs++;
+				}
+				$('#a')[0].style.display = "inline";
+				$('#nxt')[0].style.display = "block";
+				showing = true;
+				$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+			}
+			else
+			{
+				//next();
+			}
+		}
+
+		function appeal()
+		{
+			if(!appealed)
+			{
+				$('#resp')[0].innerText = "(Appealed)";
+				qs.splice(idx, 1);
+				as.splice(idx, 1);
+				errs--;
+				appealed = true;
+			}
+		}
+
+		function next()
+		{
+			$('#toStudy')[0].innerText = qs.length + ' / ' + ops.length + ' remaining (' + errs + ' mistakes)';
+			if(qs.length == 0) return;
+			idx = Math.floor(Math.random() * qs.length);
+			$('#q')[0].innerText = qs[idx];
+			for(var i = 0; i < CASES.length; i++)
+			{
+				$('#'+i)[0].value = '';
+				$('#a'+i)[0].innerText = as[idx].split(', ')[i];
+			}
+			$('#resp')[0].innerText = '';
+			$('#a')[0].style.display = "none";
+			$('#nxt')[0].style.display = "none";
+			showing = false;
+			appealed = false;
+		}
+		</script>
+	</body>
+</html>
