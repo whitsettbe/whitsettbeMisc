@@ -287,7 +287,7 @@
 			document.getElementById('courseString').value = courseString;
 			document.getElementById('courseStringVis').innerHTML = courseString;
 		})
-
+		
 	</script>
 </head>
 <body onload="doLoad()">
@@ -304,8 +304,15 @@
 		<input type="button" value="Submit" onclick="doSubmit()">
 		<input type="submit" id="submit" style="display: none;">
 	</form>
+	<div id="temporary-link" style="display:none;"><br><a href="https://docs.google.com/forms/d/e/1FAIpQLSe7_dQPv-a7a5XdVMzxbD8ytdEnlfT28IqhG-3xw0u6hS7__w/viewform?pli=1">Anonymous feedback form! Please fill out by Wed. Week 9! (After submitting this one, that is :) )</a></div>
 	<div id="loader" style="display: none">
 		<div id="loaderCircle"></div>
 	</div>
+	<script>
+		if((new Date()) < (new Date('2026-05-28')))
+		{
+			document.getElementById('temporary-link').style.display = "block";
+		}
+	</script>
 </body>
 </html>
