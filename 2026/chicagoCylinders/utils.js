@@ -216,7 +216,7 @@ function generate_wire_frame(bellCount, numRows, scrollParam = 0, circle_res_fac
 
     // Set material colors
     baseColor = 0x888888;
-    highlightColor = 0x000000;
+    highlightColor = 0xffffff;
     opacity = 0.5;
 
     // Create horizontal loops

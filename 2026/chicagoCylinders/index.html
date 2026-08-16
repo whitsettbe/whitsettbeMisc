@@ -87,7 +87,7 @@
 
                         const ctx = canvas.getContext("2d");
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        ctx.fillStyle = "#111111";
+                        ctx.fillStyle = "#dddddd";
                         ctx.textAlign = "center";
                         ctx.textBaseline = "middle";
                         ctx.font = "bold 72px sans-serif";
@@ -162,23 +162,102 @@
             .container
             {
                 display: grid;
-                grid-template-columns: 50% 50%;
+                grid-template-columns: minmax(320px, 44%) minmax(320px, 56%);
+                gap: 24px;
                 height: 100%;
+                padding: 24px;
+                box-sizing: border-box;
+                background: linear-gradient(135deg, #f5f7fb 0%, #e9edf5 100%);
             }
 
             .container-cell
             {
-                border: 1px solid black;
+                border: 1px solid rgba(17, 24, 39, 0.08);
+                border-radius: 18px;
+                background: rgba(255, 255, 255, 0.72);
+                box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+                backdrop-filter: blur(10px);
             }
 
             #controls
             {
-                padding: 10px;
+                padding: 28px 30px 20px;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                color: #1f2937;
+                position: relative;
+                overflow: auto;
             }
 
-            #notation-input
+            #controls::before
             {
-                width: 90%;
+                content: "";
+                position: absolute;
+                inset: 0 0 auto 0;
+                height: 8px;
+                background: linear-gradient(90deg, #7c3aed, #2563eb, #0ea5e9);
+            }
+
+            #controls h1
+            {
+                margin: 0 0 12px;
+                font-size: clamp(2rem, 3vw, 2.6rem);
+                line-height: 1.1;
+                letter-spacing: -0.04em;
+                color: #111827;
+            }
+
+            #controls h2
+            {
+                margin: 18px 0 10px;
+                font-size: 1.1rem;
+                color: #374151;
+                letter-spacing: 0.02em;
+            }
+
+            #controls p
+            {
+                margin: 0 0 14px;
+                line-height: 1.6;
+                color: #4b5563;
+            }
+
+            #controls label,
+            #controls small
+            {
+                display: block;
+                color: #4b5563;
+            }
+
+            #controls input[type="number"],
+            #controls input[type="text"]
+            {
+                width: min(100%, 32rem);
+                margin: 8px 0 10px;
+                padding: 12px 14px;
+                border: 1px solid rgba(148, 163, 184, 0.8);
+                border-radius: 12px;
+                font-size: 1rem;
+                background: rgba(255, 255, 255, 0.9);
+                color: #111827;
+                box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+                transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+            }
+
+            #controls input[type="number"]:focus,
+            #controls input[type="text"]:focus
+            {
+                outline: none;
+                border-color: #6366f1;
+                box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+            }
+
+            #controls small
+            {
+                margin-top: 4px;
+                color: #6b7280;
+                line-height: 1.5;
             }
 
             #scroll-input
@@ -186,15 +265,41 @@
                 writing-mode: vertical-lr;
                 position: absolute;
                 top: 10%;
-                right: 0;
+                right: 12px;
                 height: 80%;
+                width: 18px;
+                accent-color: #6d28d9;
+                border-radius: 999px;
+                box-shadow: 0 8px 20px rgba(109, 40, 217, 0.15);
+            }
+
+            #scene-container
+            {
+                position: relative;
+                overflow: hidden;
+                background: linear-gradient(180deg, #111827 0%, #0f172a 100%);
+            }
+
+            #scene-container a-scene
+            {
+                display: block;
+                width: 100%;
+                height: 100%;
+                border-radius: 18px;
             }
 
             footer
             {
-                position: absolute;
-                bottom: 0;
-                left: 0;
+                margin-top: auto;
+                padding-top: 22px;
+                border-top: 1px solid rgba(148, 163, 184, 0.4);
+                color: #6b7280;
+            }
+
+            footer small
+            {
+                display: block;
+                line-height: 1.5;
             }
         </style>
     </head>
@@ -207,24 +312,25 @@
                 <p>This tool generates a cylindrical representation of change ringing methods, based on
                     the physical models adorning the University of Chicago Mitchell Tower ringing chamber.</p>
 
-                <p>Handstrokes and backstrokes are given separate (interleaved) columns.
+                <p>Handstroke (h) and backstroke (b) positions are given separate columns.
                     When places are made, the bells "flip" across the cylinder, due to the interleaving
-                    of handstrokes and backstrokes. These can be seen from above.</p>
+                    of handstrokes and backstrokes. These flips can be seen from above.</p>
 
                 <h2>Parameters</h2>
                 Number of bells:<br>
                 <input type="number" id="count-input" min="2" step="1" value="6"><br>
                 Editable place notation:<br>
                 <input type="text" id="notation-input" value="x16x16x16x16x16x12"><br>
-                <small>Note: Comma-based symmetry notation is not yet supported.
-                    Letters are converted as A=1, B=2, C=3, etc. up to W=23.</small>
+                <small>Note: Comma-based symmetry notation is not yet supported.</small><br>
+                <small>Note: Letters are converted as A=10, B=11, etc. up to W=32.</small>
 
                 <h2>Controls</h2>
                 <p>Click and drag to rotate the view, scroll to zoom in and out,
                     and use the slider to move up and down the cylinder.</p>
 
                 <footer>
-                    <small>Created by Benjamin Whitsett, with advice from Tom Farthing. Built with A-Frame and Three.js.</small>
+                    <small>Created by Benjamin Whitsett, with advice from Tom Farthing.<br>
+                        Built with A-Frame and Three.js. Styling developed with Github Copilot.</small>
                 </footer>
 
                 
