@@ -8,8 +8,9 @@
         <script>
             AFRAME.registerComponent("some-line", {
                 schema: {
-                    height: { type: "number", default: 2 },
-                    numLines: { type: "int", default: 6 }
+                    numLines: { type: "int", default: 6 },
+                    notation: { type: "string", default: "x16x16x16x16x16x12" },
+                    scrollFrac: { type: "number", default: 0 }
                 },
                 init: function()
                 {
@@ -24,23 +25,9 @@
                 updateGeometry: function()
                 {
                     const points = [];
-                    const nPts = 20;
-                    const height = this.data.height;
                     const numLines = this.data.numLines;
 
-                    for (let i = 0; i < numLines; i++)
-                    {
-                        points.push([]);
-                        for (let j = 0; j <= nPts; j++)
-                        {
-                            points[i].push(new THREE.Vector3(
-                                Math.cos((j / nPts + i / numLines) * 2 * Math.PI),
-                                (j / nPts - 0.5) * height,
-                                Math.sin((j / nPts + i / numLines) * 2 * Math.PI)
-                            ));
-                        }
-                    }
-
+                    // Remove existing lines from the scene
                     if (this.lines)
                     {
                         for (const line of this.lines)
@@ -49,12 +36,16 @@
                         }
                     }
 
-                    const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
-                    for (let i = 0; i < numLines; i++)
+                    // Convert notation into lists of three.js Vector3 points
+                    const notation = this.data.notation;
+                    const scrollFrac = this.data.scrollFrac;
+                    const linesList = parse_place_notation_to_lines(notation, numLines, scrollFrac, includeFrame=true);
+
+                    // Add lines to the object
+                    for (const line of linesList)
                     {
-                        const geometry = new THREE.BufferGeometry().setFromPoints(points[i]);
-                        this.lines.push(new THREE.Line(geometry, material));
-                        this.el.object3D.add(this.lines[this.lines.length - 1]);
+                        this.lines.push(line);
+                        this.el.object3D.add(line);
                     }
                 }
             });
@@ -62,11 +53,13 @@
             document.addEventListener("DOMContentLoaded", function()
             {
                 const lineEl = document.querySelector("[some-line]");
-                const heightSlider = document.getElementById("height-slider");
-                const heightInput = document.getElementById("height-input");
+                //const heightSlider = document.getElementById("height-slider");
+                //const heightInput = document.getElementById("height-input");
                 const countInput = document.getElementById("count-input");
+                const scrollInput = document.getElementById("scroll-input");
+                const notationInput = document.getElementById("notation-input");
 
-                function syncHeight(value)
+                /*function syncHeight(value)
                 {
                     const safeValue = Number(value);
                     if (!Number.isFinite(safeValue)) return;
@@ -97,7 +90,7 @@
                 if (lineEl && heightSlider)
                 {
                     syncHeight(heightSlider.value);
-                }
+                }*/
 
                 if (countInput)
                 {
@@ -105,6 +98,25 @@
                     {
                         lineEl.setAttribute("some-line", "numLines", event.target.value);
                     });
+                    lineEl.setAttribute("some-line", "numLines", countInput.value);
+                }
+
+                if (notationInput)
+                {
+                    notationInput.addEventListener("input", function(event)
+                    {
+                        lineEl.setAttribute("some-line", "notation", event.target.value);
+                    });
+                    lineEl.setAttribute("some-line", "notation", notationInput.value);
+                }
+
+                if (scrollInput)
+                {
+                    scrollInput.addEventListener("input", function(event)
+                    {
+                        lineEl.setAttribute("some-line", "scrollFrac", event.target.value);
+                    });
+                    lineEl.setAttribute("some-line", "scrollFrac", scrollInput.value);
                 }
             });
         </script>
@@ -124,38 +136,78 @@
                 grid-template-columns: 50% 50%;
                 height: 100%;
             }
+
             .container-cell
             {
                 border: 1px solid black;
-                font-size: 30px;
-                text-align: center;
+            }
+
+            #controls
+            {
+                padding: 10px;
+            }
+
+            #notation-input
+            {
+                width: 90%;
+            }
+
+            #scroll-input
+            {
+                writing-mode: vertical-lr;
+                position: absolute;
+                top: 10%;
+                right: 0;
+                height: 80%;
             }
         </style>
     </head>
     <body>
 
         <div class="container">
-        <div id="controls" class="container-cell">
-            <h3>Adjust Line Height</h3>
-            <input type="range" id="height-slider" min="0" max="10" step="0.1" value="2"><br>
-            <input type="number" id="height-input" min="0" max="10" step="0.1" value="2">
+            <div id="controls" class="container-cell">
+                <h1>Chicago Cylinders</h1>
 
-            <h3>Adjust Line Count</h3>
-            <input type="number" id="count-input" min="2" step="1" value="6">
-        </div>
-        <div id="scene-container" class="container-cell">
-            <a-scene embedded>
-                <a-sphere position="0 0 0" radius="0.5" color="#EF2D5E" some-line></a-sphere>
-                <a-entity light="type: ambient; color: #bbb"></a-entity>
-                <a-entity light="type: directional; color: #FFF; intensity: 0.95" position="-0.5 1 1"></a-entity>
-                <a-entity
-                        camera
-                        look-controls="enabled: false"
-                        orbit-controls="target: 0 0 0; minDistance: 2; maxDistance: 180; initialPosition: 0 3 5; rotateSpeed: 0.5; minPolarAngle: 0; maxPolarAngle: 180">
-                    </a-entity>
-                <!--<a-entity position="0 0 0" some-line></a-entity>-->
-                <a-sky color="#ECECEC"></a-sky>
-            </a-scene></div>
+                <p>This tool generates cylindrical representations of change ringing methods, based on
+                    the physical models adorning the University of Chicago Mitchell Tower ringing chamber.</p>
+
+                <h2>Description</h2>
+
+                <p>Each combination of position and handstroke/backstroke is given a column. They are interleaved as
+                    <pre>1b, 2h, 3b, ..., Nh/b, Nb/h, ..., 3h, 2b, 1h</pre>
+                    so that a plain hunt is a counterclockwise downward spiral. Here, the 1b column is emphasized.
+                </p>
+
+                <p>When places are made, the bells "flip" across the cylinder, due to the interleaving
+                of handstrokes and backstrokes. These can be seen from above.</p>
+
+                <!--<h3>Adjust Line Height</h3>
+                <input type="range" id="height-slider" min="0" max="10" step="0.1" value="2"><br>
+                <input type="number" id="height-input" min="0" max="10" step="0.1" value="2">-->
+
+                <h2>Parameters</h2>
+                Number of bells:<br>
+                <input type="number" id="count-input" min="2" step="1" value="6"><br>
+                Place notation:<br>
+                <input type="text" id="notation-input" value="x16x16x16x16x16x12"><br>
+                <small>Note: Comma-based symmetry notation is not yet supported.
+                    Letters are converted as A=1, B=2, C=3, etc. up to W=23.</small>
+
+                <h2>Controls</h2>
+                <p>Click and drag to rotate the view, scroll to zoom in and out,
+                    and use the slider to move up and down the cylinder.</p>
+            </div>
+            <div id="scene-container" class="container-cell">
+                <a-scene embedded xr-mode-ui="enabled: false">
+                    <a-entity
+                            camera
+                            look-controls="enabled: false"
+                            orbit-controls="target: 0 0 0; minDistance: 1.5; maxDistance: 180; initialPosition: 0 3 5; rotateSpeed: 0.5; minPolarAngle: 0; maxPolarAngle: 180">
+                        </a-entity>
+                    <a-entity position="0 0 0" some-line></a-entity>
+                </a-scene>
+                <input type="range" id="scroll-input" min="0" max="1" step=".001" value="0">
+            </div>
         </div>
 
     </body>

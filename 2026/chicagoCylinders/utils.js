@@ -1,3 +1,9 @@
+// Colors match those of https://rsw.me.uk/blueline/methods/
+const BLUELINE_COLORS = [
+    0xdd1111, 0x1111dd, 0x11dd11, 0xdd11dd, 0xdddd11, 0x11dddd,
+    0x306754, 0xaf7817, 0xf75d59, 0x736aff
+]
+
 /**
  * Parses a place notation string to complete lists of places made.
  * Symmetry indication with a comma is not yet supported.
@@ -71,7 +77,7 @@ function parse_place_notation(placeNotation, bellCount)
     // Ensure no internal places are missing (i.e., the gaps between places should be even-sized)
     for(let placeRow of places)
     {
-        placeRow.sort();
+        placeRow.sort((a, b) => a - b);
         for (let i = 0; i < placeRow.length - 1; i++)
         {
             const gap = placeRow[i + 1] - placeRow[i] - 1; // exclude both endpoints
@@ -150,25 +156,138 @@ function rows_to_positions(rows)
 }
 
 /**
+ * Determines the height step between rows given the bell count.
+ * @param {number} bellCount - The total number of bells.
+ * @returns {number} The height step between rows.
+ */
+function get_height_step(bellCount)
+{
+    return Math.PI / bellCount;
+}
+
+/**
  * Converts a list of bell positions into cylindrical coordinates for a blueline.
  * Handstroke and backstroke are separated and interleaved, so
  * ccwise from the x-axis are 1b, 2h, 3b, 4h, etc. and cwise are 1h, 2b, 3h, 4b, etc.
  * Assumption: starting at backstroke.
  * @param {Array} positions - An array of bell positions, where each position is an integer from 1 to bellCount.
  * @param {number} bellCount - The total number of bells.
+ * @param {number} scrollParam - The scroll fraction along the method (default is 0, i.e. scrolled to top)
  * @returns {Array} An array of three.js vector3 objects representing the line coordinates.
  */
-function positions_to_points(positions, bellCount)
+function positions_to_points(positions, bellCount, scrollParam = 0)
 {
-    const heightStep = Math.PI / bellCount;
+    const heightStep = get_height_step(bellCount);
+    const totalHeight = heightStep * (positions.length - 1);
 
     const angles = positions.map((pos, index) => {
         return (pos - 0.5) * [-1, 1][(index + pos) % 2] * (Math.PI / bellCount);
     });
 
     const points = angles.map((angle, index) => {
-        return new THREE.Vector3(Math.cos(angle), -index * heightStep, Math.sin(angle));
+        return new THREE.Vector3(Math.cos(angle), -index * heightStep + scrollParam * totalHeight, -Math.sin(angle));
+        // z-axis is negative to match standard orientation in 2d
     });
 
     return points;
+}
+
+/**
+ * Generate a wire frame for the bell lines.
+ */
+function generate_wire_frame(bellCount, numRows, scrollParam = 0, circle_res_factor = 3)
+{
+    // Precompute circular coordinates
+    const cs_vals = [];
+    for (let i = 0; i <= 2 * bellCount * circle_res_factor; i++)
+    {
+        const angle = (i / circle_res_factor + 0.5) * (Math.PI / bellCount);
+        cs_vals.push([Math.cos(angle), Math.sin(angle)]);
+    }
+
+    // Precompute height values
+    const h_vals = [];
+    const heightStep = get_height_step(bellCount);
+    const totalHeight = heightStep * (numRows - 1);
+    for (let i = 0; i < numRows; i++)
+    {
+        h_vals.push(-i * heightStep + scrollParam * totalHeight);
+    }
+
+    // Set material colors
+    baseColor = 0x888888;
+    highlightColor = 0x000000;
+    opacity = 0.5;
+
+    // Create horizontal loops
+    const horizontalLines = [];
+    for (let i = 0; i < numRows; i++)
+    {
+        const geometry = new THREE.BufferGeometry();
+        const points = [];
+        for (let j = 0; j <= 2 * bellCount * circle_res_factor; j++)
+        {
+            const [x, z] = cs_vals[j];
+            points.push(new THREE.Vector3(x, h_vals[i], -z));
+        }
+        geometry.setFromPoints(points);
+        const material = new THREE.LineBasicMaterial({color: (i == 0 || i == numRows - 1) ? highlightColor : baseColor,
+            opacity: opacity, transparent: true
+        });
+        horizontalLines.push(new THREE.Line(geometry, material));
+    }
+
+    // Create vertical lines
+    const verticalLines = [];
+    for (let i = 0; i < 2 * bellCount; i++)
+    {
+        const geometry = new THREE.BufferGeometry();
+        const points = [];
+        for (let j = 0; j < numRows; j++)
+        {
+            const [x, z] = cs_vals[i * circle_res_factor];
+            points.push(new THREE.Vector3(x, h_vals[j], -z));
+        }
+        geometry.setFromPoints(points);
+        const material = new THREE.LineBasicMaterial({ color: (i == 0) ? highlightColor : baseColor,
+                opacity: opacity, transparent: true
+         });
+        verticalLines.push(new THREE.Line(geometry, material));
+    }
+
+    return [...horizontalLines, ...verticalLines];
+}
+
+/**
+ * Converts a place notation string into a list of three.js line objects.
+ * @param {string} placeNotation - The place notation string to parse.
+ * @param {number} bellCount - The total number of bells.
+ * @param {number} scrollParam - The scroll fraction along the method (default is 0, i.e. scrolled to top).
+ * @param {boolean} includeFrame - Whether to include a wire frame for the lines (default is false).
+ * @returns {Array} An array of three.js line objects.
+ */
+function parse_place_notation_to_lines(placeNotation, bellCount, scrollParam = 0, includeFrame = false)
+{
+    // Extract 3d points
+    const places = parse_place_notation(placeNotation, bellCount);
+    const rows = places_to_rows(places, bellCount);
+    const positions = rows_to_positions(rows);
+    const points = positions.map(pos => positions_to_points(pos, bellCount, scrollParam));
+
+    // Create bell lines
+    const lines = points.map((bellPoints, index) => {
+        const geometry = new THREE.BufferGeometry().setFromPoints(bellPoints);
+        const material = new THREE.LineBasicMaterial({ color: BLUELINE_COLORS[index % BLUELINE_COLORS.length] });
+        return new THREE.Line(geometry, material);
+    });
+
+    // Optionally add a wire frame
+    if (includeFrame)
+    {
+        return [...lines, ...generate_wire_frame(bellCount, rows.length, scrollParam)];
+    }
+    else
+    {
+        return lines;
+    }
 }
