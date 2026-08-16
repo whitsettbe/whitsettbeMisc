@@ -1,130 +1,151 @@
+<!DOCTYPE html>
 <html>
     <head>
         <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
         <script src="https://unpkg.com/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js"></script>
         <script src="https://unpkg.com/aframe-orbit-controls@1.3.2/dist/aframe-orbit-controls.min.js"></script>
+        <script src="utils.js"></script>
         <script>
             AFRAME.registerComponent("some-line", {
                 schema: {
-                    height: { type: "number", default: 2 }
+                    height: { type: "number", default: 2 },
+                    numLines: { type: "int", default: 6 }
                 },
-                init: function() {
-                    this.line = null;
+                init: function()
+                {
+                    this.lines = [];
                     this.updateGeometry = this.updateGeometry.bind(this);
                     this.updateGeometry();
                 },
-                update: function() {
+                update: function()
+                {
                     this.updateGeometry();
                 },
-                updateGeometry: function() {
+                updateGeometry: function()
+                {
                     const points = [];
                     const nPts = 20;
                     const height = this.data.height;
+                    const numLines = this.data.numLines;
 
-                    for (let i = 0; i <= nPts; i++) {
-                        points.push(new THREE.Vector3(
-                            Math.cos(i * 2 * Math.PI / nPts),
-                            (i / nPts - 0.5) * height,
-                            Math.sin(i * 2 * Math.PI / nPts)
-                        ));
+                    for (let i = 0; i < numLines; i++)
+                    {
+                        points.push([]);
+                        for (let j = 0; j <= nPts; j++)
+                        {
+                            points[i].push(new THREE.Vector3(
+                                Math.cos((j / nPts + i / numLines) * 2 * Math.PI),
+                                (j / nPts - 0.5) * height,
+                                Math.sin((j / nPts + i / numLines) * 2 * Math.PI)
+                            ));
+                        }
                     }
 
-                    if (this.line) {
-                        this.el.object3D.remove(this.line);
+                    if (this.lines)
+                    {
+                        for (const line of this.lines)
+                        {
+                            this.el.object3D.remove(line);
+                        }
                     }
 
                     const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
-                    const geometry = new THREE.BufferGeometry().setFromPoints(points);
-                    this.line = new THREE.Line(geometry, material);
-                    this.el.object3D.add(this.line);
+                    for (let i = 0; i < numLines; i++)
+                    {
+                        const geometry = new THREE.BufferGeometry().setFromPoints(points[i]);
+                        this.lines.push(new THREE.Line(geometry, material));
+                        this.el.object3D.add(this.lines[this.lines.length - 1]);
+                    }
                 }
             });
 
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function()
+            {
                 const lineEl = document.querySelector("[some-line]");
                 const heightSlider = document.getElementById("height-slider");
                 const heightInput = document.getElementById("height-input");
+                const countInput = document.getElementById("count-input");
 
-                function syncHeight(value) {
+                function syncHeight(value)
+                {
                     const safeValue = Number(value);
                     if (!Number.isFinite(safeValue)) return;
-                    if (lineEl) {
+                    if (lineEl)
+                    {
                         lineEl.setAttribute("some-line", "height", safeValue);
                     }
                     if (heightSlider) heightSlider.value = String(safeValue);
                     if (heightInput) heightInput.value = String(safeValue);
                 }
 
-                if (heightSlider) {
-                    heightSlider.addEventListener("input", function(event) {
+                if (heightSlider)
+                {
+                    heightSlider.addEventListener("input", function(event)
+                    {
                         syncHeight(event.target.value);
                     });
                 }
 
-                if (heightInput) {
-                    heightInput.addEventListener("input", function(event) {
+                if (heightInput)
+                {
+                    heightInput.addEventListener("input", function(event)
+                    {
                         syncHeight(event.target.value);
                     });
                 }
 
-                if (lineEl && heightSlider) {
+                if (lineEl && heightSlider)
+                {
                     syncHeight(heightSlider.value);
+                }
+
+                if (countInput)
+                {
+                    countInput.addEventListener("input", function(event)
+                    {
+                        lineEl.setAttribute("some-line", "numLines", event.target.value);
+                    });
                 }
             });
         </script>
         <style>
-            /*body {
+
+            html, body
+            {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            .container
+            {
                 display: grid;
-                grid-template-columns: auto auto auto;
-                grid-template-rows: auto 1fr;
+                grid-template-columns: 50% 50%;
+                height: 100%;
             }
-
-            body div {
-                display: flex;
-            }*/
-
-            .container {
-            display: grid;
-            grid-template-columns: auto auto;
-            background-color: dodgerblue;
-            padding: 10px;
-            height: 100vh;
-            }
-            .container div {
-            background-color: #f1f1f1;
-            border: 1px solid black;
-            padding: 10px;
-            font-size: 30px;
-            text-align: center;
+            .container-cell
+            {
+                border: 1px solid black;
+                font-size: 30px;
+                text-align: center;
             }
         </style>
     </head>
     <body>
 
-        <div id="controls">
-            <input type="range" id="height-slider" min="0" max="10" step="0.1" value="2" style="position: absolute; top: 10px; left: 10px;">
-            <input type="number" id="height-input" min="0" max="10" step="0.1" value="2" style="position: absolute; top: 40px; left: 10px;">
-        </div>
-
-        <div id="scene-container" style="background-color:blue">
-            <!--<a-scene embedded style="width: 100%; height: 100%;">
-                <a-sphere position="0 0 0" radius="0.5" color="#EF2D5E"></a-sphere>
-                <a-entity light="type: ambient; color: #bbb"></a-entity>
-                <a-entity light="type: directional; color: #FFF; intensity: 0.95" position="-0.5 1 1"></a-entity>
-                <a-entity
-                        camera
-                        look-controls="enabled: false"
-                        orbit-controls="target: 0 0 0; minDistance: 2; maxDistance: 180; initialPosition: 0 3 5; rotateSpeed: 0.5; minPolarAngle: 0; maxPolarAngle: 180">
-                    </a-entity>
-                <a-entity position="0 0 0" some-line></a-entity>
-                <a-sky color="#ECECEC"></a-sky>
-            </a-scene>-->
-        </div>
-
         <div class="container">
-        <div>1</div>
-        <div><a-scene embedded>
-                <a-sphere position="0 0 0" radius="0.5" color="#EF2D5E"></a-sphere>
+        <div id="controls" class="container-cell">
+            <h3>Adjust Line Height</h3>
+            <input type="range" id="height-slider" min="0" max="10" step="0.1" value="2"><br>
+            <input type="number" id="height-input" min="0" max="10" step="0.1" value="2">
+
+            <h3>Adjust Line Count</h3>
+            <input type="number" id="count-input" min="2" step="1" value="6">
+        </div>
+        <div id="scene-container" class="container-cell">
+            <a-scene embedded>
+                <a-sphere position="0 0 0" radius="0.5" color="#EF2D5E" some-line></a-sphere>
                 <a-entity light="type: ambient; color: #bbb"></a-entity>
                 <a-entity light="type: directional; color: #FFF; intensity: 0.95" position="-0.5 1 1"></a-entity>
                 <a-entity
@@ -132,7 +153,7 @@
                         look-controls="enabled: false"
                         orbit-controls="target: 0 0 0; minDistance: 2; maxDistance: 180; initialPosition: 0 3 5; rotateSpeed: 0.5; minPolarAngle: 0; maxPolarAngle: 180">
                     </a-entity>
-                <a-entity position="0 0 0" some-line></a-entity>
+                <!--<a-entity position="0 0 0" some-line></a-entity>-->
                 <a-sky color="#ECECEC"></a-sky>
             </a-scene></div>
         </div>
