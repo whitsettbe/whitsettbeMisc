@@ -162,7 +162,7 @@ function rows_to_positions(rows)
  */
 function get_height_step(bellCount)
 {
-    return Math.PI / bellCount;
+    return Math.PI / bellCount / 2;
 }
 
 /**

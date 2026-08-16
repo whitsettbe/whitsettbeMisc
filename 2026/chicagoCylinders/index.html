@@ -15,6 +15,10 @@
                 init: function()
                 {
                     this.lines = [];
+                    this.labels = [];
+                    this.labelGroup = new THREE.Group();
+                    this.el.object3D.add(this.labelGroup);
+
                     this.updateGeometry = this.updateGeometry.bind(this);
                     this.updateGeometry();
                 },
@@ -22,19 +26,35 @@
                 {
                     this.updateGeometry();
                 },
+                remove: function()
+                {
+                    for (const line of this.lines)
+                    {
+                        this.el.object3D.remove(line);
+                    }
+                    for (const label of this.labels)
+                    {
+                        this.labelGroup.remove(label);
+                    }
+                    this.el.object3D.remove(this.labelGroup);
+                },
                 updateGeometry: function()
                 {
-                    const points = [];
                     const numLines = this.data.numLines;
 
-                    // Remove existing lines from the scene
-                    if (this.lines)
+                    // Remove existing lines
+                    for (const line of this.lines)
                     {
-                        for (const line of this.lines)
-                        {
-                            this.el.object3D.remove(line);
-                        }
+                        this.el.object3D.remove(line);
                     }
+                    this.lines.length = 0; // Clear the array
+
+                    // Remove existing labels
+                    for (const label of this.labels)
+                    {
+                        this.labelGroup.remove(label);
+                    }
+                    this.labels.length = 0; // Clear the array
 
                     // Convert notation into lists of three.js Vector3 points
                     const notation = this.data.notation;
@@ -47,50 +67,59 @@
                         this.lines.push(line);
                         this.el.object3D.add(line);
                     }
+
+                    this.buildBellLabels(numLines);
+                },
+                buildBellLabels: function(bellCount)
+                {
+                    const radius = 1.2;
+                    const y = 0;
+
+                    for (let i = 1; i <= 2 * bellCount; i++)
+                    {
+                        const angle = (i - 0.5) * (Math.PI / bellCount);
+                        let labelText = String(Math.round(bellCount + .5 - Math.abs(bellCount + .5 - i)));
+                        labelText += (i % 2 == 1 ? "b" : "h");
+
+                        const canvas = document.createElement("canvas");
+                        canvas.width = 256;
+                        canvas.height = 128;
+
+                        const ctx = canvas.getContext("2d");
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillStyle = "#111111";
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle";
+                        ctx.font = "bold 72px sans-serif";
+                        ctx.fillText(labelText, canvas.width / 2, canvas.height / 2);
+
+                        const texture = new THREE.CanvasTexture(canvas);
+                        const material = new THREE.SpriteMaterial({
+                            map: texture,
+                            transparent: true,
+                            depthTest: false
+                        });
+
+                        const label = new THREE.Sprite(material);
+                        label.position.set(
+                            Math.cos(angle) * radius,
+                            y,
+                            -Math.sin(angle) * radius
+                        );
+                        label.scale.set(0.4, 0.2, 1);
+
+                        this.labelGroup.add(label);
+                        this.labels.push(label);
+                    }
                 }
             });
 
             document.addEventListener("DOMContentLoaded", function()
             {
                 const lineEl = document.querySelector("[some-line]");
-                //const heightSlider = document.getElementById("height-slider");
-                //const heightInput = document.getElementById("height-input");
                 const countInput = document.getElementById("count-input");
                 const scrollInput = document.getElementById("scroll-input");
                 const notationInput = document.getElementById("notation-input");
-
-                /*function syncHeight(value)
-                {
-                    const safeValue = Number(value);
-                    if (!Number.isFinite(safeValue)) return;
-                    if (lineEl)
-                    {
-                        lineEl.setAttribute("some-line", "height", safeValue);
-                    }
-                    if (heightSlider) heightSlider.value = String(safeValue);
-                    if (heightInput) heightInput.value = String(safeValue);
-                }
-
-                if (heightSlider)
-                {
-                    heightSlider.addEventListener("input", function(event)
-                    {
-                        syncHeight(event.target.value);
-                    });
-                }
-
-                if (heightInput)
-                {
-                    heightInput.addEventListener("input", function(event)
-                    {
-                        syncHeight(event.target.value);
-                    });
-                }
-
-                if (lineEl && heightSlider)
-                {
-                    syncHeight(heightSlider.value);
-                }*/
 
                 if (countInput)
                 {
@@ -160,6 +189,13 @@
                 right: 0;
                 height: 80%;
             }
+
+            footer
+            {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+            }
         </style>
     </head>
     <body>
@@ -168,27 +204,17 @@
             <div id="controls" class="container-cell">
                 <h1>Chicago Cylinders</h1>
 
-                <p>This tool generates cylindrical representations of change ringing methods, based on
+                <p>This tool generates a cylindrical representation of change ringing methods, based on
                     the physical models adorning the University of Chicago Mitchell Tower ringing chamber.</p>
 
-                <h2>Description</h2>
-
-                <p>Each combination of position and handstroke/backstroke is given a column. They are interleaved as
-                    <pre>1b, 2h, 3b, ..., Nh/b, Nb/h, ..., 3h, 2b, 1h</pre>
-                    so that a plain hunt is a counterclockwise downward spiral. Here, the 1b column is emphasized.
-                </p>
-
-                <p>When places are made, the bells "flip" across the cylinder, due to the interleaving
-                of handstrokes and backstrokes. These can be seen from above.</p>
-
-                <!--<h3>Adjust Line Height</h3>
-                <input type="range" id="height-slider" min="0" max="10" step="0.1" value="2"><br>
-                <input type="number" id="height-input" min="0" max="10" step="0.1" value="2">-->
+                <p>Handstrokes and backstrokes are given separate (interleaved) columns.
+                    When places are made, the bells "flip" across the cylinder, due to the interleaving
+                    of handstrokes and backstrokes. These can be seen from above.</p>
 
                 <h2>Parameters</h2>
                 Number of bells:<br>
                 <input type="number" id="count-input" min="2" step="1" value="6"><br>
-                Place notation:<br>
+                Editable place notation:<br>
                 <input type="text" id="notation-input" value="x16x16x16x16x16x12"><br>
                 <small>Note: Comma-based symmetry notation is not yet supported.
                     Letters are converted as A=1, B=2, C=3, etc. up to W=23.</small>
@@ -196,13 +222,19 @@
                 <h2>Controls</h2>
                 <p>Click and drag to rotate the view, scroll to zoom in and out,
                     and use the slider to move up and down the cylinder.</p>
+
+                <footer>
+                    <small>Created by Benjamin Whitsett, with advice from Tom Farthing. Built with A-Frame and Three.js.</small>
+                </footer>
+
+                
             </div>
             <div id="scene-container" class="container-cell">
                 <a-scene embedded xr-mode-ui="enabled: false">
                     <a-entity
                             camera
                             look-controls="enabled: false"
-                            orbit-controls="target: 0 0 0; minDistance: 1.5; maxDistance: 180; initialPosition: 0 3 5; rotateSpeed: 0.5; minPolarAngle: 0; maxPolarAngle: 180">
+                            orbit-controls="target: 0 0 0; minDistance: 1.5; maxDistance: 100; initialPosition: 3 1 0; rotateSpeed: 0.5; minPolarAngle: 0; maxPolarAngle: 180">
                         </a-entity>
                     <a-entity position="0 0 0" some-line></a-entity>
                 </a-scene>
