@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
+        <script src="https://unpkg.com/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js"></script>
+        <script src="https://unpkg.com/aframe-orbit-controls@1.3.2/dist/aframe-orbit-controls.min.js"></script>
+        <script>
+            AFRAME.registerComponent("some-line", {
+                init: function() {
+                // create an array of points. 
+                const points = [];
+                let n_pts = 20;
+                let height = 2;
+                for(let i = 0; i <= n_pts; i++) {
+                    points.push(new THREE.Vector3(
+                        Math.cos(i * 2 * Math.PI / n_pts),
+                        Math.sin(i * 2 * Math.PI / n_pts),
+                        (i / n_pts - .5) * height
+                    ))
+                }
+
+                // create the line material
+                const material = new THREE.LineBasicMaterial({color: 0x0000ff});
+                // create the geometry from points
+                const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                // create a THREE.Line from the geometry and material
+                const line = new THREE.Line(geometry, material);
+                // add it to this entity
+                this.el.object3D.add(line);
+                }
+            })
+        </script>
+    </head>
+    <body>
+        
+        <a-scene>
+        <a-sphere position="0 0 0" radius="0.5" color="#EF2D5E"></a-sphere>
+        <a-entity light="type: ambient; color: #bbb"></a-entity>
+        <a-entity light="type: directional; color: #FFF; intensity: 0.95" position="-0.5 1 1"></a-entity>
+        <a-entity
+                camera
+                look-controls="enabled: false"
+                orbit-controls="target: 0 0 0; minDistance: 2; maxDistance: 180; initialPosition: 0 3 5; rotateSpeed: 0.5; minPolarAngle: 0; maxPolarAngle: 180">
+            </a-entity>
+        <a-entity position="0 0 0" some-line></a-entity>
+        </a-scene>
+
+    </body>
+</html>
