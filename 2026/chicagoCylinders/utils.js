@@ -4,6 +4,12 @@ const BLUELINE_COLORS = [
     0x306754, 0xaf7817, 0xf75d59, 0x736aff
 ]
 
+const LINEWIDTH = 7.5; // pixel units
+
+const FRAME_BASE_COLOR = 0x888888;
+const FRAME_HIGHLIGHT_COLOR = 0xffffff;
+const FRAME_LINEWIDTH = 2; // pixel units
+
 /**
  * Parses a place notation string to complete lists of places made.
  * Symmetry indication with a comma is not yet supported.
@@ -170,13 +176,16 @@ function get_height_step(bellCount)
  * Handstroke and backstroke are separated and interleaved, so
  * ccwise from the x-axis are 1b, 2h, 3b, 4h, etc. and cwise are 1h, 2b, 3h, 4b, etc.
  * Assumption: starting at backstroke.
+ * @param {Object} HANDLES - Object containing the three.js library and other dependencies.
  * @param {Array} positions - An array of bell positions, where each position is an integer from 1 to bellCount.
  * @param {number} bellCount - The total number of bells.
  * @param {number} scrollParam - The scroll fraction along the method (default is 0, i.e. scrolled to top)
  * @returns {Array} An array of three.js vector3 objects representing the line coordinates.
  */
-function positions_to_points(positions, bellCount, scrollParam = 0)
+function positions_to_points(HANDLES, positions, bellCount, scrollParam = 0)
 {
+    const THREE = HANDLES.THREE;
+
     const heightStep = get_height_step(bellCount);
     const totalHeight = heightStep * (positions.length - 1);
 
@@ -194,9 +203,20 @@ function positions_to_points(positions, bellCount, scrollParam = 0)
 
 /**
  * Generate a wire frame for the bell lines.
+ * @param {Object} HANDLES - Object containing the three.js library and other dependencies.
+ * @param {number} bellCount - The total number of bells.
+ * @param {number} numRows - The number of rows to generate.
+ * @param {number} scrollParam - The scroll fraction along the method (default is 0, i.e. scrolled to top)
+ * @param {number} circle_res_factor - The resolution factor for the circular coordinates (default is 3)
+ * @returns {Array} An array of three.js line objects representing the wire frame.
  */
-function generate_wire_frame(bellCount, numRows, scrollParam = 0, circle_res_factor = 3)
+function generate_wire_frame(HANDLES, bellCount, numRows, scrollParam = 0, circle_res_factor = 3)
 {
+    const THREE = HANDLES.THREE;
+    const Line2 = HANDLES.Line2;
+    const LineMaterial = HANDLES.LineMaterial;
+    const LineGeometry = HANDLES.LineGeometry;
+
     // Precompute circular coordinates
     const cs_vals = [];
     for (let i = 0; i <= 2 * bellCount * circle_res_factor; i++)
@@ -214,45 +234,44 @@ function generate_wire_frame(bellCount, numRows, scrollParam = 0, circle_res_fac
         h_vals.push(-i * heightStep + scrollParam * totalHeight);
     }
 
-    // Set material colors
-    baseColor = 0x888888;
-    highlightColor = 0xffffff;
-    opacity = 0.5;
-
     // Create horizontal loops
     const horizontalLines = [];
     for (let i = 0; i < numRows; i++)
     {
-        const geometry = new THREE.BufferGeometry();
         const points = [];
         for (let j = 0; j <= 2 * bellCount * circle_res_factor; j++)
         {
             const [x, z] = cs_vals[j];
             points.push(new THREE.Vector3(x, h_vals[i], -z));
         }
-        geometry.setFromPoints(points);
-        const material = new THREE.LineBasicMaterial({color: (i == 0 || i == numRows - 1) ? highlightColor : baseColor,
-            opacity: opacity, transparent: true
-        });
-        horizontalLines.push(new THREE.Line(geometry, material));
+        
+        const geometry = new LineGeometry();
+        geometry.setPositions(points.flatMap(p => [p.x, p.y, p.z]));
+        const material = new LineMaterial({
+                color: (i == 0 || i == numRows - 1) ? FRAME_HIGHLIGHT_COLOR : FRAME_BASE_COLOR,
+                linewidth: FRAME_LINEWIDTH
+            });
+        horizontalLines.push(new Line2(geometry, material));
     }
 
     // Create vertical lines
     const verticalLines = [];
     for (let i = 0; i < 2 * bellCount; i++)
     {
-        const geometry = new THREE.BufferGeometry();
         const points = [];
         for (let j = 0; j < numRows; j++)
         {
             const [x, z] = cs_vals[i * circle_res_factor];
             points.push(new THREE.Vector3(x, h_vals[j], -z));
         }
-        geometry.setFromPoints(points);
-        const material = new THREE.LineBasicMaterial({ color: (i == 0) ? highlightColor : baseColor,
-                opacity: opacity, transparent: true
-         });
-        verticalLines.push(new THREE.Line(geometry, material));
+        
+        const geometry = new LineGeometry();
+        geometry.setPositions(points.flatMap(p => [p.x, p.y, p.z]));
+        const material = new LineMaterial({
+                color: (i == 0) ? FRAME_HIGHLIGHT_COLOR : FRAME_BASE_COLOR,
+                linewidth: FRAME_LINEWIDTH
+            });
+        verticalLines.push(new Line2(geometry, material));
     }
 
     return [...horizontalLines, ...verticalLines];
@@ -260,31 +279,41 @@ function generate_wire_frame(bellCount, numRows, scrollParam = 0, circle_res_fac
 
 /**
  * Converts a place notation string into a list of three.js line objects.
+ * @param {Object} HANDLES - Object containing the three.js library and other dependencies.
  * @param {string} placeNotation - The place notation string to parse.
  * @param {number} bellCount - The total number of bells.
- * @param {number} scrollParam - The scroll fraction along the method (default is 0, i.e. scrolled to top).
- * @param {boolean} includeFrame - Whether to include a wire frame for the lines (default is false).
+ * @param {number} scrollParam - The scroll fraction along the method (0 = scrolled to top).
+ * @param {boolean} includeFrame - Whether to include a wire frame for the lines.
  * @returns {Array} An array of three.js line objects.
  */
-function parse_place_notation_to_lines(placeNotation, bellCount, scrollParam = 0, includeFrame = false)
+function parse_place_notation_to_lines(HANDLES, placeNotation, bellCount, scrollParam, includeFrame)
 {
+    const THREE = HANDLES.THREE;
+    const Line2 = HANDLES.Line2;
+    const LineMaterial = HANDLES.LineMaterial;
+    const LineGeometry = HANDLES.LineGeometry;
+
     // Extract 3d points
     const places = parse_place_notation(placeNotation, bellCount);
     const rows = places_to_rows(places, bellCount);
     const positions = rows_to_positions(rows);
-    const points = positions.map(pos => positions_to_points(pos, bellCount, scrollParam));
+    const points = positions.map(pos => positions_to_points(HANDLES, pos, bellCount, scrollParam));
 
     // Create bell lines
     const lines = points.map((bellPoints, index) => {
-        const geometry = new THREE.BufferGeometry().setFromPoints(bellPoints);
-        const material = new THREE.LineBasicMaterial({ color: BLUELINE_COLORS[index % BLUELINE_COLORS.length] });
-        return new THREE.Line(geometry, material);
+        const geometry = new LineGeometry();
+        geometry.setPositions(bellPoints.flatMap(p => [p.x, p.y, p.z]));
+        const material = new LineMaterial({
+                color: BLUELINE_COLORS[index % BLUELINE_COLORS.length],
+                linewidth: LINEWIDTH // in world units with size attenuation, pixels otherwise
+            });
+        return new Line2(geometry, material);
     });
 
     // Optionally add a wire frame
     if (includeFrame)
     {
-        return [...lines, ...generate_wire_frame(bellCount, rows.length, scrollParam)];
+        return [...lines, ...generate_wire_frame(HANDLES, bellCount, rows.length, scrollParam)];
     }
     else
     {

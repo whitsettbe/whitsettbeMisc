@@ -3,11 +3,45 @@
     <head>
         <title>Chicago Cylinders</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
+        <!--<script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
         <script src="https://unpkg.com/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js"></script>
         <script src="https://unpkg.com/aframe-orbit-controls@1.3.2/dist/aframe-orbit-controls.min.js"></script>
-        <script src="utils.js"></script>
-        <script>
+        -->
+        <script type="importmap">
+        {
+            "imports": {
+                "aframe": "https://aframe.io/releases/1.8.0/aframe.module.min.js",
+                "three": "https://cdn.jsdelivr.net/npm/super-three@0.184.0/build/three.module.min.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/super-three@0.184.0/examples/jsm/",
+                "aframe-extras/controls": "https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.7.x/dist/aframe-extras.controls.min.js",
+                "aframe-environment-component": "https://unpkg.com/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js",
+                "aframe-orbit-controls": "https://unpkg.com/aframe-orbit-controls@1.3.2/dist/aframe-orbit-controls.min.js"
+            }
+        }
+        </script>
+        <script src="utils.js" type="application/javascript"></script>
+        <script type="module">
+            // We use an importmap to load three as a module to avoid the warning "Multiple instances of Three.js being imported."
+            import AFRAME from 'aframe';
+            // AFRAME and THREE variables are available globally, the imported aframe-master.module.min.js bundle basically does:
+            // import * as THREE from "three"
+            // window.THREE = THREE
+            import 'aframe-environment-component'; // This uses the THREE global variable in the bundle.
+            import 'aframe-orbit-controls'; // This uses the THREE global variable in the bundle.
+            import 'aframe-extras/controls'; // This uses the THREE global variable in the bundle.
+
+            import { Line2 } from 'three/addons/lines/Line2.js';
+            import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+            import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
+            
+            const HANDLES = {
+                "AFRAME": AFRAME,
+                "THREE": THREE,
+                "Line2": Line2,
+                "LineMaterial": LineMaterial,
+                "LineGeometry": LineGeometry
+            };
+
             AFRAME.registerComponent("some-line", {
                 schema: {
                     numLines: { type: "int", default: 6 },
@@ -61,7 +95,7 @@
                     // Convert notation into lists of three.js Vector3 points
                     const notation = this.data.notation;
                     const scrollFrac = this.data.scrollFrac;
-                    const linesList = parse_place_notation_to_lines(notation, numLines, scrollFrac, includeFrame=true);
+                    const linesList = parse_place_notation_to_lines(HANDLES, notation, numLines, scrollFrac, true);
 
                     // Add lines to the object
                     for (const line of linesList)
