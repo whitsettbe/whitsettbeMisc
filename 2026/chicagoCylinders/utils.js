@@ -207,10 +207,11 @@ function positions_to_points(HANDLES, positions, bellCount, scrollParam = 0)
  * @param {number} bellCount - The total number of bells.
  * @param {number} numRows - The number of rows to generate.
  * @param {number} scrollParam - The scroll fraction along the method (default is 0, i.e. scrolled to top)
+ * @param {Function} extractor - A function to extract the position data from each point (default is to extract [x, y, z])
  * @param {number} circle_res_factor - The resolution factor for the circular coordinates (default is 3)
  * @returns {Array} An array of three.js line objects representing the wire frame.
  */
-function generate_wire_frame(HANDLES, bellCount, numRows, scrollParam = 0, circle_res_factor = 3)
+function generate_wire_frame(HANDLES, bellCount, numRows, scrollParam = 0, extractor = (point) => [point.x, point.y, point.z], circle_res_factor = 3)
 {
     const THREE = HANDLES.THREE;
     const Line2 = HANDLES.Line2;
@@ -246,7 +247,7 @@ function generate_wire_frame(HANDLES, bellCount, numRows, scrollParam = 0, circl
         }
         
         const geometry = new LineGeometry();
-        geometry.setPositions(points.flatMap(p => [p.x, p.y, p.z]));
+        geometry.setPositions(points.flatMap(extractor));
         const material = new LineMaterial({
                 color: (i == 0 || i == numRows - 1) ? FRAME_HIGHLIGHT_COLOR : FRAME_BASE_COLOR,
                 linewidth: FRAME_LINEWIDTH
@@ -266,7 +267,7 @@ function generate_wire_frame(HANDLES, bellCount, numRows, scrollParam = 0, circl
         }
         
         const geometry = new LineGeometry();
-        geometry.setPositions(points.flatMap(p => [p.x, p.y, p.z]));
+        geometry.setPositions(points.flatMap(extractor));
         const material = new LineMaterial({
                 color: (i == 0) ? FRAME_HIGHLIGHT_COLOR : FRAME_BASE_COLOR,
                 linewidth: FRAME_LINEWIDTH
@@ -286,7 +287,7 @@ function generate_wire_frame(HANDLES, bellCount, numRows, scrollParam = 0, circl
  * @param {boolean} includeFrame - Whether to include a wire frame for the lines.
  * @returns {Array} An array of three.js line objects.
  */
-function parse_place_notation_to_lines(HANDLES, placeNotation, bellCount, scrollParam, includeFrame)
+function parse_place_notation_to_lines(HANDLES, placeNotation, bellCount, scrollParam, includeFrame, toroid)
 {
     const THREE = HANDLES.THREE;
     const Line2 = HANDLES.Line2;
@@ -299,10 +300,24 @@ function parse_place_notation_to_lines(HANDLES, placeNotation, bellCount, scroll
     const positions = rows_to_positions(rows);
     const points = positions.map(pos => positions_to_points(HANDLES, pos, bellCount, scrollParam));
 
+    // custom extractor to take vectors to lists of points, transforming to toroidal coordinates if requested
+    function extractor(point)
+    {
+        let x = point.x, y = point.y, z = point.z;
+        if (toroid)
+        {
+            const h = get_height_step(bellCount) * (rows.length - 1);
+            const R = 1 + Math.max(1, h / (2 * Math.PI));
+            const ang = 2 * Math.PI * y / h;
+            return [(x - R) * Math.cos(ang) + R, - (x - R) * Math.sin(ang), z];
+        }
+        return [x, y, z];
+    }
+
     // Create bell lines
-    const lines = points.map((bellPoints, index) => {
+    let lines = points.map((bellPoints, index) => {
         const geometry = new LineGeometry();
-        geometry.setPositions(bellPoints.flatMap(p => [p.x, p.y, p.z]));
+        geometry.setPositions(bellPoints.flatMap(extractor));
         const material = new LineMaterial({
                 color: BLUELINE_COLORS[index % BLUELINE_COLORS.length],
                 linewidth: LINEWIDTH // in world units with size attenuation, pixels otherwise
@@ -313,10 +328,29 @@ function parse_place_notation_to_lines(HANDLES, placeNotation, bellCount, scroll
     // Optionally add a wire frame
     if (includeFrame)
     {
-        return [...lines, ...generate_wire_frame(HANDLES, bellCount, rows.length, scrollParam)];
+        lines = [...lines, ...generate_wire_frame(HANDLES, bellCount, rows.length, scrollParam, extractor)];
     }
-    else
+    /*
+    // Optionally convert to torus mode
+    if (toroid)
     {
-        return lines;
-    }
+        for (let line of lines)
+        {
+            for (let i = 0; i < line.geometry.attributes.position.count; i++)
+            {
+                const x = line.geometry.attributes.position.getX(i);
+                const z = line.geometry.attributes.position.getZ(i);
+                const angle = Math.atan2(-z, x);
+                const radius = Math.sqrt(x * x + z * z);
+                line.geometry.attributes.position.setX(i, x + 0.5);// * Math.cos(angle));
+                //line.geometry.attributes.position.setZ(i, radius * Math.sin(angle));
+                //line.geometry.attributes.position.setY(i, 0);
+            }
+            line.geometry.computeBoundingSphere();
+            line.geometry.computeBoundingBox();
+            line.geometry.attributes.position.needsUpdate = true;
+        }
+    }*/
+
+    return lines;
 }

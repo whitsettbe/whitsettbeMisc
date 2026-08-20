@@ -34,6 +34,7 @@
             import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
             import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
             
+            
             const HANDLES = {
                 "AFRAME": AFRAME,
                 "THREE": THREE,
@@ -46,7 +47,8 @@
                 schema: {
                     numLines: { type: "int", default: 6 },
                     notation: { type: "string", default: "x16x16x16x16x16x12" },
-                    scrollFrac: { type: "number", default: 0 }
+                    scrollFrac: { type: "number", default: 0 },
+                    torusMode: { type: "boolean", default: false }
                 },
                 init: function()
                 {
@@ -95,7 +97,8 @@
                     // Convert notation into lists of three.js Vector3 points
                     const notation = this.data.notation;
                     const scrollFrac = this.data.scrollFrac;
-                    const linesList = parse_place_notation_to_lines(HANDLES, notation, numLines, scrollFrac, true);
+                    const torusMode = this.data.torusMode;
+                    const linesList = parse_place_notation_to_lines(HANDLES, notation, numLines, scrollFrac, true, torusMode);
 
                     // Add lines to the object
                     for (const line of linesList)
@@ -156,6 +159,7 @@
                 const countInput = document.getElementById("count-input");
                 const scrollInput = document.getElementById("scroll-input");
                 const notationInput = document.getElementById("notation-input");
+                const torusInput = document.getElementById("torus-input");
 
                 if (countInput)
                 {
@@ -182,6 +186,15 @@
                         lineEl.setAttribute("some-line", "scrollFrac", event.target.value);
                     });
                     lineEl.setAttribute("some-line", "scrollFrac", scrollInput.value);
+                }
+
+                if (torusInput)
+                {
+                    torusInput.addEventListener("change", function(event)
+                    {
+                        lineEl.setAttribute("some-line", "torusMode", event.target.checked);
+                    });
+                    lineEl.setAttribute("some-line", "torusMode", torusInput.checked);
                 }
             });
         </script>
@@ -367,11 +380,13 @@
                 Editable place notation:<br>
                 <input type="text" id="notation-input" value="x16x16x16x16x16x12"><br>
                 <small>Note: Palindrome notation (using commas) is not yet supported.</small><br>
-                <small>Note: Letters are converted as A=10, B=11, etc. up to W=32.</small>
+                <small>Note: Letters are converted as A=10, B=11, etc. up to W=32.</small><br>
+                <label style="white-space: nowrap;">Torus mode: <input type="checkbox" id="torus-input"></label><br>
 
                 <h2>Controls</h2>
                 <p>Drag to rotate the view, scroll to zoom in and out,
                     and use the slider (far right) to move up and down the cylinder.</p>
+                <p>After sliding to a part you're interested in, you can use the fullscreen widget (bottom-right) to view it more easily.</p>
 
                 <footer>
                     <small>Created by <span title="whitsettbe@gmail.com">Benjamin Whitsett</span>, with advice from Tom Farthing.
@@ -387,7 +402,7 @@
                     <a-entity
                             camera
                             look-controls="enabled: false"
-                            orbit-controls="target: 0 0 0; minDistance: 1.5; maxDistance: 100; initialPosition: 3 1 0; rotateSpeed: 0.5; minPolarAngle: 0; maxPolarAngle: 180">
+                            orbit-controls="target: 0 0 0; minDistance: 1.5; maxDistance: 100; initialPosition: 3 1 1; rotateSpeed: 0.5; minPolarAngle: 0; maxPolarAngle: 180">
                         </a-entity>
                     <a-entity position="0 0 0" some-line></a-entity>
                 </a-scene>
