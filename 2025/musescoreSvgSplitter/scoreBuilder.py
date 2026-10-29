@@ -42,6 +42,7 @@ ASSOC_RULE = {
     'Hook': 'near Note',
     'TrillSegment': 'near Note',
     'Tremolo': 'near Stem',
+    'TremoloSingleChord': 'near Note',
     'StemSlash': 'near Stem',
     'Fermata': 'down',
     'SystemText': 'all',
@@ -55,6 +56,7 @@ ASSOC_RULE = {
     'VoltaSegment': 'all',
     'Arpeggio': 'near Stem',
     'Fingering': 'near Note',
+    'PlayTechAnnotation': 'down',
     DUMMY: 'near',        # if "down" or "up" fails, replaced with this temporarily
 }
 # all - assoc with every part in the nearest block
